@@ -1,0 +1,21 @@
+5
+
+Europe
+2 2 2
+true
+
+North America
+2 1 1
+true
+
+South America
+1 0 0
+true
+
+Africa
+0 0 0
+true
+
+Asia
+1 1 0
+true

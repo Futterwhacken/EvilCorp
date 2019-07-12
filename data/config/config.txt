@@ -1,0 +1,27 @@
+# debug config
+false
+
+# gamemaster config
+1500
+
+# param config
+0.5 1 2
+
+# region config
+3
+1
+2
+1
+2
+3
+4
+-10
+
+# gauge config
+0 100
+
+# exploitation config
+1 2 500
+1 1 1000
+1 0.5 1500
+2

@@ -1,0 +1,21 @@
+2
+
+General strike
+Greve generale !!!
+none
+-1 -1 -1
+0 0 100
+10
+-1
+0 0 100
+2 2 1
+
+Damn nature
+A natural catastrophe dampens your productivity
+none
+-1 -1 -1
+-50 0 0
+1
+1
+0 100 0
+2 1 2
