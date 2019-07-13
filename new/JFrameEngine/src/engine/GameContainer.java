@@ -4,14 +4,21 @@ package engine;
 import engine.gfx.Image;
 import engine.gfx.Font;
 import engine.gameobjects.Button;
+import engine.gameobjects.Menu;
 import engine.gameobjects.Action;
 
 public class GameContainer implements Runnable
 {
+    /* constantes de position de menu
+       constantes de position de notification bus
+     */
+
     // debug
     private Image image;
     private Font font;
     private Button button;
+
+    private Menu menu;
     // ==================
 
     private Thread thread;
@@ -20,7 +27,7 @@ public class GameContainer implements Runnable
     private Input input;
 
     private boolean isRunning = false;
-    private final static double UPDATE_CAP = 1.0/60.0; // tomod ?
+    private final static double UPDATE_CAP = 1.0/30.0; // tomod ?
 
     // to mod
     private int width = 640, height = 360;
@@ -41,7 +48,8 @@ public class GameContainer implements Runnable
         input = new Input(this);
 
         // ===== debug
-        button = new Button(this, 100, 100, 50, 50, () -> { System.out.println("button clicked"); }, new Image("/button200.png"));
+        button = new Button(this, 100, 100, 50, 50, () -> { System.out.println("button clicked"); }, new Image("/button200.png"), null);
+        menu = new Menu(this, 0, 10, 100, 100, new String[]{"option1", "option2"}, new Action[]{() -> {System.out.println("yay111");}, () -> {System.out.println("yay222");}});
         //=============
 
         thread = new Thread(this);
@@ -83,16 +91,21 @@ public class GameContainer implements Runnable
 
                 // update game
 
+
                 input.update();
 
-                // update clickables ?
                 button.update();
+                menu.update();
+
+                // update clickables ?
+
 
                 if (frameTime >= 1.0) { // every 1 sec count frames
                     frameTime = 0;
                     fps = frames;
                     frames = 0;
                 }
+
             }
 
             if (render) {
@@ -103,9 +116,10 @@ public class GameContainer implements Runnable
                 // debug
                 // render clickables if they have an image
                 button.render();
+                menu.render();
 
 
-                renderer.drawText(font, "FPS: "+fps, 0, 0, 0xff00ff00, 2);
+                renderer.drawText(font, "FPS: "+fps, 0, 0, 0xff00ff00);
                 //renderer.drawImage(image, input.getMouseX() - 150, input.getMouseY() - 150);
                 // ===============
 
@@ -141,4 +155,9 @@ public class GameContainer implements Runnable
     public void setHeight(int height) { this.height = height; }
     public void setScale(float scale) { this.scale = scale; }
     public void setTitle(String title) { this.title = title; }
+
+    // debug
+    public Font getFont() { return font; }
+
+    // setCurrentMenu
 }

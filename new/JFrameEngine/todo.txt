@@ -6,31 +6,31 @@
 
 - make gameobjetcs package with abstract class GameObject
     * Gauges (from Rectangle ?)
-    * Menu
-    * Buttons
+    * Menu (liste d'options modélisée par des boutons qui mènent vers d'autres menus)
+    * Buttons (zone clickable à laquelle on passe par interface anonyme l'action à déclencher
 
 
-                // =============================================================
-                // debug
+// =============================================================
+// debug
 
-                /*System.out.println("X: " + input.getMouseX() + ", Y: " + input.getMouseY());
+/*System.out.println("X: " + input.getMouseX() + ", Y: " + input.getMouseY());
 
-                for (int i = 0; i < 7; i++) {
-                    if (input.getButtons()[i]) {
-                        System.out.println("button " + i + " pressed");
-                    }
-                }
-                System.out.println("");
+for (int i = 0; i < 7; i++) {
+    if (input.getButtons()[i]) {
+        System.out.println("button " + i + " pressed");
+    }
+}
+System.out.println("");
 
-                for (int i = 0; i < 256; i++) {
-                    if (input.getKeys()[i]) {
-                        System.out.println("key " + i + " pressed");
-                    }
-                }
-                System.out.println("");*/
+for (int i = 0; i < 256; i++) {
+    if (input.getKeys()[i]) {
+        System.out.println("key " + i + " pressed");
+    }
+}
+System.out.println("");*/
 
 
-                // =============================================================
+// =============================================================
 
 passing function as arg:
 

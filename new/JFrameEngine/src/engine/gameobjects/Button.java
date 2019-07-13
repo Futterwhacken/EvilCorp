@@ -5,6 +5,7 @@ import engine.gfx.Image;
 
 public class Button extends GameObject
 {
+    /* dans le runtime avoir une array avec tous les boutons pour les updater et render */
     private int posX;
     private int posY;
     private int width;
@@ -14,8 +15,9 @@ public class Button extends GameObject
 
     private Action action;
     private Image image;
+    private String label;
 
-    public Button(GameContainer gc, int posX, int posY, int width, int height, Action action, Image image) {
+    public Button(GameContainer gc, int posX, int posY, int width, int height, Action action, Image image, String label) {
         super(gc);
 
         this.posX = posX;
@@ -31,6 +33,8 @@ public class Button extends GameObject
             image.setWidth(width);
             image.setHeight(height);
         }
+
+        this.label = label;
     }
 
     private boolean checkClicked() {
@@ -64,8 +68,15 @@ public class Button extends GameObject
         }
     }
 
+    @Override
     public void render() {
-        gc.getRenderer().drawImage(image, posX, posY);
+        if (image != null) {
+            gc.getRenderer().drawImage(image, posX, posY);
+        }
+        else if (label != null) {
+            // standardiser font, ajouter margin pour texte
+            gc.getRenderer().drawText(gc.getFont(), label, posX, posY, 0xffffffff);
+        }
     }
 
     public void setAction(Action action) { this.action = action; }

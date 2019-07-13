@@ -36,7 +36,7 @@ public class Renderer
         }
     }
 
-    public void drawText(Font font, String text, int offX, int offY, int color, int scale) {
+    public void drawText(Font font, String text, int offX, int offY, int color) {
         Image imageFont = font.getFontImage();
 
         text = text.toUpperCase();
