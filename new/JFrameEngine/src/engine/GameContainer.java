@@ -6,6 +6,7 @@ import engine.gfx.Font;
 import engine.gameobjects.Button;
 import engine.gameobjects.Menu;
 import engine.gameobjects.Action;
+import engine.gameobjects.Gauge;
 
 public class GameContainer implements Runnable
 {
@@ -17,6 +18,7 @@ public class GameContainer implements Runnable
     private Image image;
     private Font font;
     private Button button;
+    private Gauge gauge;
 
     private Menu menu;
     // ==================
@@ -50,6 +52,7 @@ public class GameContainer implements Runnable
         // ===== debug
         button = new Button(this, 100, 100, 50, 50, () -> { System.out.println("button clicked"); }, new Image("/button200.png"), null);
         menu = new Menu(this, 0, 10, 100, 100, new String[]{"option1", "option2"}, new Action[]{() -> {System.out.println("yay111");}, () -> {System.out.println("yay222");}});
+        gauge = new Gauge(this, 50, 200, 10, 100, 200, 0xffffffff);
         //=============
 
         thread = new Thread(this);
@@ -96,6 +99,7 @@ public class GameContainer implements Runnable
 
                 button.update();
                 menu.update();
+                gauge.update();
 
                 // update clickables ?
 
@@ -117,6 +121,7 @@ public class GameContainer implements Runnable
                 // render clickables if they have an image
                 button.render();
                 menu.render();
+                gauge.render();
 
 
                 renderer.drawText(font, "FPS: "+fps, 0, 0, 0xff00ff00);

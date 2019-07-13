@@ -58,5 +58,13 @@ public class Renderer
         }
     }
 
+    public void drawRectangle(int offX, int offY, int w, int h, int color) {
+        for (int y = 0; y < h; y++) {
+            for (int x = 0; x < w; x++) {
+                setPixel(x + offX, y + offY, color);
+            }
+        }
+    }
+
     // todo: drawRectangle, drawCircle (?)
 }
