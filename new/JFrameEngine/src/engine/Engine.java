@@ -1,60 +1,53 @@
 package engine;
 
-
-import engine.gameobjects.*;
-import engine.gfx.Image;
+import engine.gameobjects.GameObject;
 import engine.gfx.Font;
-
 import java.util.ArrayList;
 
-public class GameContainer implements Runnable
+public class Engine implements Runnable
 {
-    /* constantes de position de menu
-       constantes de position de notification bus
+    private final boolean debug = true;
 
-       GameObject arrays, renderable arrays etc etc
-     */
+    private final Thread thread;
+    private final Window window;
+    private final Renderer renderer;
+    private final Input input;
 
-    // debug
-    /*private Image image;
-    private Font font;
-    private Button button;
-    private Gauge gauge, gauge2;*/
-
-    //private Menu menu;
-    // ==================
-
-    private Thread thread;
-    private Window window;
-    private Renderer renderer;
-    private Input input;
-
-    private boolean isRunning = false;
-    private final static double UPDATE_CAP = 1.0/30.0; // tomod ?
-
-    // to mod
-    private int width = 640, height = 360;
-    private float scale = 2f;
-    private String title = "EvilCorp";
-
-    // ================
+    private final double updateRate;
+    private final int width;
+    private final int height;
+    private final float scale;
+    private final String title;
 
     private Font standardFont;
 
     private ArrayList<GameObject> gameObjects;
 
     /* make singleton, initialized with config path, constructor loads config */
-    public GameContainer() {
-        gameObjects = new ArrayList<GameObject>();
-        standardFont = new Font("/font.png"); // debug
-    }
 
-    public void start() {
+    public Engine(String configPath) {
+        this.gameObjects = new ArrayList<GameObject>();
+
+        // load configuration and resources here
+
+        // debug
+        this.updateRate = 1.0/30.0;
+        this.width = 640;
+        this.height = 360;
+        this.scale = 2;
+        this.title = "EvilCorp";
+
+        this.standardFont = new Font("/font.png");
+
+        // ============================
+
         window = new Window(this);
         renderer = new Renderer(this);
         input = new Input(this);
-
         thread = new Thread(this);
+    }
+
+    public void start() {
         thread.run();
     }
 
@@ -64,8 +57,7 @@ public class GameContainer implements Runnable
 
     @Override
     public void run() {
-        isRunning = true;
-
+        boolean isRunning = true;
         boolean render;
 
         double currentTime;
@@ -87,9 +79,9 @@ public class GameContainer implements Runnable
             unprocessedTime += passedTime;
             frameTime += passedTime;
 
-            while (unprocessedTime >= UPDATE_CAP) { // every update cap update game
+            while (unprocessedTime >= updateRate) { // every updateRate: update game
                 render = true;
-                unprocessedTime -= UPDATE_CAP;
+                unprocessedTime -= updateRate;
 
                 // update game
 
@@ -110,7 +102,9 @@ public class GameContainer implements Runnable
 
             if (render) {
                 renderer.clear();
-                renderer.drawText(standardFont, "FPS : " + fps, 0,0,0xff00ff00);
+
+                if (debug)
+                    renderer.drawText(standardFont, "FPS : " + fps, 0,0,0xff00ff00);
 
                 // render game
                 for (GameObject o : gameObjects) {
@@ -142,11 +136,6 @@ public class GameContainer implements Runnable
     public Window getWindow() { return window; }
     public Renderer getRenderer() { return renderer; }
     public Input getInput() { return input; }
-
-    public void setWidth(int width) { this.width = width; }
-    public void setHeight(int height) { this.height = height; }
-    public void setScale(float scale) { this.scale = scale; }
-    public void setTitle(String title) { this.title = title; }
 
     // ============================
 

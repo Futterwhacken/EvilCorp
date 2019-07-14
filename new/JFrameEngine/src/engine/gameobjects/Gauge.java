@@ -1,6 +1,6 @@
 package engine.gameobjects;
 
-import engine.GameContainer;
+import engine.Engine;
 
 public class Gauge extends GameObject
 {
@@ -16,8 +16,8 @@ public class Gauge extends GameObject
     private int maxHeight;
 
     // gerer jauge horizontale, boolean
-    public Gauge(GameContainer gc, double level, int posX, int posY, int width, int maxHeight, int color) {
-        super(gc);
+    public Gauge(Engine engine, double level, int posX, int posY, int width, int maxHeight, int color) {
+        super(engine);
 
         this.level = level;
         this.posX = posX;
@@ -36,13 +36,12 @@ public class Gauge extends GameObject
 
     @Override
     public void render() {
-        gc.getRenderer().drawRectangle(posX, posY + (maxHeight - height), width, height, color);
+        engine.getRenderer().drawRectangle(posX, posY + (maxHeight - height), width, height, color);
     }
 
-    public void updateLevel(double amount) {
-        level += amount;
-    }
+
 
     public double getLevel() { return level; }
     public void setLevel(double level) { this.level = level; }
+    public void updateLevel(double amount) { level += amount; }
 }

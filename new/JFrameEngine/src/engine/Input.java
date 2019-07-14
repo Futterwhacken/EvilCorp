@@ -8,7 +8,7 @@ import java.awt.event.MouseMotionListener;
 
 public class Input implements KeyListener, MouseListener, MouseMotionListener
 {
-    private GameContainer gc;
+    private Engine engine;
 
     private final int NUM_KEYS = 256;
     private boolean[] keys = new boolean[NUM_KEYS];
@@ -20,14 +20,14 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
 
     private int mouseX, mouseY;
 
-    public Input(GameContainer gc) {
-        this.gc = gc;
+    public Input(Engine engine) {
+        this.engine = engine;
         mouseX = 0;
         mouseY = 0;
 
-        gc.getWindow().getCanvas().addKeyListener(this);
-        gc.getWindow().getCanvas().addMouseListener(this);
-        gc.getWindow().getCanvas().addMouseMotionListener(this);
+        engine.getWindow().getCanvas().addKeyListener(this);
+        engine.getWindow().getCanvas().addMouseListener(this);
+        engine.getWindow().getCanvas().addMouseMotionListener(this);
 
     }
 
@@ -50,14 +50,14 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
 
     @Override
     public void mouseMoved(MouseEvent e) {
-        mouseX = (int)(e.getX() / gc.getScale());
-        mouseY = (int)(e.getY() / gc.getScale());
+        mouseX = (int)(e.getX() / engine.getScale());
+        mouseY = (int)(e.getY() / engine.getScale());
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        mouseX = (int)(e.getX() / gc.getScale());
-        mouseY = (int)(e.getY() / gc.getScale());
+        mouseX = (int)(e.getX() / engine.getScale());
+        mouseY = (int)(e.getY() / engine.getScale());
     }
 
     @Override

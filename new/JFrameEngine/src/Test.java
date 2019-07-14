@@ -1,11 +1,12 @@
-import engine.GameContainer;
+import engine.Engine;
 
 public class Test {
     public static void main(String[] args) {
-        GameContainer gc = new GameContainer();
 
+        Engine engine = new Engine("");
+        // GameMaster gm = GameMaster.initGameMaster(configpath);
         
 
-        gc.start();
+        engine.start();
     }
 }

@@ -17,17 +17,17 @@ public class Window
     private Graphics graphics;
 
 
-    public Window(GameContainer gc) {
-        image = new BufferedImage(gc.getWidth(), gc.getHeight(), BufferedImage.TYPE_INT_RGB);
+    public Window(Engine engine) {
+        image = new BufferedImage(engine.getWidth(), engine.getHeight(), BufferedImage.TYPE_INT_RGB);
 
-        Dimension size = new Dimension((int)(gc.getWidth() * gc.getScale()), (int)(gc.getHeight() * gc.getScale()));
+        Dimension size = new Dimension((int)(engine.getWidth() * engine.getScale()), (int)(engine.getHeight() * engine.getScale()));
 
         canvas = new Canvas();
         canvas.setPreferredSize(size);
         canvas.setMaximumSize(size);
         canvas.setMinimumSize(size);
 
-        frame = new JFrame(gc.getTitle());
+        frame = new JFrame(engine.getTitle());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
         frame.add(canvas, BorderLayout.CENTER);

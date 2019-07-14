@@ -1,7 +1,6 @@
 package engine;
 
 import java.awt.image.DataBufferInt;
-
 import engine.gfx.Image;
 import engine.gfx.Font;
 
@@ -10,11 +9,11 @@ public class Renderer
     private int width, height;
     private int[] pixels;
 
-    public Renderer(GameContainer gc)
+    public Renderer(Engine engine)
     {
-        width = gc.getWidth();
-        height = gc.getHeight();
-        pixels = ((DataBufferInt)(gc.getWindow().getImage().getRaster().getDataBuffer())).getData();
+        width = engine.getWidth();
+        height = engine.getHeight();
+        pixels = ((DataBufferInt)(engine.getWindow().getImage().getRaster().getDataBuffer())).getData();
     }
 
     public void clear() {
@@ -23,7 +22,7 @@ public class Renderer
         }
     }
 
-    public void setPixel(int x, int y, int value) {
+    private void setPixel(int x, int y, int value) {
         if ((x < 0 || x >= width || y < 0 || y >= height) || value == 0xffff00ff) return; // mod alpha channel
         pixels[x + y * width] = value;
     }
@@ -65,6 +64,4 @@ public class Renderer
             }
         }
     }
-
-    // todo: drawRectangle, drawCircle (?)
 }

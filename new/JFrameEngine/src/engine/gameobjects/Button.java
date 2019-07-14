@@ -1,6 +1,6 @@
 package engine.gameobjects;
 
-import engine.GameContainer;
+import engine.Engine;
 import engine.gfx.Image;
 
 public class Button extends GameObject
@@ -17,8 +17,8 @@ public class Button extends GameObject
     private Image image;
     private String label;
 
-    public Button(GameContainer gc, int posX, int posY, int width, int height, Action action, Image image, String label) {
-        super(gc);
+    public Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label) {
+        super(engine);
 
         this.posX = posX;
         this.posY = posY;
@@ -39,11 +39,11 @@ public class Button extends GameObject
 
     private boolean checkClicked() {
 
-        int mouseX = gc.getInput().getMouseX();
-        int mouseY = gc.getInput().getMouseY();
+        int mouseX = engine.getInput().getMouseX();
+        int mouseY = engine.getInput().getMouseY();
 
         if ((mouseX >= posX && mouseX <= posX + width) && (mouseY >= posY && mouseY <= posY + height)) {
-            if (gc.getInput().isButton(1)) { // 1 = left click, tomod ?
+            if (engine.getInput().isButton(1)) { // 1 = left click, tomod ?
                 return true;
             }
         }
@@ -71,11 +71,11 @@ public class Button extends GameObject
     @Override
     public void render() {
         if (image != null) {
-            gc.getRenderer().drawImage(image, posX, posY);
+            engine.getRenderer().drawImage(image, posX, posY);
         }
         else if (label != null) {
             // standardiser font, ajouter margin pour texte
-            gc.getRenderer().drawText(gc.getStandardFont(), label, posX, posY, 0xffffffff);
+            engine.getRenderer().drawText(engine.getStandardFont(), label, posX, posY, 0xffffffff);
         }
     }
 
