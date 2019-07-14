@@ -48,3 +48,22 @@ public void someMethod(args) { ... }
 >>>
 
 func((args) -> { someMethod(args); });
+
+
+
+* y = 2 -> posY
+
+
+
+
+* y = 5
+
+
+
+
+
+
+
+* y = 10 -> maxHeight = 8
+
+posY + (maxHeight - height)

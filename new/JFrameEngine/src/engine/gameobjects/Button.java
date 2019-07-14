@@ -75,7 +75,7 @@ public class Button extends GameObject
         }
         else if (label != null) {
             // standardiser font, ajouter margin pour texte
-            gc.getRenderer().drawText(gc.getFont(), label, posX, posY, 0xffffffff);
+            gc.getRenderer().drawText(gc.getStandardFont(), label, posX, posY, 0xffffffff);
         }
     }
 

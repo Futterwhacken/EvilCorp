@@ -1,26 +1,27 @@
 package engine;
 
 
+import engine.gameobjects.*;
 import engine.gfx.Image;
 import engine.gfx.Font;
-import engine.gameobjects.Button;
-import engine.gameobjects.Menu;
-import engine.gameobjects.Action;
-import engine.gameobjects.Gauge;
+
+import java.util.ArrayList;
 
 public class GameContainer implements Runnable
 {
     /* constantes de position de menu
        constantes de position de notification bus
+
+       GameObject arrays, renderable arrays etc etc
      */
 
     // debug
-    private Image image;
+    /*private Image image;
     private Font font;
     private Button button;
-    private Gauge gauge;
+    private Gauge gauge, gauge2;*/
 
-    private Menu menu;
+    //private Menu menu;
     // ==================
 
     private Thread thread;
@@ -36,24 +37,22 @@ public class GameContainer implements Runnable
     private float scale = 2f;
     private String title = "EvilCorp";
 
-    public GameContainer() {
-        // debug
-        image = new Image("/test.png"); // relatif à l'emplacement de Image.java
-        font = new Font("/font.png");
+    // ================
 
-        // =================
+    private Font standardFont;
+
+    private ArrayList<GameObject> gameObjects;
+
+    /* make singleton, initialized with config path, constructor loads config */
+    public GameContainer() {
+        gameObjects = new ArrayList<GameObject>();
+        standardFont = new Font("/font.png"); // debug
     }
 
     public void start() {
         window = new Window(this);
         renderer = new Renderer(this);
         input = new Input(this);
-
-        // ===== debug
-        button = new Button(this, 100, 100, 50, 50, () -> { System.out.println("button clicked"); }, new Image("/button200.png"), null);
-        menu = new Menu(this, 0, 10, 100, 100, new String[]{"option1", "option2"}, new Action[]{() -> {System.out.println("yay111");}, () -> {System.out.println("yay222");}});
-        gauge = new Gauge(this, 50, 200, 10, 100, 200, 0xffffffff);
-        //=============
 
         thread = new Thread(this);
         thread.run();
@@ -94,14 +93,11 @@ public class GameContainer implements Runnable
 
                 // update game
 
-
                 input.update();
 
-                button.update();
-                menu.update();
-                gauge.update();
-
-                // update clickables ?
+                for (GameObject o : gameObjects) {
+                    o.update();
+                }
 
 
                 if (frameTime >= 1.0) { // every 1 sec count frames
@@ -114,19 +110,12 @@ public class GameContainer implements Runnable
 
             if (render) {
                 renderer.clear();
+                renderer.drawText(standardFont, "FPS : " + fps, 0,0,0xff00ff00);
 
                 // render game
-
-                // debug
-                // render clickables if they have an image
-                button.render();
-                menu.render();
-                gauge.render();
-
-
-                renderer.drawText(font, "FPS: "+fps, 0, 0, 0xff00ff00);
-                //renderer.drawImage(image, input.getMouseX() - 150, input.getMouseY() - 150);
-                // ===============
+                for (GameObject o : gameObjects) {
+                    o.render();
+                }
 
                 window.update();
                 frames++;
@@ -143,9 +132,7 @@ public class GameContainer implements Runnable
         dispose();
     }
 
-    private void dispose() {
-
-    }
+    private void dispose() {}
 
     public int getWidth() { return width; }
     public int getHeight() { return height; }
@@ -161,8 +148,11 @@ public class GameContainer implements Runnable
     public void setScale(float scale) { this.scale = scale; }
     public void setTitle(String title) { this.title = title; }
 
-    // debug
-    public Font getFont() { return font; }
+    // ============================
 
     // setCurrentMenu
+
+    public Font getStandardFont() { return standardFont; }
+
+    public void addGameObject(GameObject o) { gameObjects.add(o); }
 }

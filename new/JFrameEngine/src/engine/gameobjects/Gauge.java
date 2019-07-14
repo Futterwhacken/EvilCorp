@@ -15,7 +15,7 @@ public class Gauge extends GameObject
     private int height;
     private int maxHeight;
 
-    // gerer jauge horizontale et verticale, boolean
+    // gerer jauge horizontale, boolean
     public Gauge(GameContainer gc, double level, int posX, int posY, int width, int maxHeight, int color) {
         super(gc);
 
@@ -36,8 +36,7 @@ public class Gauge extends GameObject
 
     @Override
     public void render() {
-        // inverser le sens
-        gc.getRenderer().drawRectangle(posX, posY, width, height, color);
+        gc.getRenderer().drawRectangle(posX, posY + (maxHeight - height), width, height, color);
     }
 
     public void updateLevel(double amount) {
