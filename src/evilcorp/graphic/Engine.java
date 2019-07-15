@@ -1,7 +1,12 @@
 package evilcorp.graphic;
 
 import evilcorp.graphic.gameobjects.GameObject;
+import evilcorp.graphic.gameobjects.Menu;
+
 import evilcorp.graphic.gfx.Font;
+
+import evilcorp.logic.area.region.Region;
+
 import java.util.ArrayList;
 
 public class Engine implements Runnable
@@ -23,9 +28,12 @@ public class Engine implements Runnable
 
     private ArrayList<GameObject> gameObjects;
 
+    private Region selectedRegion; // getSelectedRegion depuis runtime pour programmer les actions
+    private Menu currentMenu;
+
     /* make singleton, initialized with config path, constructor loads config */
 
-    public Engine(String configPath) {
+    public Engine(String dataPath) {
         this.gameObjects = new ArrayList<GameObject>();
 
         // load configuration and resources here
@@ -37,7 +45,7 @@ public class Engine implements Runnable
         this.scale = 2;
         this.title = "EvilCorp";
 
-        this.standardFont = new Font("/font.png");
+        this.standardFont = new Font("/resources/fonts/standard_font.png");
 
         // ============================
 
@@ -144,5 +152,8 @@ public class Engine implements Runnable
     public Font getStandardFont() { return standardFont; }
 
     public void addGameObject(GameObject o) { gameObjects.add(o); }
+
+    public Region getSelectedRegion() { return selectedRegion; }
+    public void setSelectedRegion(Region region) { this.selectedRegion = region; }
 
 }

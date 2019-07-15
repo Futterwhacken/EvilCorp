@@ -5,6 +5,7 @@ import evilcorp.graphic.Engine;
 public class Text extends GameObject
 {
     private String text;
+    private String defaultText;
     private Action action;
     private int posX;
     private int posY;
@@ -14,6 +15,7 @@ public class Text extends GameObject
         super(engine);
 
         this.text = text;
+        this.defaultText = text;
         this.action = action;
         this.posX = posX;
         this.posY = posY;
@@ -37,4 +39,6 @@ public class Text extends GameObject
 
     public void setText(String text) { this.text = text; }
     public void setAction(Action action) { this.action = action; }
+
+    public String getDefaultText() { return defaultText; }
 }

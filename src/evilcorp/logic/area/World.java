@@ -37,6 +37,7 @@ public final class World extends Area
         if (i >= 0 && i < regions.length) return regions[i];
         return null;
     }
+    public Region[] getRegions() { return regions; } // ?
 
     public void updateGauges() {
         double prodSum = 0;
