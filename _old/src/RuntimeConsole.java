@@ -1,8 +1,8 @@
-import evilcorp.logic.GameMaster;
-import evilcorp.logic.area.region.Region;
-import evilcorp.logic.event.*;
-import evilcorp.logic.exploitation.*;
-import evilcorp.logic.NotificationBus;
+import game.logic.GameMaster;
+import game.logic.area.region.Region;
+import game.logic.event.*;
+import game.logic.exploitation.*;
+import game.logic.NotificationBus;
 
 import java.util.Scanner;
 import java.util.InputMismatchException;
@@ -239,7 +239,7 @@ public class RuntimeConsole {
 
     public static void main(String[] args) {
         try {
-            RuntimeConsole.gm = GameMaster.initGameMaster("data/config/logic/");
+            RuntimeConsole.gm = GameMaster.initGameMaster("data/config/");
         }
         catch (NullPointerException e) {
             display("Could not load GameMaster, exiting");
