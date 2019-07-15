@@ -111,7 +111,7 @@ public class Engine implements Runnable
                     o.render();
                 }
 
-                window.update();
+                window.update(); // displays buffered image
                 frames++;
             }
             else {
