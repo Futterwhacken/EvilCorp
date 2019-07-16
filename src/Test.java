@@ -2,6 +2,8 @@ import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.Button;
 import evilcorp.graphic.gameobjects.Text;
 import evilcorp.graphic.gameobjects.Visual;
+import evilcorp.graphic.gameobjects.Action;
+import evilcorp.graphic.gameobjects.Menu;
 import evilcorp.graphic.gfx.Image;
 
 
@@ -78,6 +80,42 @@ public class Test {
                 selectedRegionText.setText(selectedRegionText.getDefaultText());
             });
 
+        Text fundsText = new Text(engine, "FUNDS: ", 0, 350, 0xffffffff);
+        fundsText.setAction(() -> {fundsText.setText(fundsText.getDefaultText() + gm.getPoints());});
+
+        /*
+        r.buyExploitation(select-1);
+        displayImmediateNotifications();
+
+        show cost
+         */
+        Menu addExploitationMenu = new Menu(engine, 0, 100, 100, 10,
+                new String[]{
+                        "add primary exploitation",
+                        "add secondary exploitation",
+                        "add tertiary exploitation",
+                        "return"
+                },
+                new Action[]{
+                        () -> {engine.getSelectedRegion().buyExploitation(0);},
+                        () -> {engine.getSelectedRegion().buyExploitation(1);},
+                        () -> {engine.getSelectedRegion().buyExploitation(2);},
+                        () -> {engine.setCurrentMenu(engine.getPreviousMenu());}
+                });
+
+        Menu mainMenu = new Menu(engine, 0, 100, 100, 10,
+                new String[]{
+                    "add exploitation",
+                    "remove exploitation",
+                    "buy action"
+                },
+                new Action[]{
+                        () -> {engine.setCurrentMenu(addExploitationMenu);},
+                        () -> {System.out.println("rm expl");},
+                        () -> {System.out.println("buy act");}
+                });
+
+        engine.setCurrentMenu(mainMenu);
 
         engine.addGameObject(map);
         engine.addGameObject(africaButton);
@@ -86,6 +124,8 @@ public class Test {
         engine.addGameObject(northAmericaButton);
         engine.addGameObject(southAmericaButton);
         engine.addGameObject(selectedRegionText);
+
+        engine.addGameObject(fundsText);
 
 
 

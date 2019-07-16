@@ -30,6 +30,7 @@ public class Engine implements Runnable
 
     private Region selectedRegion; // getSelectedRegion depuis runtime pour programmer les actions
     private Menu currentMenu;
+    private Menu previousMenu;
 
     /* make singleton, initialized with config path, constructor loads config */
 
@@ -99,6 +100,8 @@ public class Engine implements Runnable
                     o.update();
                 }
 
+                if (currentMenu != null && selectedRegion != null)
+                    currentMenu.update();
 
                 if (frameTime >= 1.0) { // every 1 sec count frames
                     frameTime = 0;
@@ -118,6 +121,9 @@ public class Engine implements Runnable
                 for (GameObject o : gameObjects) {
                     o.render();
                 }
+
+                if (currentMenu != null && selectedRegion != null)
+                    currentMenu.render();
 
                 window.update(); // displays buffered image
                 frames++;
@@ -147,7 +153,6 @@ public class Engine implements Runnable
 
     // ============================
 
-    // setCurrentMenu
 
     public Font getStandardFont() { return standardFont; }
 
@@ -156,4 +161,11 @@ public class Engine implements Runnable
     public Region getSelectedRegion() { return selectedRegion; }
     public void setSelectedRegion(Region region) { this.selectedRegion = region; }
 
+    public Menu getCurrentMenu() { return currentMenu; }
+    public void setCurrentMenu(Menu menu) {
+        previousMenu = currentMenu;
+        currentMenu = menu;
+    }
+
+    public Menu getPreviousMenu() { return previousMenu; }
 }
