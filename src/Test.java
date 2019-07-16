@@ -117,6 +117,10 @@ public class Test {
 
         engine.setCurrentMenu(mainMenu);
 
+        /*
+            ATTENTION, il arrive que après avoir cliqué une option d'un menu, ça clique l'option suivante qui apparait
+            mettre un délai ou un boolean d'activation du clic
+        */
         engine.addGameObject(map);
         engine.addGameObject(africaButton);
         engine.addGameObject(asiaButton);
