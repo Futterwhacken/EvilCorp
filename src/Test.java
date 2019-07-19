@@ -126,6 +126,7 @@ public class Test {
 
         show buy and rmv cost
         show event status and cost in event buy menu
+        show event descr and other hover/selected information (such as region details) in notif area (or alt dedicated area)
          */
 
         Menu addExploitationMenu = new Menu(engine, menuAnchorX, menuAnchorY, 100, 10,
