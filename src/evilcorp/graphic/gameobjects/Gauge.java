@@ -39,8 +39,6 @@ public class Gauge extends GameObject
         engine.getRenderer().drawRectangle(posX, posY + (maxHeight - height), width, height, color);
     }
 
-
-
     public double getLevel() { return level; }
     public void setLevel(double level) { this.level = level; }
     public void updateLevel(double amount) { level += amount; }

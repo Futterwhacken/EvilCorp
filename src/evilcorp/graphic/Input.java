@@ -20,6 +20,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
 
     private int mouseX, mouseY;
 
+    private boolean hasClicked = false;
+
     public Input(Engine engine) {
         this.engine = engine;
         mouseX = 0;
@@ -68,6 +70,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
     @Override
     public void mouseReleased(MouseEvent e) {
         buttons[e.getButton()] = false;
+        setHasClicked(false);
     }
 
     @Override
@@ -85,6 +88,9 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
 
     public boolean[] getButtons() { return buttons; }
     public boolean[] getKeys() { return keys; }
+
+    public boolean getHasClicked() { return hasClicked; }
+    public void setHasClicked(boolean b) { hasClicked = b; }
 
 
     /* leftovers */

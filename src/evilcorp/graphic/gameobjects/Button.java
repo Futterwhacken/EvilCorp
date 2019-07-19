@@ -5,7 +5,6 @@ import evilcorp.graphic.gfx.Image;
 
 public class Button extends GameObject
 {
-    /* dans le runtime avoir une array avec tous les boutons pour les updater et render */
     private int posX;
     private int posY;
     private int width;
@@ -16,8 +15,9 @@ public class Button extends GameObject
     private Action action;
     private Image image;
     private String label;
+    private int labelColor;
 
-    public Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label) {
+    public Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor) {
         super(engine);
 
         this.posX = posX;
@@ -35,7 +35,21 @@ public class Button extends GameObject
         }
 
         this.label = label;
+        this.labelColor = labelColor;
     }
+
+    public Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image) {
+        this(engine, posX, posY, width, height, action, image, null, 0);
+    }
+
+    public Button(Engine engine, int posX, int posY, int width, int height, Action action, String label, int labelColor) {
+        this(engine, posX, posY, width, height, action, null, label, labelColor);
+    }
+
+    public Button(Engine engine, int posX, int posY, int width, int height, Action action) {
+        this(engine, posX, posY, width, height, action, null, null, 0);
+    }
+
 
     private boolean checkClicked() {
 
@@ -54,9 +68,10 @@ public class Button extends GameObject
     @Override
     public void update() {
 
-        if (checkClicked()) {
+        if (checkClicked() && !engine.getInput().getHasClicked()) {
             if (!clicked) {
                 clicked = true;
+                engine.getInput().setHasClicked(true);
 
                 action.exec();
             }
@@ -74,11 +89,10 @@ public class Button extends GameObject
             engine.getRenderer().drawImage(image, posX, posY);
         }
         else if (label != null) {
-            // standardiser font, ajouter margin pour texte
-            engine.getRenderer().drawText(engine.getStandardFont(), label, posX, posY, 0xffffffff);
+            // ajouter margin pour texte
+            engine.getRenderer().drawText(engine.getStandardFont(), label, posX, posY, labelColor);
         }
     }
 
     public void setAction(Action action) { this.action = action; }
-
 }

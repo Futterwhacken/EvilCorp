@@ -9,12 +9,15 @@ import evilcorp.graphic.gfx.Image;
 
 import evilcorp.logic.GameMaster;
 import evilcorp.logic.area.region.Region;
-import evilcorp.logic.exploitation.Exploitation;
 
 
 public class Test {
     public static Engine engine;
     public static GameMaster gm;
+
+    public static int menuColor = 0xff00ff00;
+    public static int menuAnchorX = 10;
+    public static int menuAnchorY = 100;
 
     public static Region getRegion(String regionName) {
         for (Region r : gm.getWorld().getRegions()) {
@@ -41,7 +44,7 @@ public class Test {
         options[options.length - 1] = "return";
         actions[options.length - 1] = () -> {engine.setCurrentMenu(engine.getMainMenu());};
 
-        return new Menu(engine, 0, 100, 100, 10, options, actions);
+        return new Menu(engine, menuAnchorX, menuAnchorY, 100, 10, options, actions, menuColor);
     }
 
     public static Menu buildBuyEventMenu() {
@@ -59,7 +62,7 @@ public class Test {
         options[options.length - 1] = "return";
         actions[options.length - 1] = () -> {engine.setCurrentMenu(engine.getMainMenu());};
 
-        return new Menu(engine, 0, 100, 100, 10, options, actions);
+        return new Menu(engine, menuAnchorX, menuAnchorY, 100, 10, options, actions, menuColor);
     }
 
     public static void main(String[] args) {
@@ -84,27 +87,27 @@ public class Test {
                 () -> {
                 map.setVisual(mapAfricaImage);
                 engine.setSelectedRegion(getRegion("Africa"));
-                }, null, null);
+                });
         Button asiaButton = new Button(engine, 374, 36, 140, 144,
                 () -> {
                 map.setVisual(mapAsiaImage);
                 engine.setSelectedRegion(getRegion("Asia"));
-                }, null, null);
+                });
         Button europeButton = new Button(engine, 306, 22, 67, 67,
                 () -> {
                 map.setVisual(mapEuropeImage);
                 engine.setSelectedRegion(getRegion("Europe"));
-                }, null, null);
+                });
         Button northAmericaButton = new Button(engine, 136, 21, 153, 92,
                 () -> {
                 map.setVisual(mapNorthAmericaImage);
                 engine.setSelectedRegion(getRegion("North America"));
-                }, null, null);
+                });
         Button southAmericaButton = new Button(engine, 215, 115, 63, 87,
                 () -> {
                 map.setVisual(mapSouthAmericaImage);
                 engine.setSelectedRegion(getRegion("South America"));
-                }, null, null);
+                });
 
         Text selectedRegionText = new Text(engine, "Select a region", 10, 10, 0xffffffff);
         selectedRegionText.setAction(() -> {
@@ -125,7 +128,7 @@ public class Test {
         show event status and cost in event buy menu
          */
 
-        Menu addExploitationMenu = new Menu(engine, 0, 100, 100, 10,
+        Menu addExploitationMenu = new Menu(engine, menuAnchorX, menuAnchorY, 100, 10,
                 new String[]{
                         "add primary exploitation",
                         "add secondary exploitation",
@@ -137,9 +140,9 @@ public class Test {
                         () -> {engine.getSelectedRegion().buyExploitation(1);},
                         () -> {engine.getSelectedRegion().buyExploitation(2);},
                         () -> {engine.setCurrentMenu(engine.getMainMenu());}
-                });
+                }, menuColor);
 
-        Menu mainMenu = new Menu(engine, 0, 100, 100, 10,
+        Menu mainMenu = new Menu(engine, menuAnchorX, menuAnchorY, 100, 10,
                 new String[]{
                     "add exploitation",
                     "remove exploitation",
@@ -149,15 +152,11 @@ public class Test {
                         () -> {engine.setCurrentMenu(addExploitationMenu);},
                         () -> {engine.setCurrentMenu(buildRemoveExploitationMenu());},
                         () -> {engine.setCurrentMenu(buildBuyEventMenu());}
-                });
+                }, menuColor);
 
         engine.setCurrentMenu(mainMenu);
         engine.setMainMenu(mainMenu);
 
-        /*
-            ATTENTION, il arrive que après avoir cliqué une option d'un menu, ça clique l'option suivante qui apparait
-            mettre un délai ou un boolean d'activation du clic
-        */
         engine.addGameObject(map);
         engine.addGameObject(africaButton);
         engine.addGameObject(asiaButton);

@@ -32,7 +32,6 @@ public class Engine implements Runnable
 
     private Menu mainMenu;
     private Menu currentMenu;
-    private Menu previousMenu;
 
     /* make singleton, initialized with config path, constructor loads config */
 
@@ -155,23 +154,21 @@ public class Engine implements Runnable
 
     // ============================
 
+    public void addGameObject(GameObject o) { gameObjects.add(o); } // ?
 
     public Font getStandardFont() { return standardFont; }
 
-    public void addGameObject(GameObject o) { gameObjects.add(o); }
-
     public Region getSelectedRegion() { return selectedRegion; }
-    public void setSelectedRegion(Region region) { this.selectedRegion = region; }
+    public void setSelectedRegion(Region region) {
+        this.selectedRegion = region;
+        currentMenu = mainMenu;
+    }
 
     public Menu getMainMenu() { return mainMenu; }
     public void setMainMenu(Menu menu) { mainMenu = menu; }
 
     public Menu getCurrentMenu() { return currentMenu; }
     public void setCurrentMenu(Menu menu) {
-        previousMenu = currentMenu;
         currentMenu = menu;
     }
-
-    public Menu getPreviousMenu() { return previousMenu; }
-    public void setPreviousMenu(Menu menu) { previousMenu = menu; }
 }
