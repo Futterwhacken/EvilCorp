@@ -9,9 +9,7 @@ import evilcorp.graphic.gfx.Image;
 
 import evilcorp.logic.GameMaster;
 import evilcorp.logic.area.region.Region;
-
-
-
+import evilcorp.logic.exploitation.Exploitation;
 
 
 public class Test {
@@ -26,6 +24,42 @@ public class Test {
         }
 
         return null;
+    }
+
+    public static Menu buildRemoveExploitationMenu() {
+        String[] options = new String[engine.getSelectedRegion().getExploitations().size() + 1];
+        Action[] actions = new Action[options.length];
+
+        for (int i = 0; i < options.length - 1; i++) {
+            int a = i;
+            options[i] = ""+engine.getSelectedRegion().getExploitations().get(i);
+            actions[i] = () -> {
+                engine.getSelectedRegion().removeExploitation(a);
+                engine.setCurrentMenu(buildRemoveExploitationMenu());
+            };
+        }
+        options[options.length - 1] = "return";
+        actions[options.length - 1] = () -> {engine.setCurrentMenu(engine.getMainMenu());};
+
+        return new Menu(engine, 0, 100, 100, 10, options, actions);
+    }
+
+    public static Menu buildBuyEventMenu() {
+        String[] options = new String[engine.getSelectedRegion().getBuyableEvents().size() + 1];
+        Action[] actions = new Action[options.length];
+
+        for (int i = 0; i < options.length - 1; i++) {
+            int a = i;
+            options[i] = ""+engine.getSelectedRegion().getBuyableEvents().get(i).getName();
+            actions[i] = () -> {
+                engine.getSelectedRegion().buyEvent(engine.getSelectedRegion().getBuyableEvents().get(a));
+                engine.setCurrentMenu(buildBuyEventMenu());
+            };
+        }
+        options[options.length - 1] = "return";
+        actions[options.length - 1] = () -> {engine.setCurrentMenu(engine.getMainMenu());};
+
+        return new Menu(engine, 0, 100, 100, 10, options, actions);
     }
 
     public static void main(String[] args) {
@@ -87,8 +121,10 @@ public class Test {
         r.buyExploitation(select-1);
         displayImmediateNotifications();
 
-        show cost
+        show buy and rmv cost
+        show event status and cost in event buy menu
          */
+
         Menu addExploitationMenu = new Menu(engine, 0, 100, 100, 10,
                 new String[]{
                         "add primary exploitation",
@@ -100,7 +136,7 @@ public class Test {
                         () -> {engine.getSelectedRegion().buyExploitation(0);},
                         () -> {engine.getSelectedRegion().buyExploitation(1);},
                         () -> {engine.getSelectedRegion().buyExploitation(2);},
-                        () -> {engine.setCurrentMenu(engine.getPreviousMenu());}
+                        () -> {engine.setCurrentMenu(engine.getMainMenu());}
                 });
 
         Menu mainMenu = new Menu(engine, 0, 100, 100, 10,
@@ -111,11 +147,12 @@ public class Test {
                 },
                 new Action[]{
                         () -> {engine.setCurrentMenu(addExploitationMenu);},
-                        () -> {System.out.println("rm expl");},
-                        () -> {System.out.println("buy act");}
+                        () -> {engine.setCurrentMenu(buildRemoveExploitationMenu());},
+                        () -> {engine.setCurrentMenu(buildBuyEventMenu());}
                 });
 
         engine.setCurrentMenu(mainMenu);
+        engine.setMainMenu(mainMenu);
 
         /*
             ATTENTION, il arrive que après avoir cliqué une option d'un menu, ça clique l'option suivante qui apparait

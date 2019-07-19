@@ -29,6 +29,8 @@ public class Engine implements Runnable
     private ArrayList<GameObject> gameObjects;
 
     private Region selectedRegion; // getSelectedRegion depuis runtime pour programmer les actions
+
+    private Menu mainMenu;
     private Menu currentMenu;
     private Menu previousMenu;
 
@@ -161,6 +163,9 @@ public class Engine implements Runnable
     public Region getSelectedRegion() { return selectedRegion; }
     public void setSelectedRegion(Region region) { this.selectedRegion = region; }
 
+    public Menu getMainMenu() { return mainMenu; }
+    public void setMainMenu(Menu menu) { mainMenu = menu; }
+
     public Menu getCurrentMenu() { return currentMenu; }
     public void setCurrentMenu(Menu menu) {
         previousMenu = currentMenu;
@@ -168,4 +173,5 @@ public class Engine implements Runnable
     }
 
     public Menu getPreviousMenu() { return previousMenu; }
+    public void setPreviousMenu(Menu menu) { previousMenu = menu; }
 }
