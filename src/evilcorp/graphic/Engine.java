@@ -21,7 +21,7 @@ public class Engine implements Runnable
     private final double updateRate;
     private final int width;
     private final int height;
-    private final float scale;
+    private final double scale;
     private final String title;
 
     private Font standardFont;
@@ -42,9 +42,9 @@ public class Engine implements Runnable
 
         // debug
         this.updateRate = 1.0/30.0;
-        this.width = 640;
-        this.height = 360;
-        this.scale = 2;
+        this.width = 1280;
+        this.height = 720;
+        this.scale = 1;
         this.title = "EvilCorp";
 
         this.standardFont = new Font("/resources/fonts/standard_font.png");
@@ -115,8 +115,10 @@ public class Engine implements Runnable
             if (render) {
                 renderer.clear();
 
-                if (debug)
-                    renderer.drawText(standardFont, "FPS : " + fps, 0,0,0xff00ff00);
+                if (debug) {
+                    renderer.drawText(standardFont, "FPS:" + fps, 0, 2, 0xff00ff00);
+                    renderer.drawText(standardFont, "X: " + input.getMouseX() + ", Y: " + input.getMouseY(), 70, 2, 0xff00ff00);
+                }
 
                 // render game
                 for (GameObject o : gameObjects) {

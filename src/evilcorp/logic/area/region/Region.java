@@ -13,6 +13,8 @@ public final class Region extends Area
 {
     private static int MAX_EXPL = Config.maxExpl; // maximum d'exploitations
 
+    public static int getMaxExpl() { return MAX_EXPL; }
+
     // taux de variation des jauges
     private double rateProductivity;
     private double rateVisibility;

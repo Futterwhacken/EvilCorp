@@ -9,12 +9,12 @@ import java.util.InputMismatchException;
 import java.util.ArrayList;
 
 public class RuntimeConsole {
-    public static Scanner scan = new Scanner(System.in);
-    public static GameMaster gm = null;
+    private static Scanner scan = new Scanner(System.in);
+    private static GameMaster gm = null;
 
-    public static void display(String str) { System.out.println(str); }
-    public static void clear() { for (int i = 0; i < 50; i++) System.out.println(); }
-    public static int input() {
+    private static void display(String str) { System.out.println(str); }
+    private static void clear() { for (int i = 0; i < 50; i++) System.out.println(); }
+    private static int input() {
         System.out.print(">>> ");
         int input;
         try {
@@ -27,7 +27,19 @@ public class RuntimeConsole {
         return input;
     }
 
-    public static void displayWaitingNotifications() {
+    private static void displayGameStatus() {
+        display("");
+        display("========== Game Status ==========");
+        display("Turn "+gm.getTurn());
+        display("Points: "+gm.getPoints()+" ("+gm.getRatePoints()+")");
+        display("\nProductivity: "+gm.getWorld().getProductivity());
+        display("Pollution: "+gm.getWorld().getVisibility());
+        display("Social: "+gm.getWorld().getSocial());
+
+        display("");
+    }
+
+    private static void displayWaitingNotifications() {
         for (String notif: NotificationBus.getWaitingList()) {
             display("");
             display(notif);
@@ -36,7 +48,7 @@ public class RuntimeConsole {
         //NotificationBus.clearWaitingList();
     }
 
-    public static void displayImmediateNotifications() {
+    private static void displayImmediateNotifications() {
         for (String notif: NotificationBus.getImmediateList()) {
             display("");
             display(notif);
@@ -45,19 +57,11 @@ public class RuntimeConsole {
         NotificationBus.clearImmediateList();
     }
 
-    public static void turnMenu() {
+    private static void turnMenu() {
         int select, regionSelect;
         do {
             // display game status
-            display("");
-            display("========== Game Status ==========");
-            display("Turn "+gm.getTurn());
-            display("Points: "+gm.getPoints()+" ("+gm.getRatePoints()+")");
-            display("\nProductivity: "+gm.getWorld().getProductivity());
-            display("Pollution: "+gm.getWorld().getVisibility());
-            display("Social: "+gm.getWorld().getSocial());
-
-            display("");
+            displayGameStatus();
             display("========= Notifications =========");
             displayWaitingNotifications();
 
@@ -92,7 +96,7 @@ public class RuntimeConsole {
         } while (select != 0);
     }
 
-    public static void regionSelectMenu() {
+    private static void regionSelectMenu() {
         int regionCount = gm.getWorld().getRegionCount();
         int select;
         do {
@@ -114,7 +118,7 @@ public class RuntimeConsole {
         } while (select != 0);
     }
 
-    public static void regionMenu(Region r) {
+    private static void regionMenu(Region r) {
         int select;
         do {
             display(r+"");
@@ -145,7 +149,7 @@ public class RuntimeConsole {
         } while (select != 0);
     }
 
-    public static void addExploitationMenu(Region r) {
+    private static void addExploitationMenu(Region r) {
         int select;
         do {
             display(r+"");
@@ -171,7 +175,7 @@ public class RuntimeConsole {
     }
 
 
-    public static void removeExploitationMenu(Region r) {
+    private static void removeExploitationMenu(Region r) {
         ArrayList<Exploitation> ex = r.getExploitations();
         int select;
         do {
@@ -195,7 +199,7 @@ public class RuntimeConsole {
         } while (select != 0);
     }
 
-    public static void actionMenu(Region r) {
+    private static void actionMenu(Region r) {
 
         ArrayList<EventBuyable> eb = r.getBuyableEvents();
         int select;
@@ -250,14 +254,7 @@ public class RuntimeConsole {
 
         int status = gm.checkGameStatus();
         if (status != 1) {
-            display("");
-            display("========== Game Status ==========");
-            display("Turn "+gm.getTurn());
-            display("Points: "+gm.getPoints()+" ("+gm.getRatePoints()+")");
-            display("\nProductivity: "+gm.getWorld().getProductivity());
-            display("Pollution: "+gm.getWorld().getVisibility());
-            display("Social: "+gm.getWorld().getSocial());
-            display("");
+            displayGameStatus();
 
             if (status == 0) {
                 display("You lost ! The people won !");

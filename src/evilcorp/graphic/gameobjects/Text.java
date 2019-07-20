@@ -7,6 +7,7 @@ public class Text extends GameObject
     private String text;
     private String defaultText;
     private Action action;
+
     private int posX;
     private int posY;
     private int color;
@@ -20,6 +21,10 @@ public class Text extends GameObject
         this.posX = posX;
         this.posY = posY;
         this.color = color;
+    }
+
+    public Text(Engine engine) {
+        this(engine, "", () -> {}, 0 ,0 ,0xffffffff);
     }
 
     public Text(Engine engine, String text, int posX, int posY, int color) {
@@ -40,5 +45,8 @@ public class Text extends GameObject
     public void setText(String text) { this.text = text; }
     public void setAction(Action action) { this.action = action; }
 
+    public String getText() { return text; }
     public String getDefaultText() { return defaultText; }
+
+    public int getColor() { return color; }
 }

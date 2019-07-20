@@ -121,10 +121,37 @@ public final class Parameters extends GameLogic
             case 2: s += "\t- Strong environmental norms\n"; break;
         }
         switch (tOpposition) {
-            case 0: s += "\t- Weak tolerance towards opposition"; break;
+            case 0: s += "\t- Little tolerance towards opposition"; break;
             case 1: s += "\t- Medium tolerance towards opposition"; break;
-            case 2: s += "\t- Strong tolerance towars opposition"; break;
+            case 2: s += "\t- Strong tolerance towards opposition"; break;
         }
         return s;
+    }
+
+    /* make string array for that z,goiezrvnioerz */
+
+    public String getActivityToleranceString() {
+        switch (tActivity) {
+            case 0: return "Likes primary sector";
+            case 1: return "Likes secondary sector";
+            case 2: return "Likes tertiary sector";
+        }
+        return "";
+    }
+    public String getEnvironmentToleranceString() {
+        switch (tEnvironment) {
+            case 0: return "Weak environmental norms";
+            case 1: return "Medium environmental norms";
+            case 2: return "Strong environmental norms";
+        }
+        return "";
+    }
+    public String getOppositionToleranceString() {
+        switch (tOpposition) {
+            case 0: return "Little tolerance towards opposition";
+            case 1: return "Medium tolerance towards opposition";
+            case 2: return "Strong tolerance towards opposition";
+        }
+        return "";
     }
 }

@@ -1,9 +1,6 @@
 package evilcorp.graphic;
 
-import java.awt.Canvas;
-import java.awt.Graphics;
-import java.awt.Dimension;
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
@@ -16,27 +13,26 @@ public class Window
     private Canvas canvas;
     private Graphics graphics;
 
+    private Engine engine;
 
     public Window(Engine engine) {
+        this.engine = engine;
         image = new BufferedImage(engine.getWidth(), engine.getHeight(), BufferedImage.TYPE_INT_RGB);
 
-        Dimension size = new Dimension((int)(engine.getWidth() * engine.getScale()), (int)(engine.getHeight() * engine.getScale()));
-
         canvas = new Canvas();
-        canvas.setPreferredSize(size);
-        canvas.setMaximumSize(size);
-        canvas.setMinimumSize(size);
+        canvas.setPreferredSize(new Dimension((int)(engine.getWidth() * engine.getScale()), (int)(engine.getHeight() * engine.getScale())));
 
         frame = new JFrame(engine.getTitle());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
-        frame.add(canvas, BorderLayout.CENTER);
+        frame.add(canvas);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
+        //frame.setSize(new Dimension((int)(engine.getWidth() * engine.getScale())+50, (int)(engine.getHeight() * engine.getScale())+50));
 
-        canvas.createBufferStrategy(2);
+        canvas.createBufferStrategy(1);
         buffer = canvas.getBufferStrategy();
         graphics = buffer.getDrawGraphics();
     }
