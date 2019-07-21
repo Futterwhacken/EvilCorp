@@ -12,7 +12,7 @@ public class Text extends GameObject
     private int posY;
     private int color;
 
-    public Text(Engine engine, String text, Action action, int posX, int posY, int color) {
+    private Text(Engine engine, String text, Action action, int posX, int posY, int color) {
         super(engine);
 
         this.text = text;

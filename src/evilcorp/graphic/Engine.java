@@ -36,7 +36,7 @@ public class Engine implements Runnable
     /* make singleton, initialized with config path, constructor loads config */
 
     public Engine(String dataPath) {
-        this.gameObjects = new ArrayList<GameObject>();
+        this.gameObjects = new ArrayList<>();
 
         // load configuration and resources here
 
@@ -59,10 +59,6 @@ public class Engine implements Runnable
 
     public void start() {
         thread.run();
-    }
-
-    public void stop() {
-
     }
 
     @Override
@@ -130,20 +126,16 @@ public class Engine implements Runnable
 
                 window.update(); // displays buffered image
                 frames++;
-            }
-            else {
+            } else {
                 try {
                     Thread.sleep(1);
-                } catch(InterruptedException e) {
+                } catch (InterruptedException e) {
+                    isRunning = false;
                     e.printStackTrace();
                 }
             }
         }
-
-        dispose();
     }
-
-    private void dispose() {}
 
     public int getWidth() { return width; }
     public int getHeight() { return height; }

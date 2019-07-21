@@ -48,9 +48,9 @@ public final class EventTriggerable extends Event
     public void handleTrigger() {
         if (triggered) return;
 
-        boolean prodCond = false;
-        boolean visiCond = false;
-        boolean sociCond = false;
+        boolean prodCond;
+        boolean visiCond;
+        boolean sociCond;
 
         switch (conditionType[0]) { // prod
             case 0:

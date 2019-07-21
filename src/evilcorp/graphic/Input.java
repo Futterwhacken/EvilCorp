@@ -34,12 +34,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
     }
 
     public void update() {
-        for (int i = 0; i < NUM_KEYS; i++) {
-            keysLast[i] = keys[i];
-        }
-        for (int i = 0; i < NUM_BUTTONS; i++) {
-            buttonsLast[i] = buttons[i];
-        }
+        keysLast = keys.clone();
+        buttonsLast = buttons.clone();
     }
 
     public boolean isKey(int keyCode) { return keys[keyCode]; }

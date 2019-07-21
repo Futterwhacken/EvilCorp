@@ -71,7 +71,7 @@ public class RuntimeGraphic {
         options[options.length - 2] = " ";
         actions[options.length - 2] = () -> {};
         options[options.length - 1] = "return";
-        actions[options.length - 1] = () -> {engine.setCurrentMenu(engine.getMainMenu());};
+        actions[options.length - 1] = () -> engine.setCurrentMenu(engine.getMainMenu());
 
         return new Menu(engine, menuAnchorX, menuAnchorY, menuWidth, menuFieldHeight, options, actions, menuColor);
     }
@@ -151,11 +151,11 @@ public class RuntimeGraphic {
                         "return"
                 },
                 new Action[]{
-                        () -> {engine.getSelectedRegion().buyExploitation(0);},
-                        () -> {engine.getSelectedRegion().buyExploitation(1);},
-                        () -> {engine.getSelectedRegion().buyExploitation(2);},
+                        () -> engine.getSelectedRegion().buyExploitation(0),
+                        () -> engine.getSelectedRegion().buyExploitation(1),
+                        () -> engine.getSelectedRegion().buyExploitation(2),
                         () -> {},
-                        () -> {engine.setCurrentMenu(engine.getMainMenu());}
+                        () -> engine.setCurrentMenu(engine.getMainMenu())
                 }, menuColor);
 
         Menu mainMenu = new Menu(engine, menuAnchorX, menuAnchorY, menuWidth, menuFieldHeight,
@@ -165,9 +165,9 @@ public class RuntimeGraphic {
                     "buy action"
                 },
                 new Action[]{
-                        () -> {engine.setCurrentMenu(addExploitationMenu);},
-                        () -> {engine.setCurrentMenu(buildRemoveExploitationMenu());},
-                        () -> {engine.setCurrentMenu(buildBuyEventMenu());}
+                        () -> engine.setCurrentMenu(addExploitationMenu),
+                        () -> engine.setCurrentMenu(buildRemoveExploitationMenu()),
+                        () -> engine.setCurrentMenu(buildBuyEventMenu())
                 }, menuColor);
 
         engine.setCurrentMenu(mainMenu);
@@ -184,7 +184,7 @@ public class RuntimeGraphic {
         //engine.addGameObject(logo);
 
         Text fundsText = new Text(engine, "FUNDS: ", 0, 350, 0xffffffff);
-        fundsText.setAction(() -> {fundsText.setText(fundsText.getDefaultText() + gm.getPoints());});
+        fundsText.setAction(() -> fundsText.setText(fundsText.getDefaultText() + gm.getPoints()));
 
 
         Text selectedRegionText = new Text(engine, "SELECT A REGION", 0, 0, regionInfoColor);

@@ -5,12 +5,13 @@ import evilcorp.logic.event.*;
 
 import java.io.*;
 
+@SuppressWarnings("Duplicates")
 public class ConfigReader
 {
     /* Classe statique qui gère l'initialisation des configurations globales,
     des régions et des events du jeu en lisant des fichiers de configuration formattés */
 
-    public static String pass(BufferedReader br) {
+    private static String pass(BufferedReader br) {
         String line;
         do {
             try {
@@ -32,72 +33,72 @@ public class ConfigReader
             BufferedReader reader = new BufferedReader(fileReader);
 
             line = pass(reader);
-            Config.debug = (Boolean.valueOf(line)).booleanValue();
+            Config.debug = Boolean.valueOf(line);
 
             line = pass(reader);
-            Config.startingPoints = (Integer.valueOf(line)).intValue();
-
-            line = pass(reader);
-            buffer = line.split(" ");
-
-            Config.mod0 = (Double.valueOf(buffer[0])).doubleValue();
-            Config.mod1 = (Double.valueOf(buffer[1])).doubleValue();
-            Config.mod2 = (Double.valueOf(buffer[2])).doubleValue();
-
-            line = pass(reader);
-
-            Config.maxExpl = (Integer.valueOf(line)).intValue();
-
-            line = reader.readLine();
-            Config.dampener = (Integer.valueOf(line)).intValue();
-
-            line = reader.readLine();
-            Config.modPoints = (Integer.valueOf(line)).intValue();
-
-            line = reader.readLine();
-            Config.scaleSocial0 = (Integer.valueOf(line)).intValue();
-
-            line = reader.readLine();
-            Config.scaleSocial1 = (Integer.valueOf(line)).intValue();
-
-            line = reader.readLine();
-            Config.scaleSocial2 = (Integer.valueOf(line)).intValue();
-
-            line = reader.readLine();
-            Config.scaleSocial3 = (Integer.valueOf(line)).intValue();
-
-            line = reader.readLine();
-            Config.strikeRecovery = (Double.valueOf(line)).doubleValue();
+            Config.startingPoints = Integer.valueOf(line);
 
             line = pass(reader);
             buffer = line.split(" ");
 
-            Config.minGauge = (Integer.valueOf(buffer[0])).intValue();
-            Config.maxGauge = (Integer.valueOf(buffer[1])).intValue();
+            Config.mod0 = Double.valueOf(buffer[0]);
+            Config.mod1 = Double.valueOf(buffer[1]);
+            Config.mod2 = Double.valueOf(buffer[2]);
+
+            line = pass(reader);
+
+            Config.maxExpl = Integer.valueOf(line);
+
+            line = reader.readLine();
+            Config.dampener = Integer.valueOf(line);
+
+            line = reader.readLine();
+            Config.modPoints = Integer.valueOf(line);
+
+            line = reader.readLine();
+            Config.scaleSocial0 = Integer.valueOf(line);
+
+            line = reader.readLine();
+            Config.scaleSocial1 = Integer.valueOf(line);
+
+            line = reader.readLine();
+            Config.scaleSocial2 = Integer.valueOf(line);
+
+            line = reader.readLine();
+            Config.scaleSocial3 = Integer.valueOf(line);
+
+            line = reader.readLine();
+            Config.strikeRecovery = Double.valueOf(line);
 
             line = pass(reader);
             buffer = line.split(" ");
 
-            Config.PrimaryProd = (Double.valueOf(buffer[0])).doubleValue();
-            Config.PrimaryVisi = (Double.valueOf(buffer[1])).doubleValue();
-            Config.PrimaryCost = (Integer.valueOf(buffer[2])).intValue();
+            Config.minGauge = Integer.valueOf(buffer[0]);
+            Config.maxGauge = Integer.valueOf(buffer[1]);
+
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            Config.PrimaryProd = Double.valueOf(buffer[0]);
+            Config.PrimaryVisi = Double.valueOf(buffer[1]);
+            Config.PrimaryCost = Integer.valueOf(buffer[2]);
 
             line = reader.readLine();
             buffer = line.split(" ");
 
-            Config.SecondaryProd = (Double.valueOf(buffer[0])).doubleValue();
-            Config.SecondaryVisi = (Double.valueOf(buffer[1])).doubleValue();
-            Config.SecondaryCost = (Integer.valueOf(buffer[2])).intValue();
+            Config.SecondaryProd = Double.valueOf(buffer[0]);
+            Config.SecondaryVisi = Double.valueOf(buffer[1]);
+            Config.SecondaryCost = Integer.valueOf(buffer[2]);
 
             line = reader.readLine();
             buffer = line.split(" ");
 
-            Config.TertiaryProd = (Double.valueOf(buffer[0])).doubleValue();
-            Config.TertiaryVisi = (Double.valueOf(buffer[1])).doubleValue();
-            Config.TertiaryCost = (Integer.valueOf(buffer[2])).intValue();
+            Config.TertiaryProd = Double.valueOf(buffer[0]);
+            Config.TertiaryVisi = Double.valueOf(buffer[1]);
+            Config.TertiaryCost = Integer.valueOf(buffer[2]);
 
             line = reader.readLine();
-            Config.removeMod = (Integer.valueOf(line)).intValue();
+            Config.removeMod = Integer.valueOf(line);
 
             reader.close();
         }
@@ -125,7 +126,7 @@ public class ConfigReader
 
             line = pass(reader);
 
-            int regionCount = (Integer.valueOf(line)).intValue();
+            int regionCount = Integer.valueOf(line);
 
             regions = new Region[regionCount];
 
@@ -137,13 +138,13 @@ public class ConfigReader
                 line = reader.readLine();
                 buffer = line.split(" ");
 
-                tA = (Integer.valueOf(buffer[0])).intValue();
-                tE = (Integer.valueOf(buffer[1])).intValue();
-                tO = (Integer.valueOf(buffer[2])).intValue();
+                tA = Integer.valueOf(buffer[0]);
+                tE = Integer.valueOf(buffer[1]);
+                tO = Integer.valueOf(buffer[2]);
 
                 line = reader.readLine();
 
-                exploitable = (Boolean.valueOf(line)).booleanValue();
+                exploitable = Boolean.valueOf(line);
 
                 regions[i] = new Region(name, new Parameters(tA, tE, tO), exploitable);
             }
@@ -187,7 +188,7 @@ public class ConfigReader
 
             line = pass(reader);
 
-            int eventCount = (Integer.valueOf(line)).intValue();
+            int eventCount = Integer.valueOf(line);
 
             events = new EventTriggerable[eventCount];
 
@@ -206,38 +207,38 @@ public class ConfigReader
                 line = reader.readLine();
                 buffer = line.split(" ");
 
-                effectsParams[0] = (Integer.valueOf(buffer[0])).intValue();
-                effectsParams[1] = (Integer.valueOf(buffer[1])).intValue();
-                effectsParams[2] = (Integer.valueOf(buffer[2])).intValue();
+                effectsParams[0] = Integer.valueOf(buffer[0]);
+                effectsParams[1] = Integer.valueOf(buffer[1]);
+                effectsParams[2] = Integer.valueOf(buffer[2]);
 
                 line = reader.readLine();
                 buffer = line.split(" ");
 
-                effectsGauges[0] = (Double.valueOf(buffer[0])).doubleValue();
-                effectsGauges[1] = (Double.valueOf(buffer[1])).doubleValue();
-                effectsGauges[2] = (Double.valueOf(buffer[2])).doubleValue();
+                effectsGauges[0] = Double.valueOf(buffer[0]);
+                effectsGauges[1] = Double.valueOf(buffer[1]);
+                effectsGauges[2] = Double.valueOf(buffer[2]);
 
                 line = reader.readLine();
 
-                duration = (Integer.valueOf(line)).intValue();
+                duration = Integer.valueOf(line);
 
                 line = reader.readLine();
 
-                uses = (Integer.valueOf(line)).intValue();
-
-                line = reader.readLine();
-                buffer = line.split(" ");
-
-                conditions[0] = (Double.valueOf(buffer[0])).doubleValue();
-                conditions[1] = (Double.valueOf(buffer[1])).doubleValue();
-                conditions[2] = (Double.valueOf(buffer[2])).doubleValue();
+                uses = Integer.valueOf(line);
 
                 line = reader.readLine();
                 buffer = line.split(" ");
 
-                conditionType[0] = (Integer.valueOf(buffer[0])).intValue();
-                conditionType[1] = (Integer.valueOf(buffer[1])).intValue();
-                conditionType[2] = (Integer.valueOf(buffer[2])).intValue();
+                conditions[0] = Double.valueOf(buffer[0]);
+                conditions[1] = Double.valueOf(buffer[1]);
+                conditions[2] = Double.valueOf(buffer[2]);
+
+                line = reader.readLine();
+                buffer = line.split(" ");
+
+                conditionType[0] = Integer.valueOf(buffer[0]);
+                conditionType[1] = Integer.valueOf(buffer[1]);
+                conditionType[2] = Integer.valueOf(buffer[2]);
 
                 events[i] = new EventTriggerable(name, description, source, effectsParams, effectsGauges,
                                                 duration, uses, null, conditions, conditionType);
@@ -285,7 +286,7 @@ public class ConfigReader
 
             line = pass(reader);
 
-            int eventCount = (Integer.valueOf(line)).intValue();
+            int eventCount = Integer.valueOf(line);
 
             events = new EventBuyable[eventCount];
 
@@ -302,32 +303,32 @@ public class ConfigReader
                 line = reader.readLine();
                 buffer = line.split(" ");
 
-                effectsParams[0] = (Integer.valueOf(buffer[0])).intValue();
-                effectsParams[1] = (Integer.valueOf(buffer[1])).intValue();
-                effectsParams[2] = (Integer.valueOf(buffer[2])).intValue();
+                effectsParams[0] = Integer.valueOf(buffer[0]);
+                effectsParams[1] = Integer.valueOf(buffer[1]);
+                effectsParams[2] = Integer.valueOf(buffer[2]);
 
                 line = reader.readLine();
                 buffer = line.split(" ");
 
-                effectsGauges[0] = (Double.valueOf(buffer[0])).doubleValue();
-                effectsGauges[1] = (Double.valueOf(buffer[1])).doubleValue();
-                effectsGauges[2] = (Double.valueOf(buffer[2])).doubleValue();
+                effectsGauges[0] = Double.valueOf(buffer[0]);
+                effectsGauges[1] = Double.valueOf(buffer[1]);
+                effectsGauges[2] = Double.valueOf(buffer[2]);
 
                 line = reader.readLine();
 
-                duration = (Integer.valueOf(line)).intValue();
+                duration = Integer.valueOf(line);
 
                 line = reader.readLine();
 
-                uses = (Integer.valueOf(line)).intValue();
+                uses = Integer.valueOf(line);
 
                 line = reader.readLine();
 
-                cost = (Integer.valueOf(line)).intValue();
+                cost = Integer.valueOf(line);
 
                 line = reader.readLine();
 
-                risk = (Double.valueOf(line)).doubleValue();
+                risk = Double.valueOf(line);
 
                 events[i] = new EventBuyable(name, description, source, effectsParams, effectsGauges,
                                                 duration, uses, null, cost, risk);

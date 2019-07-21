@@ -13,10 +13,7 @@ public class Window
     private Canvas canvas;
     private Graphics graphics;
 
-    private Engine engine;
-
     public Window(Engine engine) {
-        this.engine = engine;
         image = new BufferedImage(engine.getWidth(), engine.getHeight(), BufferedImage.TYPE_INT_RGB);
 
         canvas = new Canvas();

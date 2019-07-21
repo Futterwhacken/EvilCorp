@@ -1,6 +1,5 @@
 package evilcorp.logic.event;
 
-import evilcorp.logic.config.Config;
 import evilcorp.logic.area.region.Region;
 import evilcorp.logic.NotificationBus;
 
@@ -52,12 +51,12 @@ public final class EventBuyable extends Event
                     effectsGauges[i] = -1 * effectsGauges[i];
 
                     switch (effectsParams[i]) {
-                        case -1: break;
                         case 0: effectsParams[i] = 1;
                         case 1: effectsParams[i] = 2;
                         case 2: effectsParams[i] = 0;
                         case 3: effectsParams[i] = 4;
                         case 4: effectsParams[i] = 3;
+                        case -1:
                         default: break;
                     }
                 }

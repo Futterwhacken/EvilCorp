@@ -8,11 +8,10 @@ public class TextArea extends GameObject
 {
     /* static version */
 
-    Text[] texts;
+    private Text[] texts;
 
     private int posX;
     private int posY;
-    private int width;
     private int lineHeight;
 
     private int maxChars;
@@ -28,7 +27,6 @@ public class TextArea extends GameObject
 
         this.posX = posX;
         this.posY = posY;
-        this.width = width;
         this.lineHeight = lineHeight;
 
         this.maxLines = maxLines;
@@ -60,7 +58,7 @@ public class TextArea extends GameObject
         }
     }
 
-    public ArrayList<String> processString(String s) {
+    private ArrayList<String> processString(String s) {
         ArrayList<String> strings = new ArrayList<>();
 
         if (s.length() > maxChars) {

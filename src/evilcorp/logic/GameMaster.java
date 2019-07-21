@@ -5,8 +5,6 @@ import evilcorp.logic.area.World;
 import evilcorp.logic.area.region.*;
 import evilcorp.logic.event.*;
 
-import java.util.ArrayList;
-
 public final class GameMaster extends GameLogic
 {
     /* Classe permettant d'intéragir avec le moteur logique qui sera appelée par l'executable et le moteur graphique */

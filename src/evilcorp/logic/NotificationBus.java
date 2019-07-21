@@ -8,8 +8,8 @@ public final class NotificationBus {
         2) les notifications à afficher immédiatement: immediateList
     */
 
-    private static ArrayList<String> waitingList = new ArrayList<String>();
-    private static ArrayList<String> immediateList = new ArrayList<String>();
+    private static ArrayList<String> waitingList = new ArrayList<>();
+    private static ArrayList<String> immediateList = new ArrayList<>();
 
     public static ArrayList<String> getWaitingList() {
         return waitingList;
@@ -28,10 +28,10 @@ public final class NotificationBus {
     }
 
     public static void clearWaitingList() {
-        waitingList = new ArrayList<String>();
+        waitingList = new ArrayList<>();
     }
 
     public static void clearImmediateList() {
-        immediateList = new ArrayList<String>();
+        immediateList = new ArrayList<>();
     }
 }

@@ -32,8 +32,8 @@ public final class Region extends Area
 
         this.params = params;
         this.exploitable = exploitable;
-        this.events = new ArrayList<Event>();
-        this.exploitations = new ArrayList<Exploitation>();
+        this.events = new ArrayList<>();
+        this.exploitations = new ArrayList<>();
     }
 
     public Parameters getParams() { return params; }
@@ -41,7 +41,7 @@ public final class Region extends Area
     public void addEvent(Event e) { events.add(e); }
 
     public ArrayList<EventBuyable> getBuyableEvents() {
-        ArrayList<EventBuyable> eb = new ArrayList<EventBuyable>();
+        ArrayList<EventBuyable> eb = new ArrayList<>();
         for (Event e: events) {
             if (e instanceof EventBuyable) {
                 eb.add((EventBuyable)e);
@@ -66,8 +66,8 @@ public final class Region extends Area
         return false;
     }
 
-    public void makeExploitable() { exploitable = true; }
-    public void makeUnexploitable()  { exploitable = false; }
+    private void makeExploitable() { exploitable = true; }
+    private void makeUnexploitable()  { exploitable = false; }
     public boolean isExploitable() { return exploitable; }
 
     public ArrayList<Exploitation> getExploitations() {

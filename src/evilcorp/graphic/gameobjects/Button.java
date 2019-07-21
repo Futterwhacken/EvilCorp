@@ -17,7 +17,7 @@ public class Button extends GameObject
     private String label;
     private int labelColor;
 
-    public Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor) {
+    private Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor) {
         super(engine);
 
         this.posX = posX;
@@ -57,9 +57,8 @@ public class Button extends GameObject
         int mouseY = engine.getInput().getMouseY();
 
         if ((mouseX >= posX && mouseX <= posX + width) && (mouseY >= posY && mouseY <= posY + height)) {
-            if (engine.getInput().isButton(1)) { // 1 = left click, tomod ?
-                return true;
-            }
+            // 1 = left click, tomod ?
+            return engine.getInput().isButton(1);
         }
 
         return false;

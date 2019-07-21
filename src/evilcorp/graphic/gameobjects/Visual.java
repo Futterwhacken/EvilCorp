@@ -10,7 +10,7 @@ public class Visual extends GameObject
     private int posX;
     private int posY;
 
-    public Visual(Engine engine, Image visual, Action action, int posX, int posY) {
+    private Visual(Engine engine, Image visual, Action action, int posX, int posY) {
         super(engine);
 
         this.visual = visual;

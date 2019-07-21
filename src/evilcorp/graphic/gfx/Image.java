@@ -41,7 +41,7 @@ public class Image
     public void setHeight(int height) { this.height = height; }
     public void setPixels(int[] pixels) { this.pixels = pixels; }
 
-    public BufferedImage scale(BufferedImage image, double scale) {
+    private BufferedImage scale(BufferedImage image, double scale) {
 
         int scaledWidth = (int)(image.getWidth() * scale);
         int scaleHeight = (int)(image.getHeight() * scale);

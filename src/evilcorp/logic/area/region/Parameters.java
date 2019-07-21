@@ -3,6 +3,7 @@ package evilcorp.logic.area.region;
 import evilcorp.logic.GameLogic;
 import evilcorp.logic.config.Config;
 
+@SuppressWarnings({"DuplicateBranchesInSwitch", "Duplicates"})
 public final class Parameters extends GameLogic
 {
     private static double[] mods = {Config.mod0, Config.mod1, Config.mod2};
