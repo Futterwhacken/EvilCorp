@@ -432,7 +432,6 @@ public class RuntimeGraphic extends AbstractGame {
 					if (engagePath[1] != 0) {
 						engagePath[0] = 1;
 						engagePath[1] = 0;
-						// TODO : display selected region 
 					}
 				}
 			}

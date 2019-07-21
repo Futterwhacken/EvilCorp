@@ -9,8 +9,6 @@ public class Mouseable {
 
     private int x1, y1, x2, y2;
 
-    //TODO: Store Event so that it can be triggered
-
     /*    (x1, y1)  ___________   (x2, y1)
      *             |           |
      *             |           |

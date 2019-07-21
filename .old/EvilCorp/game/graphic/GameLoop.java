@@ -65,7 +65,6 @@ public class GameLoop implements Runnable {
                 unprocessedTime -= HERTZ;
                 render = true;
 
-                //TODO: Update Game
                 game.update(this, HERTZ);
 
                 window.update();
