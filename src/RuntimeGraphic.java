@@ -2,6 +2,7 @@ import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.*;
 
 
+import evilcorp.graphic.gfx.Image;
 import evilcorp.logic.GameMaster;
 import evilcorp.logic.area.region.Region;
 
@@ -13,7 +14,6 @@ public class RuntimeGraphic {
     private static final int menuColor = 0xff00ffff;
     private static final int menuAnchorX = 50;
     private static final int menuAnchorY = 335;
-    private static final int menuWidth = 100;
     private static final int menuFieldHeight = 21;
 
     private static final int regionInfoColor = 0xffffffff;
@@ -82,7 +82,7 @@ public class RuntimeGraphic {
         finalOptions[finalOptions.length - 1] = "return";
         finalActions[finalActions.length - 1] = () -> engine.setCurrentMenu(engine.getMainMenu());
 
-        return new Menu(engine, menuAnchorX, menuAnchorY, menuWidth, menuFieldHeight, finalOptions, finalActions, menuColor);
+        return new Menu(engine, menuAnchorX, menuAnchorY, menuFieldHeight, finalOptions, finalActions, menuColor);
     }
 
     public static void main(String[] args) {
@@ -118,7 +118,7 @@ public class RuntimeGraphic {
         engine.addGameObject(map);
 
 
-        Menu mainMenu = new Menu(engine, menuAnchorX, menuAnchorY, menuWidth, menuFieldHeight,
+        Menu mainMenu = new Menu(engine, menuAnchorX, menuAnchorY, menuFieldHeight,
                 new String[]{
                     "add exploitation",
                     "remove exploitation",
@@ -132,12 +132,6 @@ public class RuntimeGraphic {
 
         engine.setCurrentMenu(mainMenu); // encapsuler
         engine.setMainMenu(mainMenu);
-
-
-        Text fundsText = new Text(engine, 0, 700, 0xffffffff);
-        fundsText.setAction(() -> fundsText.setText("FUNDS: " + gm.getPoints()));
-
-        engine.addGameObject(fundsText);
 
 
         Text selectedRegionText = new Text(engine, "SELECT A REGION", regionInfoColor);
@@ -216,6 +210,25 @@ public class RuntimeGraphic {
                 });
 
         engine.addGameObject(regionInfo);
+
+
+        Text turnsText = new Text(engine, 1025, 100, 0xff00ffff);
+        turnsText.setAction(() -> turnsText.setText("TURN: " + gm.getTurn()));
+
+        Text fundsText = new Text(engine, 1025, 116, 0xff00ffff);
+        fundsText.setAction(() -> fundsText.setText("FUNDS: " + gm.getPoints() + " $"));
+
+        Button nextTurnButton = new Button(engine, 1026, 148,
+                () -> gm.nextTurn(),
+                new Image("/resources/images/next_turn.png"));
+
+        engine.addGameObject(turnsText);
+        engine.addGameObject(fundsText);
+        engine.addGameObject(nextTurnButton);
+
+        Visual logo = new Visual(engine, (int)(0.5*(engine.getWidth() - 252)), 600, new Image("/resources/images/logo.png"));
+
+        engine.addGameObject(logo);
 
         engine.start();
     }

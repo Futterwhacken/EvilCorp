@@ -17,8 +17,6 @@ public class TextArea extends GameObject
     private final int maxChars;
     private final int maxLines;
 
-    private final int charWidth = 7+1;
-
     // allow inArea Offset
 
     public TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts) {
@@ -29,7 +27,7 @@ public class TextArea extends GameObject
         this.lineHeight = lineHeight;
 
         this.maxLines = maxLines;
-        this.maxChars = width / charWidth;
+        this.maxChars = width / engine.getStandardFont().getTextUnitWidth();
 
         this.texts = texts;
     }

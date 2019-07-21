@@ -49,7 +49,7 @@ public class Engine implements Runnable
         this.scale = 1;
         this.title = "EvilCorp";
 
-        this.standardFont = new Font("/resources/fonts/standard_font.png");
+        this.standardFont = new Font("/resources/fonts/standard_font.png", 7, 1);
 
         // ============================
 

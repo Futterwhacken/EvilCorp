@@ -6,13 +6,15 @@ public class Menu extends GameObject
 {
     private final Button[] buttons;
 
-    public Menu(Engine engine, int posX, int posY, int width, int fieldHeight, String[] options, Action[] actions, int color) {
+    public Menu(Engine engine, int posX, int posY, int fieldHeight, String[] options, Action[] actions, int color) {
         super(engine);
 
         this.buttons = new Button[actions.length];
 
+        // implement margin
+
         for (int i = 0; i < actions.length; i++) {
-            buttons[i] = new Button(engine, posX, posY + i * fieldHeight, width, fieldHeight, actions[i], options[i], color);
+            buttons[i] = new Button(engine, posX, posY + i * fieldHeight, options[i].length() * engine.getStandardFont().getTextUnitWidth(), fieldHeight, actions[i], options[i], color);
         }
     }
 

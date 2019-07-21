@@ -29,18 +29,13 @@ public class Button extends GameObject
 
         this.image = image;
 
-        if (image != null) {
-            image.setWidth(width);
-            image.setHeight(height);
-        }
-
         this.label = label;
         this.labelColor = labelColor;
     }
 
     // image
-    public Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image) {
-        this(engine, posX, posY, width, height, action, image, null, 0);
+    public Button(Engine engine, int posX, int posY, Action action, Image image) {
+        this(engine, posX, posY, image.getWidth(), image.getHeight(), action, image, null, 0);
     }
 
     // string label

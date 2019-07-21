@@ -6,11 +6,19 @@ public class Font
     private final int[] offsets;
     private final int[] widths;
 
-    public Font(String path) {
-        fontImage = new Image(path);
+    private final int charWidth;
+    private final int charHeight;
+    private final int interspace;
 
-        offsets = new int[59];
-        widths = new int[59];
+    public Font(String path, int charWidth, int charHeight, int interspace) {
+        this.fontImage = new Image(path);
+
+        this.offsets = new int[59];
+        this.widths = new int[59];
+
+        this.charWidth = charWidth;
+        this.charHeight = charHeight;
+        this.interspace = interspace; // use interspace in renderer
 
         int unicode = 0;
 
@@ -26,7 +34,18 @@ public class Font
         }
     }
 
+    public Font(String path, int charWidth, int interspace) {
+        //noinspection SuspiciousNameCombination
+        this(path, charWidth, charWidth, interspace);
+    }
+
     public Image getFontImage() { return fontImage; }
     public int[] getOffsets() { return offsets; }
     public int[] getWidths() { return widths; }
+
+    public int getCharWidth() { return charWidth; }
+    public int getCharHeight() { return charHeight; }
+    public int getInterspace() { return interspace; }
+
+    public int getTextUnitWidth() { return charWidth + interspace; }
 }

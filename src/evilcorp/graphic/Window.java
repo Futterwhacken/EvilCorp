@@ -27,7 +27,7 @@ public class Window
         frame.setLocationRelativeTo(null);
         frame.setResizable(false);
         frame.setVisible(true);
-        //frame.setSize(new Dimension((int)(engine.getWidth() * engine.getScale())+50, (int)(engine.getHeight() * engine.getScale())+50));
+        frame.setSize(new Dimension((int)(engine.getWidth() * engine.getScale()) + 6, (int)(engine.getHeight() * engine.getScale()) + 29));
 
         canvas.createBufferStrategy(1);
         buffer = canvas.getBufferStrategy();
@@ -36,7 +36,8 @@ public class Window
 
     public void update()
     {
-        graphics.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
+        graphics.drawImage(image, 0, 0, null);
+        //graphics.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
         buffer.show();
     }
 

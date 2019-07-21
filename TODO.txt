@@ -1,12 +1,14 @@
 
 
 TODO:
+    * immediate and waiting notifications
     * HOVER NOTIFICATION show buy and rmv cost
-    * HOVER NOTIFICATION show event status, descr and cost
+    * HOVER NOTIFICATION & MENU show event status, descr and cost
     * add menu label
     * TextArea -> ? Dynamic, Static, Abstract ?
     * add Scene object (splash screen, menu, game, credits)
     * handle button text margin
+    * button feedback
     * [DONE] standardiser ordre des arguments & cleanup
     * [DONE (Map.java added)] link region logic config with region graphic config through the name (string) of the region
 
