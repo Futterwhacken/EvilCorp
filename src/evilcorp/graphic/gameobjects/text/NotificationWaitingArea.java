@@ -20,7 +20,8 @@ public class NotificationWaitingArea extends TextArea
 
     }
 
-    @Override
+
+    @Override @SuppressWarnings("Duplicates")
     public void render() {
         int usedLines = 0;
         ArrayList<String> notifications = NotificationBus.getWaitingList();

@@ -145,6 +145,8 @@ public class Engine implements Runnable
     public double getScale() { return scale; }
     public String getTitle() { return title; }
 
+    public double getUpdateRate() { return updateRate; }
+
     public Window getWindow() { return window; }
     public Renderer getRenderer() { return renderer; }
     public Input getInput() { return input; }

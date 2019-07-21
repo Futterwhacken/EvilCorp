@@ -5,6 +5,7 @@ import evilcorp.graphic.gameobjects.*;
 import evilcorp.graphic.gameobjects.interactive.Button;
 import evilcorp.graphic.gameobjects.interactive.Map;
 import evilcorp.graphic.gameobjects.interactive.Menu;
+import evilcorp.graphic.gameobjects.text.NotificationImmediateArea;
 import evilcorp.graphic.gameobjects.text.NotificationWaitingArea;
 import evilcorp.graphic.gameobjects.text.Text;
 import evilcorp.graphic.gameobjects.text.TextArea;
@@ -128,7 +129,7 @@ public class RuntimeGraphic {
 
 
         Text hoverText = new Text(engine, 0xffffffff);
-        TextArea hoverTextArea = new TextArea(engine, 50, 600,8*40, 14, 15, new Text[]{hoverText});
+        TextArea hoverTextArea = new TextArea(engine, 50, 620,8*40, 14, 7, new Text[]{hoverText});
 
         engine.addGameObject(hoverTextArea);
 
@@ -253,6 +254,7 @@ public class RuntimeGraphic {
         Button nextTurnButton = new Button(engine, 1026, 148,
                 () -> {
                     NotificationBus.clearWaitingList();
+                    NotificationBus.clearImmediateList();
                     gm.nextTurn();
                 },
                 new Image("/resources/images/next_turn.png"));
@@ -270,6 +272,10 @@ public class RuntimeGraphic {
         NotificationWaitingArea notificationWaitingArea = new NotificationWaitingArea(engine,850, 318, 8*50,14, 27, 0xffffffff);
 
         engine.addGameObject(notificationWaitingArea);
+
+        NotificationImmediateArea notificationImmediateArea = new NotificationImmediateArea(engine,50, 510, 8*50,16, 3, 0xffff0000, 3);
+
+        engine.addGameObject(notificationImmediateArea);
 
 
         engine.start();
