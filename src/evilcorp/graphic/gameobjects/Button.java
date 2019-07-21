@@ -5,17 +5,17 @@ import evilcorp.graphic.gfx.Image;
 
 public class Button extends GameObject
 {
-    private int posX;
-    private int posY;
-    private int width;
-    private int height;
-
-    private boolean clicked = false;
+    private final int posX;
+    private final int posY;
+    private final int width;
+    private final int height;
 
     private Action action;
-    private Image image;
-    private String label;
-    private int labelColor;
+    private final Image image;
+    private final String label;
+    private final int labelColor;
+
+    private boolean clicked = false;
 
     private Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor) {
         super(engine);
@@ -38,14 +38,17 @@ public class Button extends GameObject
         this.labelColor = labelColor;
     }
 
+    // image
     public Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image) {
         this(engine, posX, posY, width, height, action, image, null, 0);
     }
 
+    // string label
     public Button(Engine engine, int posX, int posY, int width, int height, Action action, String label, int labelColor) {
         this(engine, posX, posY, width, height, action, null, label, labelColor);
     }
 
+    // invisible
     public Button(Engine engine, int posX, int posY, int width, int height, Action action) {
         this(engine, posX, posY, width, height, action, null, null, 0);
     }

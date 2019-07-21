@@ -9,7 +9,7 @@ import java.util.InputMismatchException;
 import java.util.ArrayList;
 
 public class RuntimeConsole {
-    private static Scanner scan = new Scanner(System.in);
+    private static final Scanner scan = new Scanner(System.in);
     private static GameMaster gm = null;
 
     private static void display(String str) { System.out.println(str); }

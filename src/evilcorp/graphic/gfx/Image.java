@@ -11,7 +11,6 @@ public class Image
     private int height;
     private int[] pixels;
 
-
     public Image(String path, double scale) {
         BufferedImage image;
         try {
@@ -39,7 +38,6 @@ public class Image
 
     public void setWidth(int width) { this.width = width; }
     public void setHeight(int height) { this.height = height; }
-    public void setPixels(int[] pixels) { this.pixels = pixels; }
 
     private BufferedImage scale(BufferedImage image, double scale) {
 

@@ -5,6 +5,7 @@ import evilcorp.graphic.gameobjects.Menu;
 
 import evilcorp.graphic.gfx.Font;
 
+import evilcorp.logic.GameMaster;
 import evilcorp.logic.area.region.Region;
 
 import java.util.ArrayList;
@@ -24,21 +25,22 @@ public class Engine implements Runnable
     private final double scale;
     private final String title;
 
-    private Font standardFont;
+    private final Font standardFont;
 
-    private ArrayList<GameObject> gameObjects;
+    private final ArrayList<GameObject> gameObjects;
 
-    private Region selectedRegion; // getSelectedRegion depuis runtime pour programmer les actions
+    private final GameMaster gm;
+    private Region selectedRegion;
 
     private Menu mainMenu;
     private Menu currentMenu;
 
-    /* make singleton, initialized with config path, constructor loads config */
+    /* make singleton */
 
-    public Engine(String dataPath) {
+    public Engine(String dataPath, GameMaster gm) {
+        this.gm = gm;
+
         this.gameObjects = new ArrayList<>();
-
-        // load configuration and resources here
 
         // debug
         this.updateRate = 1.0/30.0;
@@ -165,4 +167,14 @@ public class Engine implements Runnable
     public void setCurrentMenu(Menu menu) {
         currentMenu = menu;
     }
+
+    public Region getRegion(String regionName) {
+        for (Region r : gm.getWorld().getRegions()) {
+            if (r.getName().equals(regionName)) {
+                return r;
+            }
+        }
+        return null;
+    }
+
 }

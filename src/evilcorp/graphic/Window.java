@@ -7,11 +7,11 @@ import javax.swing.JFrame;
 
 public class Window
 {
-    private JFrame frame;
-    private BufferedImage image;
-    private BufferStrategy buffer;
-    private Canvas canvas;
-    private Graphics graphics;
+    private final JFrame frame;
+    private final BufferedImage image;
+    private final BufferStrategy buffer;
+    private final Canvas canvas;
+    private final Graphics graphics;
 
     public Window(Engine engine) {
         image = new BufferedImage(engine.getWidth(), engine.getHeight(), BufferedImage.TYPE_INT_RGB);

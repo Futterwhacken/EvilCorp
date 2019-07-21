@@ -2,9 +2,9 @@ package evilcorp.graphic.gfx;
 
 public class Font
 {
-    private Image fontImage;
-    private int[] offsets;
-    private int[] widths;
+    private final Image fontImage;
+    private final int[] offsets;
+    private final int[] widths;
 
     public Font(String path) {
         fontImage = new Image(path);

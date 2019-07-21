@@ -8,14 +8,14 @@ import java.awt.event.MouseMotionListener;
 
 public class Input implements KeyListener, MouseListener, MouseMotionListener
 {
-    private Engine engine;
+    private final Engine engine;
 
     private final int NUM_KEYS = 256;
-    private boolean[] keys = new boolean[NUM_KEYS];
+    private final boolean[] keys = new boolean[NUM_KEYS];
     private boolean[] keysLast = new boolean[NUM_KEYS];
 
     private final int NUM_BUTTONS = 7;
-    private boolean[] buttons = new boolean[NUM_BUTTONS];
+    private final boolean[] buttons = new boolean[NUM_BUTTONS];
     private boolean[] buttonsLast = new boolean[NUM_BUTTONS];
 
     private int mouseX, mouseY;

@@ -4,7 +4,7 @@ import evilcorp.graphic.Engine;
 
 public class Menu extends GameObject
 {
-    private Button[] buttons;
+    private final Button[] buttons;
 
     public Menu(Engine engine, int posX, int posY, int width, int fieldHeight, String[] options, Action[] actions, int color) {
         super(engine);

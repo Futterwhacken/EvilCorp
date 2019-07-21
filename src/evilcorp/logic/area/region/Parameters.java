@@ -6,7 +6,7 @@ import evilcorp.logic.config.Config;
 @SuppressWarnings({"DuplicateBranchesInSwitch", "Duplicates"})
 public final class Parameters extends GameLogic
 {
-    private static double[] mods = {Config.mod0, Config.mod1, Config.mod2};
+    private static final double[] mods = {Config.mod0, Config.mod1, Config.mod2};
 
     /* Les trois paramètres permettent de déterminer quels modificateurs (mod0, mod1, mod2)
     seront appliqués au différents taux de variation des jauges d'une région */

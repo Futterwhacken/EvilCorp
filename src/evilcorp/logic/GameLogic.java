@@ -9,7 +9,7 @@ public abstract class GameLogic
     /* Permet de garder traces des instances du moteur logique */
 
     private static int instanceCount = 0;
-    private static ArrayList<GameLogic> instances = new ArrayList<>();
+    private static final ArrayList<GameLogic> instances = new ArrayList<>();
 
     public static int getInstanceCount() { return instanceCount; }
     public static GameLogic getElement(int id) { return instances.get(id); }

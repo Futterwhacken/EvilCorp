@@ -5,31 +5,45 @@ import evilcorp.graphic.Engine;
 public class Text extends GameObject
 {
     private String text;
-    private String defaultText;
     private Action action;
+    private final String defaultText;
 
-    private int posX;
-    private int posY;
-    private int color;
+    private final int posX;
+    private final int posY;
+    private final int color;
 
-    private Text(Engine engine, String text, Action action, int posX, int posY, int color) {
+    public Text(Engine engine, int posX, int posY, String text, Action action, int color) {
         super(engine);
 
         this.text = text;
         this.defaultText = text;
         this.action = action;
+
         this.posX = posX;
         this.posY = posY;
         this.color = color;
     }
 
     public Text(Engine engine) {
-        this(engine, "", () -> {}, 0 ,0 ,0xffffffff);
+        this(engine, 0xffffffff);
     }
 
-    public Text(Engine engine, String text, int posX, int posY, int color) {
-        this(engine, text, null, posX, posY, color);
+    public Text(Engine engine, int color) {
+        this(engine, 0, 0, "", color);
     }
+
+    public Text(Engine engine, String text, int color) {
+        this(engine, 0, 0, text, null, color);
+    }
+
+    public Text(Engine engine, int posX, int posY, int color) {
+        this(engine, posX, posY, "", color);
+    }
+
+    public Text(Engine engine, int posX, int posY, String text, int color) {
+        this(engine, posX, posY, text, null, color);
+    }
+
 
     @Override
     public void update() {

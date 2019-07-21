@@ -6,8 +6,9 @@ import evilcorp.graphic.gfx.Font;
 
 public class Renderer
 {
-    private int width, height;
-    private int[] pixels;
+    private final int width;
+    private final int height;
+    private final int[] pixels;
 
     public Renderer(Engine engine)
     {

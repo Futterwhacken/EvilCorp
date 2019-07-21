@@ -1,6 +1,5 @@
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.*;
-import evilcorp.graphic.gfx.Image;
 
 
 import evilcorp.logic.GameMaster;
@@ -11,37 +10,39 @@ public class RuntimeGraphic {
     private static Engine engine;
     private static GameMaster gm;
 
-    private static double mapScale = 1.75;
-    private static int mapPosX;
-    private static int mapPosY;
+    private static final int menuColor = 0xff00ffff;
+    private static final int menuAnchorX = 50;
+    private static final int menuAnchorY = 335;
+    private static final int menuWidth = 100;
+    private static final int menuFieldHeight = 21;
 
-    private static int menuColor = 0xff00ffff;
-    private static int menuAnchorX = 50;
-    private static int menuAnchorY = 335;
-    private static int menuWidth = 100;
-    private static int menuFieldHeight = 21;
+    private static final int regionInfoColor = 0xffffffff;
+    private static final int regionInfoAnchorX = 50;
+    private static final int regionInfoAnchorY = 100;
+    private static final int regionInfoWidth = 8*40;
+    private static final int regionInfoFieldHeight = 16;
+    private static final int regionInfoMaxLines = 15;
 
-    private static int regionInfoColor = 0xffffffff;
-    private static int regionInfoAnchorX = 50;
-    private static int regionInfoAnchorY = 100;
-    private static int regionInfoWidth = 8*40;
-    private static int regionInfoFieldHeight = 16;
+    private static Menu buildAddExploitationMenu() {
+            String[] options = new String[]{
+                    "add primary exploitation",
+                    "add secondary exploitation",
+                    "add tertiary exploitation",
+            };
+            Action[] actions = new Action[]{
+                    () -> engine.getSelectedRegion().buyExploitation(0),
+                    () -> engine.getSelectedRegion().buyExploitation(1),
+                    () -> engine.getSelectedRegion().buyExploitation(2),
+            };
 
-    private static Region getRegion(String regionName) {
-        for (Region r : gm.getWorld().getRegions()) {
-            if (r.getName().equals(regionName)) {
-                return r;
-            }
-        }
-
-        return null;
+            return buildReturnableMenu(options, actions);
     }
 
     private static Menu buildRemoveExploitationMenu() {
-        String[] options = new String[engine.getSelectedRegion().getExploitations().size() + 2];
+        String[] options = new String[engine.getSelectedRegion().getExploitations().size()];
         Action[] actions = new Action[options.length];
 
-        for (int i = 0; i < options.length - 2; i++) {
+        for (int i = 0; i < options.length; i++) {
             int a = i;
             options[i] = ""+engine.getSelectedRegion().getExploitations().get(i);
             actions[i] = () -> {
@@ -53,10 +54,10 @@ public class RuntimeGraphic {
     }
 
     private static Menu buildBuyEventMenu() {
-        String[] options = new String[engine.getSelectedRegion().getBuyableEvents().size() + 2];
+        String[] options = new String[engine.getSelectedRegion().getBuyableEvents().size()];
         Action[] actions = new Action[options.length];
 
-        for (int i = 0; i < options.length - 2; i++) {
+        for (int i = 0; i < options.length; i++) {
             int a = i;
             options[i] = ""+engine.getSelectedRegion().getBuyableEvents().get(i).getName();
             actions[i] = () -> {
@@ -68,95 +69,54 @@ public class RuntimeGraphic {
     }
 
     private static Menu buildReturnableMenu(String[] options, Action[] actions) {
-        options[options.length - 2] = " ";
-        actions[options.length - 2] = () -> {};
-        options[options.length - 1] = "return";
-        actions[options.length - 1] = () -> engine.setCurrentMenu(engine.getMainMenu());
+        String[] finalOptions = new String[options.length + 2];
+        Action[] finalActions = new Action[options.length + 2];
 
-        return new Menu(engine, menuAnchorX, menuAnchorY, menuWidth, menuFieldHeight, options, actions, menuColor);
+        for (int i = 0; i < options.length; i++) {
+            finalOptions[i] = options[i];
+            finalActions[i] = actions[i];
+        }
+
+        finalOptions[finalOptions.length - 2] = " ";
+        finalActions[finalActions.length - 2] = () -> {};
+        finalOptions[finalOptions.length - 1] = "return";
+        finalActions[finalActions.length - 1] = () -> engine.setCurrentMenu(engine.getMainMenu());
+
+        return new Menu(engine, menuAnchorX, menuAnchorY, menuWidth, menuFieldHeight, finalOptions, finalActions, menuColor);
     }
 
     public static void main(String[] args) {
 
-        engine = new Engine("");
+        // pass game master to engine (get region -> ???)
         gm = GameMaster.initGameMaster("data/config/logic/");
+        engine = new Engine("", gm);
 
-        mapPosX = (int)(0.5*(engine.getWidth() - (370 * mapScale)));
-        mapPosY = 0;
-
-        Image mapImage = new Image("/resources/maps/map.png", mapScale);
-        Image mapAfricaImage = new Image("/resources/maps/map-africa.png", mapScale);
-        Image mapAsiaImage = new Image("/resources/maps/map-asia.png", mapScale);
-        Image mapEuropeImage = new Image("/resources/maps/map-europe.png", mapScale);
-        Image mapNorthAmericaImage = new Image("/resources/maps/map-northamerica.png", mapScale);
-        Image mapSouthAmericaImage = new Image("/resources/maps/map-southamerica.png", mapScale);
-
-        //Visual logo = new Visual(engine, new Image("/resources/logo/logo.png"), 266, 300);
-
-        Visual map = new Visual(engine, mapImage, mapPosX, mapPosY);
-
-        // link region logic config with region graphic config through the name (string) of the region
-        Button africaButton = new Button(engine, (int)(mapPosX + 160 * mapScale),(int)(mapPosY + 92 * mapScale), (int)(69 * mapScale), (int)(72 * mapScale),
-                () -> {
-                map.setVisual(mapAfricaImage);
-                engine.setSelectedRegion(getRegion("Africa"));
-                });
-        Button asiaButton = new Button(engine, (int)(mapPosX + 230 * mapScale), (int)(mapPosY + 38 * mapScale), (int)(124 * mapScale), (int)(136 * mapScale),
-                () -> {
-                map.setVisual(mapAsiaImage);
-                engine.setSelectedRegion(getRegion("Asia"));
-                });
-        Button europeButton = new Button(engine, (int)(mapPosX + 165 * mapScale), (int)(mapPosY + 34 * mapScale), (int)(62 * mapScale), (int)(53 * mapScale),
-                () -> {
-                map.setVisual(mapEuropeImage);
-                engine.setSelectedRegion(getRegion("Europe"));
-                });
-        Button northAmericaButton = new Button(engine, (int)(mapPosX + 11 * mapScale), (int)(mapPosY + 22 * mapScale), (int)(123 * mapScale), (int)(87 * mapScale),
-                () -> {
-                map.setVisual(mapNorthAmericaImage);
-                engine.setSelectedRegion(getRegion("North America"));
-                });
-        Button southAmericaButton = new Button(engine, (int)(mapPosX + 89 * mapScale), (int)(mapPosY + 117 * mapScale), (int)(42 * mapScale), (int)(71 * mapScale),
-                () -> {
-                map.setVisual(mapSouthAmericaImage);
-                engine.setSelectedRegion(getRegion("South America"));
-                });
-
-
-        /*
-        r.buyExploitation(select-1);
-        displayImmediateNotifications();
-
-        show buy and rmv cost
-        show event status and cost in event buy menu
-        show event descr and other hover/selected information (such as region details) in notif area (or alt dedicated area)
-
-        add menu label
-
-        add Text Area object (?)
-
-        add Scene object (splash screen, menu, game, credits)
-
-        button text margin !!!
-
-        standardiser ordre des arguments
-        */
-
-        Menu addExploitationMenu = new Menu(engine, menuAnchorX, menuAnchorY, menuWidth, menuFieldHeight,
+        Map map = new Map(engine, 370, 195, 1.75,
                 new String[]{
-                        "add primary exploitation",
-                        "add secondary exploitation",
-                        "add tertiary exploitation",
-                        " ",
-                        "return"
+                        "Africa",
+                        "Asia",
+                        "Europe",
+                        "North America",
+                        "South America"
                 },
-                new Action[]{
-                        () -> engine.getSelectedRegion().buyExploitation(0),
-                        () -> engine.getSelectedRegion().buyExploitation(1),
-                        () -> engine.getSelectedRegion().buyExploitation(2),
-                        () -> {},
-                        () -> engine.setCurrentMenu(engine.getMainMenu())
-                }, menuColor);
+                new String[]{
+                        "/resources/maps/map.png",
+                        "/resources/maps/map-africa.png",
+                        "/resources/maps/map-asia.png",
+                        "/resources/maps/map-europe.png",
+                        "/resources/maps/map-northamerica.png",
+                        "/resources/maps/map-southamerica.png"
+                },
+                new int[][]{
+                        new int[]{160,92,69,72},
+                        new int[]{230,38,124,136},
+                        new int[]{165,34,62,53},
+                        new int[]{11,22,123,87},
+                        new int[]{89,117,42,71},
+                });
+
+        engine.addGameObject(map);
+
 
         Menu mainMenu = new Menu(engine, menuAnchorX, menuAnchorY, menuWidth, menuFieldHeight,
                 new String[]{
@@ -165,29 +125,22 @@ public class RuntimeGraphic {
                     "buy action"
                 },
                 new Action[]{
-                        () -> engine.setCurrentMenu(addExploitationMenu),
+                        () -> engine.setCurrentMenu(buildAddExploitationMenu()),
                         () -> engine.setCurrentMenu(buildRemoveExploitationMenu()),
                         () -> engine.setCurrentMenu(buildBuyEventMenu())
                 }, menuColor);
 
-        engine.setCurrentMenu(mainMenu);
+        engine.setCurrentMenu(mainMenu); // encapsuler
         engine.setMainMenu(mainMenu);
 
-        engine.addGameObject(map);
-        engine.addGameObject(africaButton);
-        engine.addGameObject(asiaButton);
-        engine.addGameObject(europeButton);
-        engine.addGameObject(northAmericaButton);
-        engine.addGameObject(southAmericaButton);
+
+        Text fundsText = new Text(engine, 0, 700, 0xffffffff);
+        fundsText.setAction(() -> fundsText.setText("FUNDS: " + gm.getPoints()));
+
+        engine.addGameObject(fundsText);
 
 
-        //engine.addGameObject(logo);
-
-        Text fundsText = new Text(engine, "FUNDS: ", 0, 350, 0xffffffff);
-        fundsText.setAction(() -> fundsText.setText(fundsText.getDefaultText() + gm.getPoints()));
-
-
-        Text selectedRegionText = new Text(engine, "SELECT A REGION", 0, 0, regionInfoColor);
+        Text selectedRegionText = new Text(engine, "SELECT A REGION", regionInfoColor);
         selectedRegionText.setAction(() -> {
             if (engine.getSelectedRegion() != null)
                 selectedRegionText.setText(engine.getSelectedRegion().getName());
@@ -195,57 +148,56 @@ public class RuntimeGraphic {
                 selectedRegionText.setText(selectedRegionText.getDefaultText());
         });
 
-        Text selectedRegionActivityText = new Text(engine, "", 0, 0, regionInfoColor);
+        Text selectedRegionActivityText = new Text(engine, regionInfoColor);
         selectedRegionActivityText.setAction(() -> {
             if (engine.getSelectedRegion() != null)
                 selectedRegionActivityText.setText(engine.getSelectedRegion().getParams().getActivityToleranceString());
         });
 
-        Text selectedRegionEnvironmentText = new Text(engine, "", 0, 0, regionInfoColor);
+        Text selectedRegionEnvironmentText = new Text(engine, regionInfoColor);
         selectedRegionEnvironmentText.setAction(() -> {
             if (engine.getSelectedRegion() != null)
                 selectedRegionEnvironmentText.setText(engine.getSelectedRegion().getParams().getEnvironmentToleranceString());
         });
 
-        Text selectedRegionOppositionText = new Text(engine, "", 0, 0, regionInfoColor);
+        Text selectedRegionOppositionText = new Text(engine, regionInfoColor);
         selectedRegionOppositionText.setAction(() -> {
             if (engine.getSelectedRegion() != null)
                 selectedRegionOppositionText.setText(engine.getSelectedRegion().getParams().getOppositionToleranceString());
         });
 
-        Text selectedRegionProductionText = new Text(engine, "", 0,0, regionInfoColor);
+        Text selectedRegionProductionText = new Text(engine, regionInfoColor);
         selectedRegionProductionText.setAction(() -> {
             if (engine.getSelectedRegion() != null)
                 selectedRegionProductionText.setText("PRODUCTION: " + engine.getSelectedRegion().getProductivity());
         });
 
-        Text selectedRegionPollutionText = new Text(engine, "", 0,0, regionInfoColor);
+        Text selectedRegionPollutionText = new Text(engine, regionInfoColor);
         selectedRegionPollutionText.setAction(() -> {
             if (engine.getSelectedRegion() != null)
                 selectedRegionPollutionText.setText("POLLUTION: " + engine.getSelectedRegion().getVisibility());
         });
 
-        Text selectedRegionSocialText = new Text(engine, "", 0,0, regionInfoColor);
+        Text selectedRegionSocialText = new Text(engine, regionInfoColor);
         selectedRegionSocialText.setAction(() -> {
             if (engine.getSelectedRegion() != null)
                 selectedRegionSocialText.setText("SOCIAL: " + engine.getSelectedRegion().getSocial());
         });
 
-        Text selectedRegionExploitationText = new Text(engine, "", 0, 0, regionInfoColor);
+        Text selectedRegionExploitationText = new Text(engine, regionInfoColor);
         selectedRegionExploitationText.setAction(() -> {
             if (engine.getSelectedRegion() != null)
                 selectedRegionExploitationText.setText(""+engine.getSelectedRegion().getExploitations().size() + "/" + Region.getMaxExpl() + " EXPLOITATIONS");
         });
 
-        Text regionMenuTitle = new Text(engine, "", 0,0, menuColor);
+        Text regionMenuTitle = new Text(engine, menuColor);
         regionMenuTitle.setAction(() -> {
-            if (engine.getSelectedRegion() != null) {
+            if (engine.getSelectedRegion() != null)
                 regionMenuTitle.setText("REGION MENU");
-            }
         });
 
 
-        TextArea regionInfo = new TextArea(engine, regionInfoAnchorX, regionInfoAnchorY, regionInfoWidth,regionInfoFieldHeight, 15,
+        TextArea regionInfo = new TextArea(engine, regionInfoAnchorX, regionInfoAnchorY, regionInfoWidth,regionInfoFieldHeight, regionInfoMaxLines,
                 new Text[]{
                         selectedRegionText,
                         new Text(engine),
@@ -264,26 +216,8 @@ public class RuntimeGraphic {
                 });
 
         engine.addGameObject(regionInfo);
-        //engine.addGameObject(fundsText);
 
         engine.start();
     }
 }
-
-
-        /*Text test1 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-        Text test2 = new Text(engine, "BBBBBBBBBB", 10, 210, 0xffffffff);
-        Text test3 = new Text(engine, "CCCCCCCCCC", 10, 220, 0xffffffff);
-        Text test4 = new Text(engine, "OOOOOOOOOO", 10, 230, 0xffffffff);
-        Text test5 = new Text(engine, "IIIIIIIIII", 10, 240, 0xffffffff);
-        Text test6 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-        Text test7 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-        Text test8 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-        Text test9 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-
-        engine.addGameObject(test1);
-        engine.addGameObject(test2);
-        engine.addGameObject(test3);
-        engine.addGameObject(test4);
-        engine.addGameObject(test5);*/
 

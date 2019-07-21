@@ -6,7 +6,7 @@ import evilcorp.graphic.Engine;
 public abstract class GameObject
 {
     private static int instanceCount = 0;
-    private static ArrayList<GameObject> instances = new ArrayList<>();
+    private static final ArrayList<GameObject> instances = new ArrayList<>();
 
     public static int getInstanceCount() { return instanceCount; }
     public static GameObject getElement(int id) { return instances.get(id); }

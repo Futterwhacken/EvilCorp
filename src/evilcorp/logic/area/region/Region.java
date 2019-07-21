@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public final class Region extends Area
 {
-    private static int MAX_EXPL = Config.maxExpl; // maximum d'exploitations
+    private static final int MAX_EXPL = Config.maxExpl; // maximum d'exploitations
 
     public static int getMaxExpl() { return MAX_EXPL; }
 

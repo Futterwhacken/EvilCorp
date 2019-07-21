@@ -8,17 +8,16 @@ public class TextArea extends GameObject
 {
     /* static version */
 
-    private Text[] texts;
+    private final Text[] texts;
 
-    private int posX;
-    private int posY;
-    private int lineHeight;
+    private final int posX;
+    private final int posY;
+    private final int lineHeight;
 
-    private int maxChars;
-    private int usedLines = 0;
-    private int maxLines;
+    private final int maxChars;
+    private final int maxLines;
 
-    private int charWidth = 7+1;
+    private final int charWidth = 7+1;
 
     // allow inArea Offset
 
@@ -45,7 +44,7 @@ public class TextArea extends GameObject
     @Override
     public void render() {
 
-        usedLines = 0;
+        int usedLines = 0;
 
         for (int i = 0; i < texts.length && usedLines < maxLines; i++) {
 

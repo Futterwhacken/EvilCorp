@@ -5,15 +5,16 @@ import evilcorp.graphic.Engine;
 public class Gauge extends GameObject
 {
     //private String label; // ??
-    private int color;
-    private double level;
+    private final int color;
     private final double max = 100;
 
-    private int posX;
-    private int posY;
-    private int width;
+    private final int posX;
+    private final int posY;
+    private final int width;
+    private final int maxHeight;
+
+    private double level;
     private int height;
-    private int maxHeight;
 
     // gerer jauge horizontale, boolean
     public Gauge(Engine engine, double level, int posX, int posY, int width, int maxHeight, int color) {
