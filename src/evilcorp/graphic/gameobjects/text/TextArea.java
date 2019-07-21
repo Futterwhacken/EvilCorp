@@ -1,21 +1,20 @@
-package evilcorp.graphic.gameobjects;
+package evilcorp.graphic.gameobjects.text;
 
 import evilcorp.graphic.Engine;
+import evilcorp.graphic.gameobjects.GameObject;
 
 import java.util.ArrayList;
 
 public class TextArea extends GameObject
 {
-    /* static version */
-
     private final Text[] texts;
 
-    private final int posX;
-    private final int posY;
-    private final int lineHeight;
+    protected final int posX;
+    protected final int posY;
+    protected final int lineHeight;
 
-    private final int maxChars;
-    private final int maxLines;
+    protected final int maxChars;
+    protected final int maxLines;
 
     // allow inArea Offset
 
@@ -32,6 +31,10 @@ public class TextArea extends GameObject
         this.texts = texts;
     }
 
+    protected TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines) {
+        this(engine, posX, posY, width, lineHeight, maxLines, null);
+    }
+
     @Override
     public void update() {
         for (Text t : texts) {
@@ -41,12 +44,16 @@ public class TextArea extends GameObject
 
     @Override
     public void render() {
-
         int usedLines = 0;
 
         for (int i = 0; i < texts.length && usedLines < maxLines; i++) {
 
-            ArrayList<String> strings = processString(texts[i].getText());
+            String[] stringsArray = texts[i].getText().split("\n");
+
+            ArrayList<String> strings = new ArrayList<>();
+            for (String s : stringsArray) {
+                strings.addAll(processString(s));
+            }
 
             for (int j = 0; j < strings.size() && usedLines < maxLines; j++) {
                 engine.getRenderer().drawText(engine.getStandardFont(), strings.get(j), posX, posY + (lineHeight * usedLines), texts[i].getColor());
@@ -55,7 +62,8 @@ public class TextArea extends GameObject
         }
     }
 
-    private ArrayList<String> processString(String s) {
+
+    protected ArrayList<String> processString(String s) {
         ArrayList<String> strings = new ArrayList<>();
 
         if (s.length() > maxChars) {

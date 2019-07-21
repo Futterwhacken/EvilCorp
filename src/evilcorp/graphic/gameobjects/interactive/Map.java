@@ -1,6 +1,8 @@
-package evilcorp.graphic.gameobjects;
+package evilcorp.graphic.gameobjects.interactive;
 
 import evilcorp.graphic.Engine;
+import evilcorp.graphic.gameobjects.GameObject;
+import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Image;
 
 public class Map extends GameObject

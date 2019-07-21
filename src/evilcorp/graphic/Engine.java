@@ -1,7 +1,8 @@
 package evilcorp.graphic;
 
+import evilcorp.graphic.gameobjects.interactive.Button;
 import evilcorp.graphic.gameobjects.GameObject;
-import evilcorp.graphic.gameobjects.Menu;
+import evilcorp.graphic.gameobjects.interactive.Menu;
 
 import evilcorp.graphic.gfx.Font;
 
@@ -165,6 +166,12 @@ public class Engine implements Runnable
 
     public Menu getCurrentMenu() { return currentMenu; }
     public void setCurrentMenu(Menu menu) {
+        /* ptn ça c'est vraiment moche j'aime pas ! */
+        if (currentMenu != null) {
+            for (Button b : currentMenu.getButtons()) {
+                b.execUnHoverAction();
+            }
+        }
         currentMenu = menu;
     }
 

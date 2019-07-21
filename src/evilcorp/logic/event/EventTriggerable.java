@@ -100,7 +100,7 @@ public final class EventTriggerable extends Event
 
         if (prodCond && visiCond && sociCond) {
             triggered = true;
-            NotificationBus.addWaitingNotif("Event Triggered: \n"+name+"\n"+description+"\n"+duration+" turns,"+region.getName());
+            NotificationBus.addWaitingNotif("Event Triggered: \n"+name+"\n"+description+"\n"+duration+" turns, "+region.getName());
         }
     }
 

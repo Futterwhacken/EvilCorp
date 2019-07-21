@@ -1,6 +1,8 @@
-package evilcorp.graphic.gameobjects;
+package evilcorp.graphic.gameobjects.text;
 
 import evilcorp.graphic.Engine;
+import evilcorp.graphic.gameobjects.Action;
+import evilcorp.graphic.gameobjects.GameObject;
 
 public class Text extends GameObject
 {

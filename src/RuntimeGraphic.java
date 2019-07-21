@@ -2,9 +2,18 @@ import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.*;
 
 
+import evilcorp.graphic.gameobjects.interactive.Button;
+import evilcorp.graphic.gameobjects.interactive.Map;
+import evilcorp.graphic.gameobjects.interactive.Menu;
+import evilcorp.graphic.gameobjects.text.NotificationWaitingArea;
+import evilcorp.graphic.gameobjects.text.Text;
+import evilcorp.graphic.gameobjects.text.TextArea;
+import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Image;
 import evilcorp.logic.GameMaster;
+import evilcorp.logic.NotificationBus;
 import evilcorp.logic.area.region.Region;
+import evilcorp.logic.exploitation.*;
 
 
 public class RuntimeGraphic {
@@ -25,9 +34,9 @@ public class RuntimeGraphic {
 
     private static Menu buildAddExploitationMenu() {
             String[] options = new String[]{
-                    "add primary exploitation",
-                    "add secondary exploitation",
-                    "add tertiary exploitation",
+                    "add primary exploitation ("+ExploitationPrimary.COST+" $)",
+                    "add secondary exploitation ("+ExploitationSecondary.COST+" $)",
+                    "add tertiary exploitation ("+ExploitationTertiary.COST+" $)",
             };
             Action[] actions = new Action[]{
                     () -> engine.getSelectedRegion().buyExploitation(0),
@@ -44,7 +53,7 @@ public class RuntimeGraphic {
 
         for (int i = 0; i < options.length; i++) {
             int a = i;
-            options[i] = ""+engine.getSelectedRegion().getExploitations().get(i);
+            options[i] = engine.getSelectedRegion().getExploitations().get(i).toString()+" ("+engine.getSelectedRegion().getExploitations().get(i).getRemoveCost() + " $)";
             actions[i] = () -> {
                 engine.getSelectedRegion().removeExploitation(a);
                 engine.setCurrentMenu(buildRemoveExploitationMenu());
@@ -59,10 +68,10 @@ public class RuntimeGraphic {
 
         for (int i = 0; i < options.length; i++) {
             int a = i;
-            options[i] = ""+engine.getSelectedRegion().getBuyableEvents().get(i).getName();
+            options[i] = engine.getSelectedRegion().getBuyableEvents().get(i).getName();
             actions[i] = () -> {
-                engine.getSelectedRegion().buyEvent(engine.getSelectedRegion().getBuyableEvents().get(a));
-                engine.setCurrentMenu(buildBuyEventMenu());
+                if (engine.getSelectedRegion().buyEvent(engine.getSelectedRegion().getBuyableEvents().get(a)))
+                    engine.setCurrentMenu(engine.getMainMenu());
             };
         }
         return buildReturnableMenu(options, actions);
@@ -118,6 +127,12 @@ public class RuntimeGraphic {
         engine.addGameObject(map);
 
 
+        Text hoverText = new Text(engine, 0xffffffff);
+        TextArea hoverTextArea = new TextArea(engine, 50, 600,8*40, 14, 15, new Text[]{hoverText});
+
+        engine.addGameObject(hoverTextArea);
+
+
         Menu mainMenu = new Menu(engine, menuAnchorX, menuAnchorY, menuFieldHeight,
                 new String[]{
                     "add exploitation",
@@ -127,7 +142,24 @@ public class RuntimeGraphic {
                 new Action[]{
                         () -> engine.setCurrentMenu(buildAddExploitationMenu()),
                         () -> engine.setCurrentMenu(buildRemoveExploitationMenu()),
-                        () -> engine.setCurrentMenu(buildBuyEventMenu())
+                        () -> {
+                            engine.setCurrentMenu(buildBuyEventMenu());
+                            Menu buyEvntMenu = engine.getCurrentMenu();
+
+                            if (buyEvntMenu.getButtons()[0].getHoverAction() == null) {
+                                for (int i = 0; i < buyEvntMenu.getButtons().length-2; i++) {
+                                    int a = i;
+                                    buyEvntMenu.getButtons()[i].setHoverAction(() -> {
+                                        if (buyEvntMenu.noneHovered()) {
+                                            hoverText.setText("");
+                                        }
+                                        else if (buyEvntMenu.getButtons()[a].isHovered()) {
+                                            hoverText.setText(engine.getSelectedRegion().getBuyableEvents().get(a).toString());
+                                        }
+                                    }, () -> hoverText.setText(""));
+                                }
+                            }
+                        }
                 }, menuColor);
 
         engine.setCurrentMenu(mainMenu); // encapsuler
@@ -219,16 +251,26 @@ public class RuntimeGraphic {
         fundsText.setAction(() -> fundsText.setText("FUNDS: " + gm.getPoints() + " $"));
 
         Button nextTurnButton = new Button(engine, 1026, 148,
-                () -> gm.nextTurn(),
+                () -> {
+                    NotificationBus.clearWaitingList();
+                    gm.nextTurn();
+                },
                 new Image("/resources/images/next_turn.png"));
 
         engine.addGameObject(turnsText);
         engine.addGameObject(fundsText);
         engine.addGameObject(nextTurnButton);
 
+
         Visual logo = new Visual(engine, (int)(0.5*(engine.getWidth() - 252)), 600, new Image("/resources/images/logo.png"));
 
         engine.addGameObject(logo);
+
+
+        NotificationWaitingArea notificationWaitingArea = new NotificationWaitingArea(engine,850, 318, 8*50,14, 27, 0xffffffff);
+
+        engine.addGameObject(notificationWaitingArea);
+
 
         engine.start();
     }

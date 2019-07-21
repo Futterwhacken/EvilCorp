@@ -1,6 +1,8 @@
-package evilcorp.graphic.gameobjects;
+package evilcorp.graphic.gameobjects.visual;
 
 import evilcorp.graphic.Engine;
+import evilcorp.graphic.gameobjects.Action;
+import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gfx.Image;
 
 public class Visual extends GameObject
@@ -35,5 +37,5 @@ public class Visual extends GameObject
     }
 
     public void setImage(Image image) { this.image = image; }
-    public void setAction(Action action) { this.action = action; }
+    public void setAction(Action action) { this.action = action; } // useful for animations
 }

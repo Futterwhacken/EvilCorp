@@ -1,6 +1,8 @@
-package evilcorp.graphic.gameobjects;
+package evilcorp.graphic.gameobjects.interactive;
 
 import evilcorp.graphic.Engine;
+import evilcorp.graphic.gameobjects.Action;
+import evilcorp.graphic.gameobjects.GameObject;
 
 public class Menu extends GameObject
 {
@@ -30,5 +32,17 @@ public class Menu extends GameObject
         for (Button b : buttons) {
             b.render();
         }
+    }
+
+    public Button[] getButtons() { return buttons; }
+
+    public boolean noneHovered() {
+        for (Button b : buttons) {
+            if (b.isHovered()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

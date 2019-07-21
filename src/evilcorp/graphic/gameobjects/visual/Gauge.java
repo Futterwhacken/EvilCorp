@@ -1,6 +1,7 @@
-package evilcorp.graphic.gameobjects;
+package evilcorp.graphic.gameobjects.visual;
 
 import evilcorp.graphic.Engine;
+import evilcorp.graphic.gameobjects.GameObject;
 
 public class Gauge extends GameObject
 {

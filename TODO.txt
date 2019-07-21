@@ -2,36 +2,12 @@
 
 TODO:
     * immediate and waiting notifications
-    * HOVER NOTIFICATION show buy and rmv cost
-    * HOVER NOTIFICATION & MENU show event status, descr and cost
     * add menu label
-    * TextArea -> ? Dynamic, Static, Abstract ?
+    * réduire nb de lignes notif
     * add Scene object (splash screen, menu, game, credits)
     * handle button text margin
     * button feedback
     * [DONE] standardiser ordre des arguments & cleanup
-    * [DONE (Map.java added)] link region logic config with region graphic config through the name (string) of the region
-
-
-
-MISC CODE:
-
-r.buyExploitation(select-1);
-displayImmediateNotifications();
-
-
-Text test1 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-Text test2 = new Text(engine, "BBBBBBBBBB", 10, 210, 0xffffffff);
-Text test3 = new Text(engine, "CCCCCCCCCC", 10, 220, 0xffffffff);
-Text test4 = new Text(engine, "OOOOOOOOOO", 10, 230, 0xffffffff);
-Text test5 = new Text(engine, "IIIIIIIIII", 10, 240, 0xffffffff);
-Text test6 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-Text test7 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-Text test8 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-Text test9 = new Text(engine, "AAAAAAAAAA", 10, 200, 0xffffffff);
-
-engine.addGameObject(test1);
-engine.addGameObject(test2);
-engine.addGameObject(test3);
-engine.addGameObject(test4);
-engine.addGameObject(test5);
+    * [DONE] link region logic config with region graphic config through the name (string) of the region
+    * [DONE] show buy and rmv cost
+    * [DONE] HOVER NOTIFICATION & MENU show event status, descr and cost

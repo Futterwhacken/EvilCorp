@@ -1,6 +1,8 @@
-package evilcorp.graphic.gameobjects;
+package evilcorp.graphic.gameobjects.interactive;
 
 import evilcorp.graphic.Engine;
+import evilcorp.graphic.gameobjects.Action;
+import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gfx.Image;
 
 public class Button extends GameObject
@@ -11,10 +13,14 @@ public class Button extends GameObject
     private final int height;
 
     private Action action;
+    private Action hoverAction;
+    private Action unHoverAction;
+
     private final Image image;
     private final String label;
     private final int labelColor;
 
+    private boolean hovered = false;
     private boolean clicked = false;
 
     private Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor) {
@@ -55,21 +61,25 @@ public class Button extends GameObject
         int mouseY = engine.getInput().getMouseY();
 
         if ((mouseX >= posX && mouseX <= posX + width) && (mouseY >= posY && mouseY <= posY + height)) {
-            // 1 = left click, tomod ?
-            return engine.getInput().isButton(1);
+            hovered = true;
+            return engine.getInput().isButton(1); // 1 = left click, tomod ?
         }
 
+        hovered = false;
         return false;
     }
 
     @Override
     public void update() {
 
+        if (hoverAction != null) {
+            hoverAction.exec();
+        }
+
         if (checkClicked() && !engine.getInput().getHasClicked()) {
             if (!clicked) {
                 clicked = true;
                 engine.getInput().setHasClicked(true);
-
                 action.exec();
             }
         }
@@ -78,6 +88,7 @@ public class Button extends GameObject
                 clicked = false;
             }
         }
+
     }
 
     @Override
@@ -92,4 +103,12 @@ public class Button extends GameObject
     }
 
     public void setAction(Action action) { this.action = action; }
+    public void setHoverAction(Action hoverAction, Action unHoverAction) { this.hoverAction = hoverAction; this.unHoverAction = unHoverAction; }
+    public Action getHoverAction() { return hoverAction; }
+
+    public void execUnHoverAction() {
+        if (unHoverAction != null)
+            unHoverAction.exec();
+    }
+    public boolean isHovered() { return hovered; }
 }
