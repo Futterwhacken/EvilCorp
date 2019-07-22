@@ -1,13 +1,13 @@
 
 
 TODO:
-    * add global gauges
     * add menu label
     * réduire nb de lignes notif
     * add Scene class (splash screen, menu, game, credits)
     * handle button text margin
     * button feedback
     *
+    * [DONE] add global gauges
     * [DONE] standardiser ordre des arguments & cleanup
     * [DONE] link region logic config with region graphic config through the name (string) of the region
     * [DONE] show buy and rmv cost

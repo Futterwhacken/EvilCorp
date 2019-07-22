@@ -1,20 +1,15 @@
+
 import evilcorp.graphic.Engine;
-import evilcorp.graphic.gameobjects.*;
-
-
-import evilcorp.graphic.gameobjects.interactive.Button;
-import evilcorp.graphic.gameobjects.interactive.Map;
-import evilcorp.graphic.gameobjects.interactive.Menu;
-import evilcorp.graphic.gameobjects.text.NotificationImmediateArea;
-import evilcorp.graphic.gameobjects.text.NotificationWaitingArea;
-import evilcorp.graphic.gameobjects.text.Text;
-import evilcorp.graphic.gameobjects.text.TextArea;
-import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Image;
+import evilcorp.graphic.gameobjects.*;
+import evilcorp.graphic.gameobjects.interactive.*;
+import evilcorp.graphic.gameobjects.text.*;
+import evilcorp.graphic.gameobjects.visual.*;
+
 import evilcorp.logic.GameMaster;
 import evilcorp.logic.NotificationBus;
 import evilcorp.logic.area.region.Region;
-import evilcorp.logic.exploitation.*;
+import evilcorp.logic.config.Config;
 
 
 public class RuntimeGraphic {
@@ -35,9 +30,9 @@ public class RuntimeGraphic {
 
     private static Menu buildAddExploitationMenu() {
             String[] options = new String[]{
-                    "add primary exploitation ("+ExploitationPrimary.COST+" $)",
-                    "add secondary exploitation ("+ExploitationSecondary.COST+" $)",
-                    "add tertiary exploitation ("+ExploitationTertiary.COST+" $)",
+                    "add primary exploitation ("+Config.PrimaryCost+" $)",
+                    "add secondary exploitation ("+Config.SecondaryCost+" $)",
+                    "add tertiary exploitation ("+Config.TertiaryCost+" $)",
             };
             Action[] actions = new Action[]{
                     () -> engine.getSelectedRegion().buyExploitation(0),
@@ -273,9 +268,50 @@ public class RuntimeGraphic {
 
         engine.addGameObject(notificationWaitingArea);
 
-        NotificationImmediateArea notificationImmediateArea = new NotificationImmediateArea(engine,50, 510, 8*50,16, 3, 0xffff0000, 3);
+        NotificationImmediateArea notificationImmediateArea = new NotificationImmediateArea(engine,50, 510, 8*50,16, 3, 0xffff0000, 5);
 
         engine.addGameObject(notificationImmediateArea);
+
+
+        int gaugeWidth = 300;
+        int gaugePosX = (int)(0.5*(engine.getWidth() - gaugeWidth));
+        int gaugePosY = 375;
+
+
+        Text productionGaugeText = new Text(engine,gaugePosX - (11 * 8), gaugePosY, "PRODUCTION ", 0xffffffff);
+        Text visibilityGaugeText = new Text(engine,gaugePosX - (10 * 8), gaugePosY+20, "POLLUTION ", 0xffffffff);
+        Text socialGaugeText = new Text(engine,gaugePosX - (7 * 8), gaugePosY+40, "SOCIAL ", 0xffffffff);
+
+        Text productionLevelText = new Text(engine,gaugePosX + gaugeWidth + 8, gaugePosY, 0xffffffff);
+        productionLevelText.setAction(() -> productionLevelText.setText(""+gm.getWorld().getProductivity()));
+
+        Text visibilityLevelText = new Text(engine,gaugePosX + gaugeWidth + 8, gaugePosY+20, 0xffffffff);
+        visibilityLevelText.setAction(() -> visibilityLevelText.setText(""+gm.getWorld().getVisibility()));
+
+        Text socialLevelText = new Text(engine,gaugePosX + gaugeWidth + 8, gaugePosY+40, 0xffffffff);
+        socialLevelText.setAction(() -> socialLevelText.setText(""+gm.getWorld().getSocial()));
+
+        GaugeGraph productionGauge = new GaugeGraph(engine, gaugePosX, gaugePosY-2, gaugeWidth, 11, true, Config.maxGauge, Config.maxGauge, 0xffff0000);
+        productionGauge.setAction(() -> productionGauge.setLevel(gm.getWorld().getProductivity()));
+
+        GaugeGraph visibilityGauge = new GaugeGraph(engine, gaugePosX, gaugePosY+20-2, gaugeWidth, 11, true, Config.maxGauge, Config.maxGauge, 0xff00ff00);
+        visibilityGauge.setAction(() -> visibilityGauge.setLevel(gm.getWorld().getVisibility()));
+
+        GaugeGraph socialGauge = new GaugeGraph(engine, gaugePosX, gaugePosY+40-2, gaugeWidth, 11, true, Config.maxGauge, Config.maxGauge, 0xff0000ff);
+        socialGauge.setAction(() -> socialGauge.setLevel(gm.getWorld().getSocial()));
+
+        engine.addGameObject(productionGaugeText);
+        engine.addGameObject(visibilityGaugeText);
+        engine.addGameObject(socialGaugeText);
+
+        engine.addGameObject(productionLevelText);
+        engine.addGameObject(visibilityLevelText);
+        engine.addGameObject(socialLevelText);
+
+        engine.addGameObject(productionGauge);
+        engine.addGameObject(visibilityGauge);
+        engine.addGameObject(socialGauge);
+
 
 
         engine.start();
