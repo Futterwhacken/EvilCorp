@@ -1,6 +1,7 @@
 
 
 TODO:
+    * add global gauges
     * add menu label
     * réduire nb de lignes notif
     * add Scene class (splash screen, menu, game, credits)
