@@ -17,15 +17,15 @@ public class GaugeGraph extends GameObject
 
     private final double max;
 
-    private final int borderWidth = 2;
-    private final int borderColor = 0xffffffff;
+    private final int borderSize;
+    private final int borderColor;
 
     private double level;
     private int dimensionDynamic;
 
     private Action action;
 
-    public GaugeGraph(Engine engine, int posX, int posY, int width, int height, boolean horizontal, double level, double max, int color) {
+    public GaugeGraph(Engine engine, int posX, int posY, int width, int height, boolean horizontal, double level, double max, int borderSize, int color, int borderColor) {
         super(engine);
 
         this.posX = posX;
@@ -35,6 +35,9 @@ public class GaugeGraph extends GameObject
         this.level = level;
         this.max = max;
         this.color = color;
+
+        this.borderSize = borderSize;
+        this.borderColor = borderColor;
 
         if (horizontal) {
             this.dimensionStatic = height;
@@ -47,8 +50,8 @@ public class GaugeGraph extends GameObject
         this.dimensionDynamic = (int)(dimensionDynamicMax * level/max);
     }
 
-    public GaugeGraph(Engine engine, int posX, int posY, int width, int height, double max, int color) {
-        this(engine, posX, posY, width, height, true, 0, max, color);
+    public GaugeGraph(Engine engine, int posX, int posY, int width, int height, double max, int borderSize, int color, int borderColor) {
+        this(engine, posX, posY, width, height, true, 0, max, borderSize, color, borderColor);
     }
 
     @Override
@@ -63,13 +66,13 @@ public class GaugeGraph extends GameObject
     public void render() {
         if (horizontal) {
             engine.getRenderer().drawRectangle(posX, posY, dimensionDynamic, dimensionStatic, color);
-            engine.getRenderer().drawRectangle(posX - borderWidth, posY, borderWidth, dimensionStatic, borderColor);
-            engine.getRenderer().drawRectangle(posX + dimensionDynamicMax + borderWidth, posY, borderWidth, dimensionStatic, borderColor);
+            engine.getRenderer().drawRectangle(posX - borderSize, posY, borderSize, dimensionStatic, borderColor);
+            engine.getRenderer().drawRectangle(posX + dimensionDynamicMax + borderSize, posY, borderSize, dimensionStatic, borderColor);
         }
         else {
             engine.getRenderer().drawRectangle(posX, posY, dimensionStatic, dimensionDynamic, color);
-            engine.getRenderer().drawRectangle(posX, posY - borderWidth, dimensionStatic, borderWidth, borderColor);
-            engine.getRenderer().drawRectangle(posX, posY + dimensionDynamicMax + borderWidth, dimensionStatic, borderWidth, borderColor);
+            engine.getRenderer().drawRectangle(posX, posY - borderSize, dimensionStatic, borderSize, borderColor);
+            engine.getRenderer().drawRectangle(posX, posY + dimensionDynamicMax + borderSize, dimensionStatic, borderSize, borderColor);
         }
 
 

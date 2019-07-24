@@ -7,7 +7,11 @@ import evilcorp.graphic.gameobjects.interactive.Map;
 import evilcorp.graphic.gameobjects.interactive.Menu;
 import evilcorp.graphic.gameobjects.text.Text;
 import evilcorp.graphic.gameobjects.text.TextArea;
+import evilcorp.graphic.gameobjects.visual.GaugeGraph;
 import evilcorp.graphic.gfx.Font;
+
+import evilcorp.logic.GameMaster;
+import evilcorp.logic.config.Config;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -229,39 +233,6 @@ public class ConfigReader
 
         Engine engine = Engine.getEngine();
 
-        /*
-
-        TextArea hoverTextArea = new TextArea(engine, (int)menuConfig[8], (int)menuConfig[9],(int)menuConfig[10], (int)menuConfig[11], (int)menuConfig[12], new Text[]{new Text(engine, (int)menuConfig[13])});
-        Menu mainMenu = new Menu(engine, (int)menuConfig[0], (int)menuConfig[1], (int)menuConfig[2], menuConfig[4].toString(),
-                new String[]{
-                        menuConfig[5].toString(),
-                        menuConfig[6].toString(),
-                        menuConfig[7].toString()
-                },
-                new Action[]{
-                        () -> engine.setCurrentMenu(buildAddExploitationMenu(menuConfig[5].toString())),
-                        () -> engine.setCurrentMenu(buildRemoveExploitationMenu(menuConfig[6].toString())),
-                        () -> {
-                            engine.setCurrentMenu(buildBuyEventMenu(menuConfig[7].toString()));
-                            Menu buyEvntMenu = engine.getCurrentMenu();
-
-                            if (buyEvntMenu.getButtons()[0].getHoverAction() == null) {
-                                for (int i = 0; i < buyEvntMenu.getButtons().length-2; i++) {
-                                    int a = i;
-                                    buyEvntMenu.getButtons()[i].setHoverAction(() -> {
-                                        if (buyEvntMenu.noneHovered()) {
-                                            hoverTextArea.getTexts()[0].setText("");
-                                        }
-                                        else if (buyEvntMenu.getButtons()[a].isHovered()) {
-                                            hoverTextArea.getTexts()[0].setText(engine.getSelectedRegion().getBuyableEvents().get(a).toString());
-                                        }
-                                    }, () -> hoverTextArea.getTexts()[0].setText(""));
-                                }
-                            }
-                        }
-                }, (int)menuConfig[3]);
-
-         */
         String line;
         String[] buffer;
 
@@ -337,7 +308,220 @@ public class ConfigReader
                             }
                     }, menuColor);
 
+            reader.close();
+
             return new GameObject[]{mainMenu, hoverTextArea};
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file \"" + configPath + "\"");
+        }
+        catch (IOException ex) {
+            System.out.println("Error reading file \""+ configPath + "\"");
+        }
+
+        return null;
+    }
+
+    public static TextArea readInfoArea(String configPath) {
+
+        Engine engine = Engine.getEngine();
+
+        String line;
+        String[] buffer;
+
+
+        int posX, posY, width, lineHeight, maxLines, color;
+
+
+        try {
+            FileReader fileReader = new FileReader(configPath);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            // area parameters
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            posX = Integer.valueOf(buffer[0]);
+            posY = Integer.valueOf(buffer[1]);
+            width = Integer.valueOf(buffer[2]);
+            lineHeight = Integer.valueOf(buffer[3]);
+            maxLines = Integer.valueOf(buffer[4]);
+            color = (int)Long.parseLong(buffer[5], 16);
+
+            // building text area
+
+            // modulariser tout ça ?
+            Text selectedRegionText = new Text(engine, "SELECT A REGION", color);
+            selectedRegionText.setAction(() -> {
+                if (engine.getSelectedRegion() != null)
+                    selectedRegionText.setText(engine.getSelectedRegion().getName());
+                else
+                    selectedRegionText.setText(selectedRegionText.getDefaultText());
+            });
+
+            Text selectedRegionActivityText = new Text(engine, color);
+            selectedRegionActivityText.setAction(() -> {
+                if (engine.getSelectedRegion() != null)
+                    selectedRegionActivityText.setText(engine.getSelectedRegion().getParams().getActivityToleranceString());
+            });
+
+            Text selectedRegionEnvironmentText = new Text(engine, color);
+            selectedRegionEnvironmentText.setAction(() -> {
+                if (engine.getSelectedRegion() != null)
+                    selectedRegionEnvironmentText.setText(engine.getSelectedRegion().getParams().getEnvironmentToleranceString());
+            });
+
+            Text selectedRegionOppositionText = new Text(engine, color);
+            selectedRegionOppositionText.setAction(() -> {
+                if (engine.getSelectedRegion() != null)
+                    selectedRegionOppositionText.setText(engine.getSelectedRegion().getParams().getOppositionToleranceString());
+            });
+
+            Text selectedRegionProductionText = new Text(engine, color);
+            selectedRegionProductionText.setAction(() -> {
+                if (engine.getSelectedRegion() != null)
+                    selectedRegionProductionText.setText("PRODUCTION: " + engine.getSelectedRegion().getProductivity());
+            });
+
+            Text selectedRegionPollutionText = new Text(engine, color);
+            selectedRegionPollutionText.setAction(() -> {
+                if (engine.getSelectedRegion() != null)
+                    selectedRegionPollutionText.setText("POLLUTION: " + engine.getSelectedRegion().getVisibility());
+            });
+
+            Text selectedRegionSocialText = new Text(engine, color);
+            selectedRegionSocialText.setAction(() -> {
+                if (engine.getSelectedRegion() != null)
+                    selectedRegionSocialText.setText("SOCIAL: " + engine.getSelectedRegion().getSocial());
+            });
+
+            Text selectedRegionExploitationText = new Text(engine, color);
+            selectedRegionExploitationText.setAction(() -> {
+                if (engine.getSelectedRegion() != null)
+                    selectedRegionExploitationText.setText(""+engine.getSelectedRegion().getExploitations().size() + "/" + engine.getSelectedRegion().getMaxExpl() + " EXPLOITATIONS");
+            });
+
+            TextArea regionInfo = new TextArea(engine, posX, posY, width, lineHeight, maxLines,
+                    new Text[]{
+                            selectedRegionText,
+                            new Text(engine),
+                            selectedRegionActivityText,
+                            selectedRegionEnvironmentText,
+                            selectedRegionOppositionText,
+                            new Text(engine),
+                            selectedRegionProductionText,
+                            selectedRegionPollutionText,
+                            selectedRegionSocialText,
+                            new Text(engine),
+                            selectedRegionExploitationText,
+                    });
+
+            reader.close();
+
+            return regionInfo;
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file \"" + configPath + "\"");
+        }
+        catch (IOException ex) {
+            System.out.println("Error reading file \""+ configPath + "\"");
+        }
+
+        return null;
+    }
+
+    public static GameObject[] readGauges(String configPath) {
+
+        Engine engine = Engine.getEngine();
+        GameMaster gm = GameMaster.getGameMaster();
+
+        String line;
+        String[] buffer;
+
+        boolean horizontal;
+        int width, height, posX, posY, borderSize, textColor, prodColor, pollColor, socialColor;
+        String prod, poll, social;
+
+        try {
+            FileReader fileReader = new FileReader(configPath);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            // area parameters
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            horizontal = Boolean.valueOf(buffer[0]);
+            width = Integer.valueOf(buffer[1]);
+            height = Integer.valueOf(buffer[2]);
+
+            if (Integer.valueOf(buffer[3]) == -1) {
+                posX = (int)(0.5*(engine.getWidth() - width));
+            }
+            else {
+                posX = Integer.valueOf(buffer[3]);
+            }
+
+            posY = Integer.valueOf(buffer[4]);
+            borderSize = Integer.valueOf(buffer[5]);
+            textColor = (int)Long.parseLong(buffer[6], 16);
+
+            // strings
+
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            prod = buffer[0];
+            poll = buffer[1];
+            social = buffer[2];
+
+            // colors
+
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            prodColor = (int)Long.parseLong(buffer[0], 16);
+            pollColor = (int)Long.parseLong(buffer[1], 16);
+            socialColor = (int)Long.parseLong(buffer[2], 16);
+
+
+            // building text area
+
+            // modulariser horizontal/vertical
+
+            int charWidth = engine.getStandardFont().getTextUnitWidth();
+            int offset = (height-engine.getStandardFont().getCharHeight())/2;
+            int field = borderSize;
+
+            Text productionGaugeText = new Text(engine,posX - ((prod.length()+1) * charWidth) - borderSize, posY, prod, textColor);
+            Text visibilityGaugeText = new Text(engine,posX - ((poll.length()+1) * charWidth) - borderSize, posY + height*2, poll, textColor);
+            Text socialGaugeText = new Text(engine,posX - ((social.length()+1) * charWidth) - borderSize, posY + height*4, social, textColor);
+
+            Text productionLevelText = new Text(engine,posX + width + charWidth + borderSize, posY, textColor);
+            productionLevelText.setAction(() -> productionLevelText.setText(""+gm.getWorld().getProductivity()));
+
+            Text visibilityLevelText = new Text(engine,posX + width + charWidth + borderSize, posY + height*2, textColor);
+            visibilityLevelText.setAction(() -> visibilityLevelText.setText(""+gm.getWorld().getVisibility()));
+
+            Text socialLevelText = new Text(engine,posX + width + charWidth + borderSize, posY + height*4, textColor);
+            socialLevelText.setAction(() -> socialLevelText.setText(""+gm.getWorld().getSocial()));
+
+
+            GaugeGraph productionGauge = new GaugeGraph(engine, posX, posY + height*field*0 - offset, width, height, horizontal, Config.maxGauge, Config.maxGauge, borderSize, prodColor, textColor);
+            productionGauge.setAction(() -> productionGauge.setLevel(gm.getWorld().getProductivity()));
+
+            GaugeGraph visibilityGauge = new GaugeGraph(engine, posX, posY + height*field*1 - offset, width, height, horizontal, Config.maxGauge, Config.maxGauge, borderSize, pollColor, textColor);
+            visibilityGauge.setAction(() -> visibilityGauge.setLevel(gm.getWorld().getVisibility()));
+
+            GaugeGraph socialGauge = new GaugeGraph(engine, posX, posY + height*field*2 - offset, width, height, horizontal, Config.maxGauge, Config.maxGauge, borderSize, socialColor, textColor);
+            socialGauge.setAction(() -> socialGauge.setLevel(gm.getWorld().getSocial()));
+
+            reader.close();
+
+            return new GameObject[]{
+                    productionGaugeText, visibilityGaugeText, socialGaugeText,
+                    productionLevelText, visibilityLevelText, socialLevelText,
+                    productionGauge, visibilityGauge, socialGauge
+            };
         }
         catch (FileNotFoundException ex) {
             System.out.println("Unable to open file \"" + configPath + "\"");
