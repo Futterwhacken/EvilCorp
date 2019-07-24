@@ -1,9 +1,14 @@
 package evilcorp.graphic.gfx;
 
+import evilcorp.graphic.Input;
+
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 public class Image
 {
@@ -14,7 +19,7 @@ public class Image
     public Image(String path, double scale) {
         BufferedImage image;
         try {
-            image = ImageIO.read(Image.class.getResourceAsStream(path));
+            image = ImageIO.read(new FileInputStream(path));
             if (scale != 1)
                 image = scale(image, scale);
 

@@ -1,5 +1,7 @@
 
 import evilcorp.graphic.Engine;
+import evilcorp.graphic.config.ConfigReader;
+import evilcorp.graphic.gfx.Font;
 import evilcorp.graphic.gfx.Image;
 import evilcorp.graphic.gameobjects.*;
 import evilcorp.graphic.gameobjects.interactive.*;
@@ -11,6 +13,9 @@ import evilcorp.logic.NotificationBus;
 import evilcorp.logic.area.region.Region;
 import evilcorp.logic.config.Config;
 
+import java.io.IOException;
+import java.lang.invoke.SwitchPoint;
+
 
 public class RuntimeGraphic {
     private static Engine engine;
@@ -19,7 +24,7 @@ public class RuntimeGraphic {
     private static final int menuColor = 0xff00ffff;
     private static final int menuAnchorX = 50;
     private static final int menuAnchorY = 335;
-    private static final int menuFieldHeight = 21;
+    private static final int menuFieldHeight = 20;
 
     private static final int regionInfoColor = 0xffffffff;
     private static final int regionInfoAnchorX = 50;
@@ -28,7 +33,7 @@ public class RuntimeGraphic {
     private static final int regionInfoFieldHeight = 16;
     private static final int regionInfoMaxLines = 15;
 
-    private static Menu buildAddExploitationMenu() {
+    /*private static Menu buildAddExploitationMenu(String label) {
             String[] options = new String[]{
                     "add primary exploitation ("+Config.PrimaryCost+" $)",
                     "add secondary exploitation ("+Config.SecondaryCost+" $)",
@@ -40,10 +45,10 @@ public class RuntimeGraphic {
                     () -> engine.getSelectedRegion().buyExploitation(2),
             };
 
-            return buildReturnableMenu(options, actions);
+            return buildReturnableMenu(options, actions, label);
     }
 
-    private static Menu buildRemoveExploitationMenu() {
+    private static Menu buildRemoveExploitationMenu(String label) {
         String[] options = new String[engine.getSelectedRegion().getExploitations().size()];
         Action[] actions = new Action[options.length];
 
@@ -52,13 +57,13 @@ public class RuntimeGraphic {
             options[i] = engine.getSelectedRegion().getExploitations().get(i).toString()+" ("+engine.getSelectedRegion().getExploitations().get(i).getRemoveCost() + " $)";
             actions[i] = () -> {
                 engine.getSelectedRegion().removeExploitation(a);
-                engine.setCurrentMenu(buildRemoveExploitationMenu());
+                engine.setCurrentMenu(buildRemoveExploitationMenu(label));
             };
         }
-        return buildReturnableMenu(options, actions);
+        return buildReturnableMenu(options, actions, label);
     }
 
-    private static Menu buildBuyEventMenu() {
+    private static Menu buildBuyEventMenu(String label) {
         String[] options = new String[engine.getSelectedRegion().getBuyableEvents().size()];
         Action[] actions = new Action[options.length];
 
@@ -70,10 +75,10 @@ public class RuntimeGraphic {
                     engine.setCurrentMenu(engine.getMainMenu());
             };
         }
-        return buildReturnableMenu(options, actions);
+        return buildReturnableMenu(options, actions, label);
     }
 
-    private static Menu buildReturnableMenu(String[] options, Action[] actions) {
+    private static Menu buildReturnableMenu(String[] options, Action[] actions, String label) {
         String[] finalOptions = new String[options.length + 2];
         Action[] finalActions = new Action[options.length + 2];
 
@@ -87,79 +92,42 @@ public class RuntimeGraphic {
         finalOptions[finalOptions.length - 1] = "return";
         finalActions[finalActions.length - 1] = () -> engine.setCurrentMenu(engine.getMainMenu());
 
-        return new Menu(engine, menuAnchorX, menuAnchorY, menuFieldHeight, finalOptions, finalActions, menuColor);
-    }
+        return new Menu(engine, menuAnchorX, menuAnchorY, menuFieldHeight, label, finalOptions, finalActions, menuColor);
+    }*/
 
     public static void main(String[] args) {
+        String currentPath = "/";
+        try {
+            currentPath = new java.io.File(".").getCanonicalPath() + currentPath;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        // pass game master to engine (get region -> ???)
+        /* LOADING CONFIG */
+
         gm = GameMaster.initGameMaster("data/config/logic/");
-        engine = new Engine("", gm);
+        engine = Engine.initEngine("data/config/graphic/");
 
-        Map map = new Map(engine, 370, 195, 1.75,
-                new String[]{
-                        "Africa",
-                        "Asia",
-                        "Europe",
-                        "North America",
-                        "South America"
-                },
-                new String[]{
-                        "/resources/maps/map.png",
-                        "/resources/maps/map-africa.png",
-                        "/resources/maps/map-asia.png",
-                        "/resources/maps/map-europe.png",
-                        "/resources/maps/map-northamerica.png",
-                        "/resources/maps/map-southamerica.png"
-                },
-                new int[][]{
-                        new int[]{160,92,69,72},
-                        new int[]{230,38,124,136},
-                        new int[]{165,34,62,53},
-                        new int[]{11,22,123,87},
-                        new int[]{89,117,42,71},
-                });
+        Font[] fonts = ConfigReader.readFonts("data/config/graphic/fonts.cfg", "data/resources/fonts/");
+        engine.setStandardFont(fonts[0]);
+
+        Map map = ConfigReader.readMap("data/config/graphic/map.cfg","data/resources/maps/");
+
+        GameObject[] menuObjects = ConfigReader.readMenu("data/config/graphic/menu.cfg");
+        Menu mainMenu = (Menu)menuObjects[0];
+        TextArea hoverTextArea = (TextArea)menuObjects[1];
+
+
+        /* APPLYING CONFIG */
+
+
+        /* SETTING UP ENGINE */
+
 
         engine.addGameObject(map);
 
-
-        Text hoverText = new Text(engine, 0xffffffff);
-        TextArea hoverTextArea = new TextArea(engine, 50, 620,8*40, 14, 7, new Text[]{hoverText});
-
-        engine.addGameObject(hoverTextArea);
-
-
-        Menu mainMenu = new Menu(engine, menuAnchorX, menuAnchorY, menuFieldHeight,
-                new String[]{
-                    "add exploitation",
-                    "remove exploitation",
-                    "buy action"
-                },
-                new Action[]{
-                        () -> engine.setCurrentMenu(buildAddExploitationMenu()),
-                        () -> engine.setCurrentMenu(buildRemoveExploitationMenu()),
-                        () -> {
-                            engine.setCurrentMenu(buildBuyEventMenu());
-                            Menu buyEvntMenu = engine.getCurrentMenu();
-
-                            if (buyEvntMenu.getButtons()[0].getHoverAction() == null) {
-                                for (int i = 0; i < buyEvntMenu.getButtons().length-2; i++) {
-                                    int a = i;
-                                    buyEvntMenu.getButtons()[i].setHoverAction(() -> {
-                                        if (buyEvntMenu.noneHovered()) {
-                                            hoverText.setText("");
-                                        }
-                                        else if (buyEvntMenu.getButtons()[a].isHovered()) {
-                                            hoverText.setText(engine.getSelectedRegion().getBuyableEvents().get(a).toString());
-                                        }
-                                    }, () -> hoverText.setText(""));
-                                }
-                            }
-                        }
-                }, menuColor);
-
-        engine.setCurrentMenu(mainMenu); // encapsuler
         engine.setMainMenu(mainMenu);
+        engine.addGameObject(hoverTextArea);
 
 
         Text selectedRegionText = new Text(engine, "SELECT A REGION", regionInfoColor);
@@ -212,13 +180,6 @@ public class RuntimeGraphic {
                 selectedRegionExploitationText.setText(""+engine.getSelectedRegion().getExploitations().size() + "/" + Region.getMaxExpl() + " EXPLOITATIONS");
         });
 
-        Text regionMenuTitle = new Text(engine, menuColor);
-        regionMenuTitle.setAction(() -> {
-            if (engine.getSelectedRegion() != null)
-                regionMenuTitle.setText("REGION MENU");
-        });
-
-
         TextArea regionInfo = new TextArea(engine, regionInfoAnchorX, regionInfoAnchorY, regionInfoWidth,regionInfoFieldHeight, regionInfoMaxLines,
                 new Text[]{
                         selectedRegionText,
@@ -232,34 +193,31 @@ public class RuntimeGraphic {
                         selectedRegionSocialText,
                         new Text(engine),
                         selectedRegionExploitationText,
-                        new Text(engine),
-                        new Text(engine),
-                        regionMenuTitle
                 });
 
         engine.addGameObject(regionInfo);
 
 
-        Text turnsText = new Text(engine, 1025, 100, 0xff00ffff);
+        Text turnsText = new Text(engine, 1065, 100, 0xffffffff);
         turnsText.setAction(() -> turnsText.setText("TURN: " + gm.getTurn()));
 
-        Text fundsText = new Text(engine, 1025, 116, 0xff00ffff);
+        Text fundsText = new Text(engine, 1065, 116, 0xffffffff);
         fundsText.setAction(() -> fundsText.setText("FUNDS: " + gm.getPoints() + " $"));
 
-        Button nextTurnButton = new Button(engine, 1026, 148,
+        Button nextTurnButton = new Button(engine, 1025, 148,
                 () -> {
                     NotificationBus.clearWaitingList();
                     NotificationBus.clearImmediateList();
                     gm.nextTurn();
                 },
-                new Image("/resources/images/next_turn.png"));
+                new Image("data/resources/images/next_turn.png"));
 
         engine.addGameObject(turnsText);
         engine.addGameObject(fundsText);
         engine.addGameObject(nextTurnButton);
 
 
-        Visual logo = new Visual(engine, (int)(0.5*(engine.getWidth() - 252)), 600, new Image("/resources/images/logo.png"));
+        Visual logo = new Visual(engine, (int)(0.5*(engine.getWidth() - 252)), 600, new Image("data/resources/images/logo.png"));
 
         engine.addGameObject(logo);
 
@@ -278,17 +236,17 @@ public class RuntimeGraphic {
         int gaugePosY = 375;
 
 
-        Text productionGaugeText = new Text(engine,gaugePosX - (11 * 8), gaugePosY, "PRODUCTION ", 0xffffffff);
-        Text visibilityGaugeText = new Text(engine,gaugePosX - (10 * 8), gaugePosY+20, "POLLUTION ", 0xffffffff);
-        Text socialGaugeText = new Text(engine,gaugePosX - (7 * 8), gaugePosY+40, "SOCIAL ", 0xffffffff);
+        Text productionGaugeText = new Text(engine,gaugePosX - (11 * 8) - 2, gaugePosY, "PRODUCTION ", 0xffffffff);
+        Text visibilityGaugeText = new Text(engine,gaugePosX - (10 * 8) - 2, gaugePosY+20, "POLLUTION ", 0xffffffff);
+        Text socialGaugeText = new Text(engine,gaugePosX - (7 * 8) - 2, gaugePosY+40, "SOCIAL ", 0xffffffff);
 
-        Text productionLevelText = new Text(engine,gaugePosX + gaugeWidth + 8, gaugePosY, 0xffffffff);
+        Text productionLevelText = new Text(engine,gaugePosX + gaugeWidth + 8 + 2, gaugePosY, 0xffffffff);
         productionLevelText.setAction(() -> productionLevelText.setText(""+gm.getWorld().getProductivity()));
 
-        Text visibilityLevelText = new Text(engine,gaugePosX + gaugeWidth + 8, gaugePosY+20, 0xffffffff);
+        Text visibilityLevelText = new Text(engine,gaugePosX + gaugeWidth + 8 + 2, gaugePosY+20, 0xffffffff);
         visibilityLevelText.setAction(() -> visibilityLevelText.setText(""+gm.getWorld().getVisibility()));
 
-        Text socialLevelText = new Text(engine,gaugePosX + gaugeWidth + 8, gaugePosY+40, 0xffffffff);
+        Text socialLevelText = new Text(engine,gaugePosX + gaugeWidth + 8 + 2, gaugePosY+40, 0xffffffff);
         socialLevelText.setAction(() -> socialLevelText.setText(""+gm.getWorld().getSocial()));
 
         GaugeGraph productionGauge = new GaugeGraph(engine, gaugePosX, gaugePosY-2, gaugeWidth, 11, true, Config.maxGauge, Config.maxGauge, 0xffff0000);

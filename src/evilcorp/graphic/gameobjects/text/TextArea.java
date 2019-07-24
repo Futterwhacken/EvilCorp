@@ -62,6 +62,8 @@ public class TextArea extends GameObject
         }
     }
 
+    public Text[] getTexts() { return texts; }
+
 
     protected ArrayList<String> processString(String s) {
         ArrayList<String> strings = new ArrayList<>();

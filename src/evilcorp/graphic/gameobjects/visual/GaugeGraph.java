@@ -17,6 +17,9 @@ public class GaugeGraph extends GameObject
 
     private final double max;
 
+    private final int borderWidth = 2;
+    private final int borderColor = 0xffffffff;
+
     private double level;
     private int dimensionDynamic;
 
@@ -58,10 +61,17 @@ public class GaugeGraph extends GameObject
 
     @Override
     public void render() {
-        if (horizontal)
+        if (horizontal) {
             engine.getRenderer().drawRectangle(posX, posY, dimensionDynamic, dimensionStatic, color);
-        else
+            engine.getRenderer().drawRectangle(posX - borderWidth, posY, borderWidth, dimensionStatic, borderColor);
+            engine.getRenderer().drawRectangle(posX + dimensionDynamicMax + borderWidth, posY, borderWidth, dimensionStatic, borderColor);
+        }
+        else {
             engine.getRenderer().drawRectangle(posX, posY, dimensionStatic, dimensionDynamic, color);
+            engine.getRenderer().drawRectangle(posX, posY - borderWidth, dimensionStatic, borderWidth, borderColor);
+            engine.getRenderer().drawRectangle(posX, posY + dimensionDynamicMax + borderWidth, dimensionStatic, borderWidth, borderColor);
+        }
+
 
     }
 

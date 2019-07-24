@@ -1,5 +1,7 @@
 package evilcorp.graphic;
 
+import evilcorp.graphic.config.ConfigReader;
+import evilcorp.graphic.gameobjects.Action;
 import evilcorp.graphic.gameobjects.interactive.Button;
 import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gameobjects.interactive.Menu;
@@ -8,56 +10,66 @@ import evilcorp.graphic.gfx.Font;
 
 import evilcorp.logic.GameMaster;
 import evilcorp.logic.area.region.Region;
+import evilcorp.logic.config.Config;
 
 import java.util.ArrayList;
 
 public class Engine implements Runnable
 {
-    private final boolean debug = true;
+
+    private static Engine instance = null;
+
+    public static Engine initEngine(String configPath) {
+        if (instance == null) {
+            Object[] config = ConfigReader.readEngine(configPath+"engine.cfg");
+            instance = new Engine(config[0].toString(), (int)config[1], (int)config[2], (double)config[3], (double)config[4], (boolean)config[5]);
+        }
+        return instance;
+    }
+
+    public static Engine getEngine() {
+        return instance;
+    }
+
 
     private final Thread thread;
     private final Window window;
     private final Renderer renderer;
     private final Input input;
 
-    private final double updateRate;
+    private final ArrayList<GameObject> gameObjects;
+
+    private final String title;
     private final int width;
     private final int height;
     private final double scale;
-    private final String title;
+    private final double updateRate;
 
-    private final Font standardFont;
+    private final boolean debug;
 
-    private final ArrayList<GameObject> gameObjects;
+    private Font standardFont;
 
-    private final GameMaster gm;
     private Region selectedRegion;
-
     private Menu mainMenu;
     private Menu currentMenu;
 
-    /* make singleton */
-
-    public Engine(String dataPath, GameMaster gm) {
-        this.gm = gm;
+    private Engine(String title, int width, int height, double scale, double updateCap, boolean debug) {
 
         this.gameObjects = new ArrayList<>();
 
-        // debug
-        this.updateRate = 1.0/30.0;
-        this.width = 1280;
-        this.height = 720;
-        this.scale = 1;
-        this.title = "EvilCorp";
+        this.title = title;
+        this.width = width;
+        this.height = height;
+        this.scale = scale;
+        this.updateRate = 1.0/updateCap;
 
-        this.standardFont = new Font("/resources/fonts/standard_font.png", 7, 1);
+        this.debug = debug;
 
-        // ============================
+        this.window = new Window(this);
+        this.renderer = new Renderer(this);
+        this.input = new Input(this);
+        this.thread = new Thread(this);
 
-        window = new Window(this);
-        renderer = new Renderer(this);
-        input = new Input(this);
-        thread = new Thread(this);
     }
 
     public void start() {
@@ -140,11 +152,10 @@ public class Engine implements Runnable
         }
     }
 
+    public String getTitle() { return title; }
     public int getWidth() { return width; }
     public int getHeight() { return height; }
     public double getScale() { return scale; }
-    public String getTitle() { return title; }
-
     public double getUpdateRate() { return updateRate; }
 
     public Window getWindow() { return window; }
@@ -156,6 +167,7 @@ public class Engine implements Runnable
     public void addGameObject(GameObject o) { gameObjects.add(o); } // ?
 
     public Font getStandardFont() { return standardFont; }
+    public void setStandardFont(Font font) { standardFont = font; }
 
     public Region getSelectedRegion() { return selectedRegion; }
     public void setSelectedRegion(Region region) {
@@ -164,7 +176,10 @@ public class Engine implements Runnable
     }
 
     public Menu getMainMenu() { return mainMenu; }
-    public void setMainMenu(Menu menu) { mainMenu = menu; }
+    public void setMainMenu(Menu menu) {
+        mainMenu = menu;
+        setCurrentMenu(mainMenu);
+    }
 
     public Menu getCurrentMenu() { return currentMenu; }
     public void setCurrentMenu(Menu menu) {
@@ -178,12 +193,75 @@ public class Engine implements Runnable
     }
 
     public Region getRegion(String regionName) {
-        for (Region r : gm.getWorld().getRegions()) {
+        for (Region r : GameMaster.getGameMaster().getWorld().getRegions()) {
             if (r.getName().equals(regionName)) {
                 return r;
             }
         }
         return null;
     }
+
+    public Menu buildAddExploitationMenu(String label, Menu template) {
+        String[] options = new String[]{
+                "add primary exploitation ("+ Config.PrimaryCost+" $)",
+                "add secondary exploitation ("+Config.SecondaryCost+" $)",
+                "add tertiary exploitation ("+Config.TertiaryCost+" $)",
+        };
+        Action[] actions = new Action[]{
+                () -> selectedRegion.buyExploitation(0),
+                () -> selectedRegion.buyExploitation(1),
+                () -> selectedRegion.buyExploitation(2),
+        };
+
+        return buildReturnableMenu(options, actions, label, template);
+    }
+
+    public Menu buildRemoveExploitationMenu(String label, Menu template) {
+        String[] options = new String[selectedRegion.getExploitations().size()];
+        Action[] actions = new Action[options.length];
+
+        for (int i = 0; i < options.length; i++) {
+            int a = i;
+            options[i] = selectedRegion.getExploitations().get(i).toString()+" ("+selectedRegion.getExploitations().get(i).getRemoveCost() + " $)";
+            actions[i] = () -> {
+                selectedRegion.removeExploitation(a);
+                setCurrentMenu(buildRemoveExploitationMenu(label, template));
+            };
+        }
+        return buildReturnableMenu(options, actions, label, template);
+    }
+
+    public Menu buildBuyEventMenu(String label, Menu template) {
+        String[] options = new String[selectedRegion.getBuyableEvents().size()];
+        Action[] actions = new Action[options.length];
+
+        for (int i = 0; i < options.length; i++) {
+            int a = i;
+            options[i] = selectedRegion.getBuyableEvents().get(i).getName();
+            actions[i] = () -> {
+                if (selectedRegion.buyEvent(getSelectedRegion().getBuyableEvents().get(a)))
+                    setCurrentMenu(getMainMenu());
+            };
+        }
+        return buildReturnableMenu(options, actions, label, template);
+    }
+
+    public Menu buildReturnableMenu(String[] options, Action[] actions, String label, Menu template) {
+        String[] finalOptions = new String[options.length + 2];
+        Action[] finalActions = new Action[options.length + 2];
+
+        for (int i = 0; i < options.length; i++) {
+            finalOptions[i] = options[i];
+            finalActions[i] = actions[i];
+        }
+
+        finalOptions[finalOptions.length - 2] = " ";
+        finalActions[finalActions.length - 2] = () -> {};
+        finalOptions[finalOptions.length - 1] = "RETURN";
+        finalActions[finalActions.length - 1] = () -> setCurrentMenu(getMainMenu());
+
+        return new Menu(this, template, label, finalOptions, finalActions);
+    }
+
 
 }
