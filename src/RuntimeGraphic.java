@@ -10,32 +10,13 @@ import evilcorp.graphic.gameobjects.visual.*;
 
 import evilcorp.logic.GameMaster;
 import evilcorp.logic.NotificationBus;
-import evilcorp.logic.area.region.Region;
-import evilcorp.logic.config.Config;
-
-import java.io.IOException;
 
 
 public class RuntimeGraphic {
     private static Engine engine;
     private static GameMaster gm;
 
-
-    private static final int regionInfoColor = 0xffffffff;
-    private static final int regionInfoAnchorX = 50;
-    private static final int regionInfoAnchorY = 100;
-    private static final int regionInfoWidth = 8*40;
-    private static final int regionInfoFieldHeight = 16;
-    private static final int regionInfoMaxLines = 15;
-
-
     public static void main(String[] args) {
-        String currentPath = "/";
-        try {
-            currentPath = new java.io.File(".").getCanonicalPath() + currentPath;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
         /* LOADING CONFIG */
 
@@ -70,6 +51,8 @@ public class RuntimeGraphic {
         }
 
 
+        // defer to ConfigReader
+
         Text turnsText = new Text(engine, 1065, 100, 0xffffffff);
         turnsText.setAction(() -> turnsText.setText("TURN: " + gm.getTurn()));
 
@@ -84,25 +67,18 @@ public class RuntimeGraphic {
                 },
                 new Image("data/resources/images/next_turn.png"));
 
-        engine.addGameObject(turnsText);
-        engine.addGameObject(fundsText);
-        engine.addGameObject(nextTurnButton);
-
-
         Visual logo = new Visual(engine, (int)(0.5*(engine.getWidth() - 252)), 600, new Image("data/resources/images/logo.png"));
-
-        engine.addGameObject(logo);
-
 
         NotificationWaitingArea notificationWaitingArea = new NotificationWaitingArea(engine,850, 318, 8*50,14, 27, 0xffffffff);
 
-        engine.addGameObject(notificationWaitingArea);
-
         NotificationImmediateArea notificationImmediateArea = new NotificationImmediateArea(engine,50, 510, 8*50,16, 3, 0xffff0000, 5);
 
+        engine.addGameObject(turnsText);
+        engine.addGameObject(fundsText);
+        engine.addGameObject(nextTurnButton);
+        engine.addGameObject(logo);
+        engine.addGameObject(notificationWaitingArea);
         engine.addGameObject(notificationImmediateArea);
-
-
 
 
         engine.start();
