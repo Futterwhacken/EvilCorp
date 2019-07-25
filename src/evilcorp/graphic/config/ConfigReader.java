@@ -3,14 +3,20 @@ package evilcorp.graphic.config;
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.Action;
 import evilcorp.graphic.gameobjects.GameObject;
+import evilcorp.graphic.gameobjects.interactive.Button;
 import evilcorp.graphic.gameobjects.interactive.Map;
 import evilcorp.graphic.gameobjects.interactive.Menu;
+import evilcorp.graphic.gameobjects.text.NotificationImmediateArea;
+import evilcorp.graphic.gameobjects.text.NotificationWaitingArea;
 import evilcorp.graphic.gameobjects.text.Text;
 import evilcorp.graphic.gameobjects.text.TextArea;
 import evilcorp.graphic.gameobjects.visual.GaugeGraph;
+import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Font;
 
+import evilcorp.graphic.gfx.Image;
 import evilcorp.logic.GameMaster;
+import evilcorp.logic.NotificationBus;
 import evilcorp.logic.config.Config;
 
 import java.io.BufferedReader;
@@ -532,4 +538,132 @@ public class ConfigReader
 
         return null;
     }
+
+    public static GameObject[] readNextArea(String configPath, String imagesPath) {
+
+        Engine engine = Engine.getEngine();
+        GameMaster gm = GameMaster.getGameMaster();
+
+        String line;
+        String[] buffer;
+
+
+        try {
+            FileReader fileReader = new FileReader(configPath);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            // turns text
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            Text turnsText = new Text(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), (int)Long.parseLong(buffer[2], 16));
+            turnsText.setAction(() -> turnsText.setText("TURN: " + gm.getTurn()));
+
+            // funds text
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            Text fundsText = new Text(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), (int)Long.parseLong(buffer[2], 16));
+            fundsText.setAction(() -> fundsText.setText("FUNDS: " + gm.getPoints() + " $"));
+
+            // next button
+            line = pass(reader);
+            buffer = line.split(" ");
+
+
+            Button nextTurnButton = new Button(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]),
+                    () -> {
+                        NotificationBus.clearWaitingList();
+                        NotificationBus.clearImmediateList();
+                        gm.nextTurn();
+                    },
+                    new Image(imagesPath+buffer[2])
+            );
+
+            reader.close();
+
+            return new GameObject[]{turnsText, fundsText, nextTurnButton};
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file \"" + configPath + "\"");
+        }
+        catch (IOException ex) {
+            System.out.println("Error reading file \""+ configPath + "\"");
+        }
+
+        return null;
+    }
+
+    public static GameObject[] readNotifArea(String configPath, String imagesPath) {
+
+        Engine engine = Engine.getEngine();
+
+        String line;
+        String[] buffer;
+
+
+        try {
+            FileReader fileReader = new FileReader(configPath);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            // waiting notif
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            NotificationWaitingArea notificationWaitingArea = new NotificationWaitingArea(
+                    engine,
+                    Integer.valueOf(buffer[0]),
+                    Integer.valueOf(buffer[1]),
+                    Integer.valueOf(buffer[2]),
+                    Integer.valueOf(buffer[3]),
+                    Integer.valueOf(buffer[4]),
+                    (int)Long.parseLong(buffer[5], 16)
+            );
+
+            // immediate notif
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            NotificationImmediateArea notificationImmediateArea = new NotificationImmediateArea(
+                    engine,
+                    Integer.valueOf(buffer[0]),
+                    Integer.valueOf(buffer[1]),
+                    Integer.valueOf(buffer[2]),
+                    Integer.valueOf(buffer[3]),
+                    Integer.valueOf(buffer[4]),
+                    (int)Long.parseLong(buffer[5], 16),
+                    Integer.valueOf(buffer[6])
+            );
+
+            // logo
+            line = pass(reader);
+            buffer = line.split(" ");
+
+            int posX;
+            Image image = new Image(imagesPath+buffer[2]);
+
+            if (Integer.valueOf(buffer[0]) == -1) {
+                posX = (int)(0.5*(engine.getWidth() - image.getWidth()));
+            }
+            else {
+                posX = Integer.valueOf(buffer[0]);
+            }
+
+            Visual logo = new Visual(engine, posX, Integer.valueOf(buffer[1]), image);
+
+            reader.close();
+
+            return new GameObject[]{notificationWaitingArea, notificationImmediateArea, logo};
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file \"" + configPath + "\"");
+        }
+        catch (IOException ex) {
+            System.out.println("Error reading file \""+ configPath + "\"");
+        }
+
+        return null;
+    }
 }
+
+
