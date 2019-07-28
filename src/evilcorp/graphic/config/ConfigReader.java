@@ -28,6 +28,11 @@ import java.io.IOException;
 public class ConfigReader
 {
 
+    private static final String fontsPath = "data/resources/fonts/";
+    private static final String mapsPath = "data/resources/maps/";
+    private static final String imagesPath = "data/resources/images/";
+
+
     private static String pass(BufferedReader br) throws IOException {
         String line;
         do {
@@ -87,7 +92,7 @@ public class ConfigReader
         return null;
     }
 
-    public static Font[] readFonts(String configPath, String fontsPath) {
+    public static Font[] readFonts(String configPath) {
         String line;
         String[] buffer;
 
@@ -142,7 +147,7 @@ public class ConfigReader
         return null;
     }
 
-    public static Map readMap(String configPath, String mapsPath) {
+    public static Map readMap(String configPath) {
 
         Engine engine = Engine.getEngine();
 
@@ -292,11 +297,11 @@ public class ConfigReader
                             labels[3]
                     },
                     new Action[]{
-                            () -> engine.setCurrentMenu(engine.buildAddExploitationMenu(labels[1], tmp)),
-                            () -> engine.setCurrentMenu(engine.buildRemoveExploitationMenu(labels[2], tmp)),
+                            () -> engine.getCurrentScene().setCurrentMenu(Menu.buildAddExploitationMenu(labels[1], tmp)),
+                            () -> engine.getCurrentScene().setCurrentMenu(Menu.buildRemoveExploitationMenu(labels[2], tmp)),
                             () -> {
-                                engine.setCurrentMenu(engine.buildBuyEventMenu(labels[3], tmp));
-                                Menu buyEvntMenu = engine.getCurrentMenu();
+                                engine.getCurrentScene().setCurrentMenu(Menu.buildBuyEventMenu(labels[3], tmp));
+                                Menu buyEvntMenu = engine.getCurrentScene().getCurrentMenu();
 
                                 if (buyEvntMenu.getButtons()[0].getHoverAction() == null) {
                                     for (int i = 0; i < buyEvntMenu.getButtons().length-2; i++) {
@@ -306,7 +311,7 @@ public class ConfigReader
                                                 hoverTextArea.getTexts()[0].setText("");
                                             }
                                             else if (buyEvntMenu.getButtons()[a].isHovered()) {
-                                                hoverTextArea.getTexts()[0].setText(engine.getSelectedRegion().getBuyableEvents().get(a).toString());
+                                                hoverTextArea.getTexts()[0].setText(engine.getCurrentScene().getSelectedRegion().getBuyableEvents().get(a).toString());
                                             }
                                         }, () -> hoverTextArea.getTexts()[0].setText(""));
                                     }
@@ -359,52 +364,52 @@ public class ConfigReader
             // modulariser tout ça ?
             Text selectedRegionText = new Text(engine, "SELECT A REGION", color);
             selectedRegionText.setAction(() -> {
-                if (engine.getSelectedRegion() != null)
-                    selectedRegionText.setText(engine.getSelectedRegion().getName());
+                if (engine.getCurrentScene().getSelectedRegion() != null)
+                    selectedRegionText.setText(engine.getCurrentScene().getSelectedRegion().getName());
                 else
                     selectedRegionText.setText(selectedRegionText.getDefaultText());
             });
 
             Text selectedRegionActivityText = new Text(engine, color);
             selectedRegionActivityText.setAction(() -> {
-                if (engine.getSelectedRegion() != null)
-                    selectedRegionActivityText.setText(engine.getSelectedRegion().getParams().getActivityToleranceString());
+                if (engine.getCurrentScene().getSelectedRegion() != null)
+                    selectedRegionActivityText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getActivityToleranceString());
             });
 
             Text selectedRegionEnvironmentText = new Text(engine, color);
             selectedRegionEnvironmentText.setAction(() -> {
-                if (engine.getSelectedRegion() != null)
-                    selectedRegionEnvironmentText.setText(engine.getSelectedRegion().getParams().getEnvironmentToleranceString());
+                if (engine.getCurrentScene().getSelectedRegion() != null)
+                    selectedRegionEnvironmentText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getEnvironmentToleranceString());
             });
 
             Text selectedRegionOppositionText = new Text(engine, color);
             selectedRegionOppositionText.setAction(() -> {
-                if (engine.getSelectedRegion() != null)
-                    selectedRegionOppositionText.setText(engine.getSelectedRegion().getParams().getOppositionToleranceString());
+                if (engine.getCurrentScene().getSelectedRegion() != null)
+                    selectedRegionOppositionText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getOppositionToleranceString());
             });
 
             Text selectedRegionProductionText = new Text(engine, color);
             selectedRegionProductionText.setAction(() -> {
-                if (engine.getSelectedRegion() != null)
-                    selectedRegionProductionText.setText("PRODUCTION: " + engine.getSelectedRegion().getProductivity());
+                if (engine.getCurrentScene().getSelectedRegion() != null)
+                    selectedRegionProductionText.setText("PRODUCTION: " + engine.getCurrentScene().getSelectedRegion().getProductivity());
             });
 
             Text selectedRegionPollutionText = new Text(engine, color);
             selectedRegionPollutionText.setAction(() -> {
-                if (engine.getSelectedRegion() != null)
-                    selectedRegionPollutionText.setText("POLLUTION: " + engine.getSelectedRegion().getVisibility());
+                if (engine.getCurrentScene().getSelectedRegion() != null)
+                    selectedRegionPollutionText.setText("POLLUTION: " + engine.getCurrentScene().getSelectedRegion().getVisibility());
             });
 
             Text selectedRegionSocialText = new Text(engine, color);
             selectedRegionSocialText.setAction(() -> {
-                if (engine.getSelectedRegion() != null)
-                    selectedRegionSocialText.setText("SOCIAL: " + engine.getSelectedRegion().getSocial());
+                if (engine.getCurrentScene().getSelectedRegion() != null)
+                    selectedRegionSocialText.setText("SOCIAL: " + engine.getCurrentScene().getSelectedRegion().getSocial());
             });
 
             Text selectedRegionExploitationText = new Text(engine, color);
             selectedRegionExploitationText.setAction(() -> {
-                if (engine.getSelectedRegion() != null)
-                    selectedRegionExploitationText.setText(""+engine.getSelectedRegion().getExploitations().size() + "/" + engine.getSelectedRegion().getMaxExpl() + " EXPLOITATIONS");
+                if (engine.getCurrentScene().getSelectedRegion() != null)
+                    selectedRegionExploitationText.setText(""+engine.getCurrentScene().getSelectedRegion().getExploitations().size() + "/" + engine.getCurrentScene().getSelectedRegion().getMaxExpl() + " EXPLOITATIONS");
             });
 
             TextArea regionInfo = new TextArea(engine, posX, posY, width, lineHeight, maxLines,
@@ -512,13 +517,13 @@ public class ConfigReader
             socialLevelText.setAction(() -> socialLevelText.setText(""+gm.getWorld().getSocial()));
 
 
-            GaugeGraph productionGauge = new GaugeGraph(engine, posX, posY + height*field*0 - offset, width, height, horizontal, Config.maxGauge, Config.maxGauge, borderSize, prodColor, textColor);
+            GaugeGraph productionGauge = new GaugeGraph(engine, posX, posY + height*field*0 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, prodColor, textColor);
             productionGauge.setAction(() -> productionGauge.setLevel(gm.getWorld().getProductivity()));
 
-            GaugeGraph visibilityGauge = new GaugeGraph(engine, posX, posY + height*field*1 - offset, width, height, horizontal, Config.maxGauge, Config.maxGauge, borderSize, pollColor, textColor);
+            GaugeGraph visibilityGauge = new GaugeGraph(engine, posX, posY + height*field*1 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, pollColor, textColor);
             visibilityGauge.setAction(() -> visibilityGauge.setLevel(gm.getWorld().getVisibility()));
 
-            GaugeGraph socialGauge = new GaugeGraph(engine, posX, posY + height*field*2 - offset, width, height, horizontal, Config.maxGauge, Config.maxGauge, borderSize, socialColor, textColor);
+            GaugeGraph socialGauge = new GaugeGraph(engine, posX, posY + height*field*2 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, socialColor, textColor);
             socialGauge.setAction(() -> socialGauge.setLevel(gm.getWorld().getSocial()));
 
             reader.close();
@@ -539,7 +544,7 @@ public class ConfigReader
         return null;
     }
 
-    public static GameObject[] readNextArea(String configPath, String imagesPath) {
+    public static GameObject[] readNextArea(String configPath) {
 
         Engine engine = Engine.getEngine();
         GameMaster gm = GameMaster.getGameMaster();
@@ -594,7 +599,7 @@ public class ConfigReader
         return null;
     }
 
-    public static GameObject[] readNotifArea(String configPath, String imagesPath) {
+    public static GameObject[] readNotifArea(String configPath) {
 
         Engine engine = Engine.getEngine();
 

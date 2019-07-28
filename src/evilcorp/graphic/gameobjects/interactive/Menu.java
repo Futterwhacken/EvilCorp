@@ -34,10 +34,8 @@ public class Menu extends GameObject
         if (actions != null) {
             this.buttons = new Button[actions.length];
 
-            // implement margin
-
             for (int i = 0; i < actions.length; i++) {
-                buttons[i] = new Button(engine, posX, posY + i * fieldHeight, options[i].length() * engine.getStandardFont().getTextUnitWidth(), fieldHeight, actions[i], options[i], color);
+                buttons[i] = new Button(engine, posX, posY + i * fieldHeight, options[i].length() * engine.getStandardFont().getTextUnitWidth(), (fieldHeight-engine.getStandardFont().getCharHeight()-2), actions[i], options[i], color);
             }
         }
         else {
@@ -72,5 +70,72 @@ public class Menu extends GameObject
         }
 
         return true;
+    }
+
+    public static Menu buildAddExploitationMenu(String label, Menu template) {
+        Engine engine = Engine.getEngine();
+        String[] options = new String[]{
+                "add primary exploitation ("+ engine.getCurrentScene().getSelectedRegion().getPrimaryCost()+" $)",
+                "add secondary exploitation ("+engine.getCurrentScene().getSelectedRegion().getSecondaryCost()+" $)",
+                "add tertiary exploitation ("+engine.getCurrentScene().getSelectedRegion().getTertiaryCost()+" $)",
+        };
+        Action[] actions = new Action[]{
+                () -> engine.getCurrentScene().getSelectedRegion().buyExploitation(0),
+                () -> engine.getCurrentScene().getSelectedRegion().buyExploitation(1),
+                () -> engine.getCurrentScene().getSelectedRegion().buyExploitation(2),
+        };
+
+        return buildReturnableMenu(options, actions, label, template);
+    }
+
+
+    public static Menu buildRemoveExploitationMenu(String label, Menu template) {
+        Engine engine = Engine.getEngine();
+        String[] options = new String[engine.getCurrentScene().getSelectedRegion().getExploitations().size()];
+        Action[] actions = new Action[options.length];
+
+        for (int i = 0; i < options.length; i++) {
+            int a = i;
+            options[i] = engine.getCurrentScene().getSelectedRegion().getExploitations().get(i).toString()+" ("+engine.getCurrentScene().getSelectedRegion().getExploitations().get(i).getRemoveCost() + " $)";
+            actions[i] = () -> {
+                engine.getCurrentScene().getSelectedRegion().removeExploitation(a);
+                engine.getCurrentScene().setCurrentMenu(buildRemoveExploitationMenu(label, template));
+            };
+        }
+        return buildReturnableMenu(options, actions, label, template);
+    }
+
+    public static Menu buildBuyEventMenu(String label, Menu template) {
+        Engine engine = Engine.getEngine();
+        String[] options = new String[engine.getCurrentScene().getSelectedRegion().getBuyableEvents().size()];
+        Action[] actions = new Action[options.length];
+
+        for (int i = 0; i < options.length; i++) {
+            int a = i;
+            options[i] = engine.getCurrentScene().getSelectedRegion().getBuyableEvents().get(i).getName();
+            actions[i] = () -> {
+                if (engine.getCurrentScene().getSelectedRegion().buyEvent(engine.getCurrentScene().getSelectedRegion().getBuyableEvents().get(a)))
+                    engine.getCurrentScene().setCurrentMenu(engine.getCurrentScene().getMainMenu());
+            };
+        }
+        return buildReturnableMenu(options, actions, label, template);
+    }
+
+    public static Menu buildReturnableMenu(String[] options, Action[] actions, String label, Menu template) {
+        Engine engine = Engine.getEngine();
+        String[] finalOptions = new String[options.length + 2];
+        Action[] finalActions = new Action[options.length + 2];
+
+        for (int i = 0; i < options.length; i++) {
+            finalOptions[i] = options[i];
+            finalActions[i] = actions[i];
+        }
+
+        finalOptions[finalOptions.length - 2] = " ";
+        finalActions[finalActions.length - 2] = () -> {};
+        finalOptions[finalOptions.length - 1] = "RETURN";
+        finalActions[finalActions.length - 1] = () -> engine.getCurrentScene().setCurrentMenu(engine.getCurrentScene().getMainMenu());
+
+        return new Menu(engine, template, label, finalOptions, finalActions);
     }
 }

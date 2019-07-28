@@ -5,25 +5,16 @@ import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Image;
 
+import evilcorp.logic.GameMaster;
+import evilcorp.logic.area.region.Region;
+
 public class Map extends GameObject
 {
-    private final int posX;
-    private final int posY;
-    private final int width;
-    private final int height;
-    private final double scale;
-
     private final Visual map;
     private final Button[] buttons;
 
     public Map(Engine engine, int posX, int posY, int width, int height, double scale, String[] names, String[] imagesPath, int[][] params) {
         super(engine);
-
-        this.posX = posX;
-        this.posY = posY;
-        this.width = width;
-        this.height = height;
-        this.scale = scale;
 
         this.map = new Visual(engine, posX, posY, new Image(imagesPath[0], scale));
         this.buttons = new Button[names.length];
@@ -35,7 +26,7 @@ public class Map extends GameObject
             buttons[i] = new Button(engine, (int)(posX + current[0] * scale),(int)(posY + current[1] * scale), (int)(current[2] * scale), (int)(current[3] * scale),
                     () -> {
                         map.setImage(new Image(imagesPath[a+1], scale));
-                        engine.setSelectedRegion(engine.getRegion(names[a]));
+                        engine.getCurrentScene().setSelectedRegion(getRegion(names[a]));
                     });
         }
     }
@@ -58,5 +49,14 @@ public class Map extends GameObject
         for (Button b : buttons) {
             b.render();
         }
+    }
+
+    private Region getRegion(String regionName) {
+        for (Region r : GameMaster.getGameMaster().getWorld().getRegions()) {
+            if (r.getName().equals(regionName)) {
+                return r;
+            }
+        }
+        return null;
     }
 }

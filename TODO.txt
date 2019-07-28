@@ -1,12 +1,14 @@
 
 
 TODO:
-    * embed paths in config reader
-    * réduire nb de lignes notif
-    * add Scene class (splash screen, menu, game, credits)
-    * handle button text margin
+    * add win/lose trigger
+    * add Frame and LabeledFrame classes ??
     * button feedback
+    * réduire nb de lignes notif
     *
+    * [DONE] add Scene class (splash screen, menu, game, credits)
+    * [DONE] embed paths in config reader
+    * [DONE] handle button text margin
     * [DONE] config reader
     * [DONE] add menu label
     * [DONE] add global gauges

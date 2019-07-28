@@ -15,6 +15,10 @@ public final class Region extends Area
 
     public static int getMaxExpl() { return MAX_EXPL; }
 
+    public static int getPrimaryCost() { return ExploitationPrimary.COST; }
+    public static int getSecondaryCost() { return ExploitationSecondary.COST; }
+    public static int getTertiaryCost() { return ExploitationTertiary.COST; }
+
     // taux de variation des jauges
     private double rateProductivity;
     private double rateVisibility;

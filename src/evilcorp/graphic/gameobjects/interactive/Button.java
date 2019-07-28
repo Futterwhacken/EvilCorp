@@ -39,6 +39,10 @@ public class Button extends GameObject
         this.labelColor = labelColor;
     }
 
+    /*public Button(Engine engine, int posX, int posY, Action action, String label, int labelColor) {
+        this(engine, posX, posY, label.length() * engine.getStandardFont().getTextUnitWidth(), engine.getStandardFont().getCharHeight() + 2, action, label, labelColor);
+    }*/
+
     // image
     public Button(Engine engine, int posX, int posY, Action action, Image image) {
         this(engine, posX, posY, image.getWidth(), image.getHeight(), action, image, null, 0);
@@ -97,8 +101,7 @@ public class Button extends GameObject
             engine.getRenderer().drawImage(image, posX, posY);
         }
         else if (label != null) {
-            // ajouter margin pour texte
-            engine.getRenderer().drawText(engine.getStandardFont(), label, posX, posY, labelColor);
+            engine.getRenderer().drawText(engine.getStandardFont(), label, posX, posY + 1 + (height - engine.getStandardFont().getCharHeight())/2, labelColor);
         }
     }
 
