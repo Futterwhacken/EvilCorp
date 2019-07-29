@@ -17,7 +17,14 @@ public class Visual extends GameObject
 
         this.image = image;
         this.action = action;
-        this.posX = posX;
+
+        if (posX == -1) {
+            this.posX = (int)(0.5*(engine.getWidth() - image.getWidth()));
+        }
+        else {
+            this.posX = posX;
+        }
+
         this.posY = posY;
     }
 

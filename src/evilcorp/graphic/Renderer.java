@@ -54,7 +54,7 @@ public class Renderer
                 }
             }
 
-            offset += font.getWidths()[unicode];
+            offset += font.getWidths()[unicode] + font.getInterspace() - 1;
         }
     }
 

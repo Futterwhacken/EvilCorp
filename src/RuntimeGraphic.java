@@ -1,18 +1,18 @@
 
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.config.ConfigReader;
+import evilcorp.graphic.gfx.Font;
+import evilcorp.graphic.gfx.Image;
+
 import evilcorp.graphic.gameobjects.Scene;
 import evilcorp.graphic.gameobjects.interactive.Button;
 import evilcorp.graphic.gameobjects.text.Text;
 import evilcorp.graphic.gameobjects.visual.Visual;
-import evilcorp.graphic.gfx.Font;
-
 import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gameobjects.interactive.Map;
 import evilcorp.graphic.gameobjects.interactive.Menu;
 import evilcorp.graphic.gameobjects.text.TextArea;
 
-import evilcorp.graphic.gfx.Image;
 import evilcorp.logic.GameMaster;
 
 
@@ -40,25 +40,25 @@ public class RuntimeGraphic {
         /* LOADING MENU SCENE */
 
         Image logoImage = new Image("data/resources/images/logo.png", 2);
-        Visual menuLogo = new Visual(engine, (int)(0.5*(engine.getWidth() - logoImage.getWidth())), 75, logoImage);
+        Visual menuLogo = new Visual(engine, -1, 75, logoImage);
 
         String startLabel = "START GAME";
         Button startGame = new Button(engine,
-                (int)(0.5*(engine.getWidth() - (startLabel.length() * engine.getStandardFontBig().getTextUnitWidth()))),
+                -1,
                 350,
                 () -> engine.setCurrentScene(gameScene),
                 startLabel, 0xffffffff, engine.getStandardFontBig());
 
         String creditsLabel = "CREDITS";
         Button creditsButton = new Button(engine,
-                (int)(0.5*(engine.getWidth() - (creditsLabel.length() * engine.getStandardFontBig().getTextUnitWidth()))),
+                -1,
                 390,
                 () -> engine.setCurrentScene(creditsScene),
                 creditsLabel, 0xffffffff, engine.getStandardFontBig());
 
         String quitLabel = "QUIT GAME";
         Button quitGame = new Button(engine,
-                (int)(0.5*(engine.getWidth() - (quitLabel.length() * engine.getStandardFontBig().getTextUnitWidth()))),
+                -1,
                 430,
                 () -> engine.stop(),
                 quitLabel, 0xffffffff, engine.getStandardFontBig());
@@ -127,11 +127,11 @@ public class RuntimeGraphic {
         /* LOADING CREDITS SCENE */
 
         // take logoImage
-        Visual creditsLogo = new Visual(engine, (int)(0.5*(engine.getWidth() - logoImage.getWidth())), 75, logoImage);
+        Visual creditsLogo = new Visual(engine, -1, 75, logoImage);
 
         String credits = "CREATED BY HARMED-CHRONOGRAM & SPIEGELEISEN";
         Text creditsText = new Text(engine,
-                (int)(0.5*(engine.getWidth() - (credits.length() * engine.getStandardFontBig().getTextUnitWidth()))),
+                -1,
                 340,
                 credits,
                 0xffffffff,
@@ -141,7 +141,7 @@ public class RuntimeGraphic {
 
         String returnLabel = "RETURN TO MAIN MENU";
         Button returnMainMenu = new Button(engine,
-                (int)(0.5*(engine.getWidth() - (returnLabel.length() * engine.getStandardFontBig().getTextUnitWidth()))),
+                -1,
                 420,
                 () -> engine.setCurrentScene(menuScene),
                 returnLabel, 0xffffffff, engine.getStandardFontBig());

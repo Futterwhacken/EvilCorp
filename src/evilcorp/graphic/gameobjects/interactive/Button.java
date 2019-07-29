@@ -28,7 +28,16 @@ public class Button extends GameObject
     private Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor, Font font) {
         super(engine);
 
-        this.posX = posX;
+        if (image != null && posX == -1) {
+            this.posX = (int)(0.5*(engine.getWidth() - image.getWidth()));
+        }
+        else if (label != null && posX == -1) {
+            this.posX = (int)(0.5*(engine.getWidth() - font.textLength(label)));
+        }
+        else {
+            this.posX = posX;
+        }
+
         this.posY = posY;
         this.width = width;
         this.height = height;

@@ -2,6 +2,19 @@ package evilcorp.graphic.gfx;
 
 public class Font
 {
+    public int textLength(String text) {
+        text = text.toUpperCase();
+        int specials = 0;
+        for (int i = 0; i < text.length(); i++) {
+            char c = text.charAt(i);
+            if (c == 'I' || c == 'T' || c == 'Y') {
+                specials++;
+            }
+        }
+
+        return ((charWidth + interspace) * text.length()) - (specials * interspace);
+    }
+
     private final Image fontImage;
     private final int[] offsets;
     private final int[] widths;

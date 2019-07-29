@@ -179,14 +179,8 @@ public class ConfigReader
             line = pass(reader);
             buffer = line.split(" ");
 
-            if (Integer.valueOf(buffer[0]) == -1) {
-                posX = (int)(0.5*(engine.getWidth() - (width * scale)));
-                posY = 0;
-            }
-            else {
-                posX = Integer.valueOf(buffer[0]);
-                posY = Integer.valueOf(buffer[1]);
-            }
+            posX = Integer.valueOf(buffer[0]);
+            posY = Integer.valueOf(buffer[1]);
 
             // nb regions
             line = pass(reader);
@@ -653,17 +647,8 @@ public class ConfigReader
             line = pass(reader);
             buffer = line.split(" ");
 
-            int posX;
             Image image = new Image(imagesPath+buffer[2]);
-
-            if (Integer.valueOf(buffer[0]) == -1) {
-                posX = (int)(0.5*(engine.getWidth() - image.getWidth()));
-            }
-            else {
-                posX = Integer.valueOf(buffer[0]);
-            }
-
-            Visual logo = new Visual(engine, posX, Integer.valueOf(buffer[1]), image);
+            Visual logo = new Visual(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), image);
 
             reader.close();
 

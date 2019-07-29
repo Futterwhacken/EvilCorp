@@ -24,7 +24,13 @@ public class Text extends GameObject
         this.action = action;
         this.font = font;
 
-        this.posX = posX;
+        if (posX == -1) {
+            this.posX = (int)(0.5*(engine.getWidth() - font.textLength(text)));
+        }
+        else {
+            this.posX = posX;
+        }
+
         this.posY = posY;
         this.color = color;
     }

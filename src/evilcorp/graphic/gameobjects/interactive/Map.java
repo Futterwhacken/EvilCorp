@@ -16,6 +16,10 @@ public class Map extends GameObject
     public Map(Engine engine, int posX, int posY, int width, int height, double scale, String[] names, String[] imagesPath, int[][] params) {
         super(engine);
 
+        if (posX == -1) {
+            posX = (int)(0.5*(engine.getWidth() - (width * scale)));
+        }
+
         this.map = new Visual(engine, posX, posY, new Image(imagesPath[0], scale));
         this.buttons = new Button[names.length];
 
