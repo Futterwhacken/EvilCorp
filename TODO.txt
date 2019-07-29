@@ -22,3 +22,14 @@ DONE:
     * [DONE] show buy and rmv cost
     * [DONE] HOVER NOTIFICATION & MENU show event status, descr and cost
     * [DONE] immediate and waiting notifications
+
+
+OK CONSTRUCTORS:
+    - Button
+    - Map
+    - Menu
+    - Text : ok-ish
+    - TextArea
+    - Notif*Area
+    - Visual
+    - GaugeGraph

@@ -35,10 +35,6 @@ public class Map extends GameObject
         }
     }
 
-    public Map(Engine engine, int width, int height, double scale, String[] names, String[] imagesPath, int[][] params) {
-        this(engine, (int)(0.5*(engine.getWidth() - (width * scale))), 0, width, height, scale, names, imagesPath, params);
-    }
-
     @Override
     public void update() {
         map.update();

@@ -50,10 +50,6 @@ public class GaugeGraph extends GameObject
         this.dimensionDynamic = (int)(dimensionDynamicMax * level/max);
     }
 
-    public GaugeGraph(Engine engine, int posX, int posY, int width, int height, double max, int borderSize, int color, int borderColor) {
-        this(engine, posX, posY, width, height, true, 0, max, borderSize, color, borderColor);
-    }
-
     @Override
     public void update() {
         if (action != null) {

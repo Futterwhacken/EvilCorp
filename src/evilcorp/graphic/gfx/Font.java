@@ -47,11 +47,6 @@ public class Font
         }
     }
 
-    public Font(String path, int charWidth, int interspace) {
-        //noinspection SuspiciousNameCombination
-        this(path, charWidth, charWidth, interspace);
-    }
-
     public Image getFontImage() { return fontImage; }
     public int[] getOffsets() { return offsets; }
     public int[] getWidths() { return widths; }

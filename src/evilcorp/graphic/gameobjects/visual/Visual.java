@@ -12,11 +12,10 @@ public class Visual extends GameObject
     private final int posX;
     private final int posY;
 
-    private Visual(Engine engine, int posX, int posY, Image image, Action action) {
+    public Visual(Engine engine, int posX, int posY, Image image) {
         super(engine);
 
         this.image = image;
-        this.action = action;
 
         if (posX == -1) {
             this.posX = (int)(0.5*(engine.getWidth() - image.getWidth()));
@@ -26,10 +25,6 @@ public class Visual extends GameObject
         }
 
         this.posY = posY;
-    }
-
-    public Visual(Engine engine, int posX, int posY, Image image) {
-        this(engine, posX, posY, image, null);
     }
 
     @Override
@@ -44,5 +39,5 @@ public class Visual extends GameObject
     }
 
     public void setImage(Image image) { this.image = image; }
-    public void setAction(Action action) { this.action = action; } // useful for animations
+    public void setAction(Action action) { this.action = action; }
 }

@@ -23,7 +23,13 @@ public class TextArea extends GameObject
     public TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts, Font font) {
         super(engine);
 
-        this.posX = posX;
+        if (posX == -1) {
+            this.posX = (int)(0.5*(engine.getWidth() - width));
+        }
+        else {
+            this.posX = posX;
+        }
+
         this.posY = posY;
         this.lineHeight = lineHeight;
 

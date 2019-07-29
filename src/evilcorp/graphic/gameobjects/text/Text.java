@@ -16,12 +16,12 @@ public class Text extends GameObject
     private final int posY;
     private final int color;
 
-    public Text(Engine engine, int posX, int posY, String text, Action action, int color, Font font) {
+    public Text(Engine engine, int posX, int posY, String text, int color, Font font) {
         super(engine);
 
         this.text = text;
         this.defaultText = text;
-        this.action = action;
+        //this.action = action;
         this.font = font;
 
         if (posX == -1) {
@@ -36,7 +36,7 @@ public class Text extends GameObject
     }
 
     public Text(Engine engine) {
-        this(engine, 0xffffffff);
+        this(engine, 0, 0, "", 0xffffffff);
     }
 
     public Text(Engine engine, int color) {
@@ -44,7 +44,7 @@ public class Text extends GameObject
     }
 
     public Text(Engine engine, String text, int color) {
-        this(engine, 0, 0, text, null, color, engine.getStandardFont());
+        this(engine, 0, 0, text, color);
     }
 
     public Text(Engine engine, int posX, int posY, int color) {
@@ -52,11 +52,7 @@ public class Text extends GameObject
     }
 
     public Text(Engine engine, int posX, int posY, String text, int color) {
-        this(engine, posX, posY, text, null, color, engine.getStandardFont());
-    }
-
-    public Text(Engine engine, int posX, int posY, String text, int color, Font font) {
-        this(engine, posX, posY, text, null, color, font);
+        this(engine, posX, posY, text, color, engine.getStandardFont());
     }
 
 

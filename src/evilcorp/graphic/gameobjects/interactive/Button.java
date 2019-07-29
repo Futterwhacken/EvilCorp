@@ -58,18 +58,13 @@ public class Button extends GameObject
     }
 
     // string label
-    public Button(Engine engine, int posX, int posY, int width, int height, Action action, String label, int labelColor) {
-        this(engine, posX, posY, width, height, action, label, labelColor, engine.getStandardFont());
-    }
-
-    public Button(Engine engine, int posX, int posY, int width, int height, Action action, String label, int labelColor, Font font) {
-        this(engine, posX, posY, width, height, action, null, label, labelColor, font);
-    }
-
     public Button(Engine engine, int posX, int posY, Action action, String label, int labelColor, Font font) {
-        this(engine, posX, posY, (label.length() * font.getTextUnitWidth()), font.getCharHeight()+2, action, null, label, labelColor, font);
+        this(engine, posX, posY, font.textLength(label), font.getCharHeight(), action, null, label, labelColor, font);
     }
 
+    public Button(Engine engine, int posX, int posY, Action action, String label, int labelColor) {
+        this(engine, posX, posY, action, label, labelColor, engine.getStandardFont());
+    }
 
     // invisible
     public Button(Engine engine, int posX, int posY, int width, int height, Action action) {
@@ -82,7 +77,7 @@ public class Button extends GameObject
         int mouseX = engine.getInput().getMouseX();
         int mouseY = engine.getInput().getMouseY();
 
-        if ((mouseX >= posX && mouseX <= posX + width) && (mouseY >= posY && mouseY <= posY + height)) {
+        if ((mouseX >= posX && mouseX < posX + width) && (mouseY >= posY && mouseY < posY + height)) {
             hovered = true;
             return engine.getInput().isButton(1); // 1 = left click, tomod ?
         }
@@ -119,7 +114,8 @@ public class Button extends GameObject
             engine.getRenderer().drawImage(image, posX, posY);
         }
         else if (label != null) {
-            engine.getRenderer().drawText(font, label, posX, posY + 1 + (height - font.getCharHeight())/2, labelColor);
+            engine.getRenderer().drawRectangle(posX, posY, width, height, 0xFFFF0000);
+            engine.getRenderer().drawText(font, label, posX, posY, labelColor);
         }
     }
 
