@@ -1,6 +1,7 @@
 
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.config.ConfigReader;
+import evilcorp.graphic.gameobjects.visual.Animation;
 import evilcorp.graphic.gfx.Font;
 import evilcorp.graphic.gfx.Image;
 
@@ -39,7 +40,22 @@ public class RuntimeGraphic {
 
         /* LOADING MENU SCENE */
 
-        Image logoImage = new Image("data/resources/images/logo.png", 2);
+        String logoPath = "data/resources/images/logo.png";
+
+        Image[] images = new Image[60];
+        for (int i = 0; i < 60; i++) {
+            images[i] = new Image(logoPath, (i+1)/20.0);
+        }
+
+        Animation animation = new Animation(engine, engine.getWidth()/2, engine.getHeight()/2,
+                images, 2);
+
+        menuScene.addGameObject(animation);
+
+        engine.addScene(menuScene);
+        animation.launch();
+
+        /*Image logoImage = new Image("data/resources/images/logo.png", 2);
         Visual menuLogo = new Visual(engine, -1, 75, logoImage);
 
         String startLabel = "START GAME";
@@ -68,12 +84,12 @@ public class RuntimeGraphic {
         menuScene.addGameObject(creditsButton);
         menuScene.addGameObject(quitGame);
 
-        engine.addScene(menuScene);
+        engine.addScene(menuScene);*/
 
 
         /* LOADING GAME SCENE */
 
-        Map map = ConfigReader.readMap("data/config/graphic/map.cfg");
+        /*Map map = ConfigReader.readMap("data/config/graphic/map.cfg");
 
         GameObject[] menuObjects = ConfigReader.readMenu("data/config/graphic/menu.cfg");
         Menu mainMenu = (Menu)menuObjects[0];
@@ -122,12 +138,12 @@ public class RuntimeGraphic {
             }
         });
 
-        engine.addScene(gameScene);
+        engine.addScene(gameScene);*/
 
         /* LOADING CREDITS SCENE */
 
         // take logoImage
-        Visual creditsLogo = new Visual(engine, -1, 75, logoImage);
+        /*Visual creditsLogo = new Visual(engine, -1, 75, logoImage);
 
         String credits = "CREATED BY HARMED-CHRONOGRAM & SPIEGELEISEN";
         Text creditsText = new Text(engine,
@@ -150,7 +166,7 @@ public class RuntimeGraphic {
         creditsScene.addGameObject(creditsText);
         creditsScene.addGameObject(returnMainMenu);
 
-        engine.addScene(creditsScene);
+        engine.addScene(creditsScene);*/
 
 
 

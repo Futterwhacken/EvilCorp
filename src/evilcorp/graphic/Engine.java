@@ -24,6 +24,10 @@ public class Engine implements Runnable
         return instance;
     }
 
+    public static double getTime() {
+        return System.nanoTime() / 1000000000.0;
+    }
+
     private final Thread thread;
     private final Window window;
     private final Renderer renderer;
@@ -78,7 +82,7 @@ public class Engine implements Runnable
         boolean render;
 
         double currentTime;
-        double lastTime = System.nanoTime() / 1000000000.0;
+        double lastTime = getTime();
         double passedTime;
         double unprocessedTime = 0;
 
@@ -89,7 +93,7 @@ public class Engine implements Runnable
         while (isRunning) {
             render = false;
 
-            currentTime = System.nanoTime() / 1000000000.0;
+            currentTime = getTime();
             passedTime = currentTime - lastTime;
             lastTime = currentTime;
 
