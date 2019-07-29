@@ -6,6 +6,7 @@ TODO:
     * next turn button
     * text area text offset
     * réduire nb de lignes notif
+    * rework configreader and configuration paradigm
 
 
 DONE:

@@ -114,7 +114,7 @@ public class Button extends GameObject
             engine.getRenderer().drawImage(image, posX, posY);
         }
         else if (label != null) {
-            engine.getRenderer().drawRectangle(posX, posY, width, height, 0xFFFF0000);
+            //engine.getRenderer().drawRectangle(posX, posY, width, height, 0xFFFF0000); // debug
             engine.getRenderer().drawText(font, label, posX, posY, labelColor);
         }
     }
