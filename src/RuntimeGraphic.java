@@ -40,7 +40,7 @@ public class RuntimeGraphic {
 
         /* LOADING MENU SCENE */
 
-        String logoPath = "data/resources/images/logo.png";
+        /*String logoPath = "data/resources/images/logo.png";
 
         Image[] images = new Image[60];
         for (int i = 0; i < 60; i++) {
@@ -53,9 +53,9 @@ public class RuntimeGraphic {
         menuScene.addGameObject(animation);
 
         engine.addScene(menuScene);
-        animation.launch();
+        animation.launch();*/
 
-        /*Image logoImage = new Image("data/resources/images/logo.png", 2);
+        Image logoImage = new Image("data/resources/images/logo.png", 2);
         Visual menuLogo = new Visual(engine, -1, 75, logoImage);
 
         String startLabel = "START GAME";
@@ -84,12 +84,12 @@ public class RuntimeGraphic {
         menuScene.addGameObject(creditsButton);
         menuScene.addGameObject(quitGame);
 
-        engine.addScene(menuScene);*/
+        engine.addScene(menuScene);
 
 
         /* LOADING GAME SCENE */
 
-        /*Map map = ConfigReader.readMap("data/config/graphic/map.cfg");
+        Map map = ConfigReader.readMap("data/config/graphic/map.cfg");
 
         GameObject[] menuObjects = ConfigReader.readMenu("data/config/graphic/menu.cfg");
         Menu mainMenu = (Menu)menuObjects[0];
@@ -138,12 +138,12 @@ public class RuntimeGraphic {
             }
         });
 
-        engine.addScene(gameScene);*/
+        engine.addScene(gameScene);
 
         /* LOADING CREDITS SCENE */
 
         // take logoImage
-        /*Visual creditsLogo = new Visual(engine, -1, 75, logoImage);
+        Visual creditsLogo = new Visual(engine, -1, 75, logoImage);
 
         String credits = "CREATED BY HARMED-CHRONOGRAM & SPIEGELEISEN";
         Text creditsText = new Text(engine,
@@ -166,7 +166,7 @@ public class RuntimeGraphic {
         creditsScene.addGameObject(creditsText);
         creditsScene.addGameObject(returnMainMenu);
 
-        engine.addScene(creditsScene);*/
+        engine.addScene(creditsScene);
 
 
 
