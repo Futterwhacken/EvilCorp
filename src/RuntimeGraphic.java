@@ -31,6 +31,7 @@ public class RuntimeGraphic {
 
         /* SCENES */
 
+        Scene splashScene = new Scene(engine);
         Scene menuScene = new Scene(engine);
         Scene gameScene = new Scene(engine);
         Scene creditsScene = new Scene(engine);
@@ -38,22 +39,31 @@ public class RuntimeGraphic {
         Scene lostScene = new Scene(engine); // ?
         Scene wonScene = new Scene(engine); // ?
 
-        /* LOADING MENU SCENE */
+        /* LOADING SPLASH SCENE */
 
-        /*String logoPath = "data/resources/images/logo.png";
+        String logoPath = "data/resources/images/logo.png";
 
-        Image[] images = new Image[60];
-        for (int i = 0; i < 60; i++) {
-            images[i] = new Image(logoPath, (i+1)/20.0);
+        int n = 20;
+        Image[] images = new Image[n];
+        for (int i = 0; i < n; i++) {
+            double scale = 4.0/((i+1) * 0.1);
+            images[i] = new Image(logoPath, scale);
         }
 
-        Animation animation = new Animation(engine, engine.getWidth()/2, engine.getHeight()/2,
-                images, 2);
+        Animation splash = new Animation(engine, engine.getWidth()/2, 75 + (new Image("data/resources/images/logo.png", 2)).getHeight()/2, images, 0.5);
 
-        menuScene.addGameObject(animation);
+        splashScene.addGameObject(splash);
+        splashScene.addAction(() -> {
+            if (splash.isFinished()) {
+                engine.setCurrentScene(menuScene);
+            }
+        });
 
-        engine.addScene(menuScene);
-        animation.launch();*/
+        engine.addScene(splashScene);
+        splash.launch();
+
+
+        /* LOADING MENU SCENE */
 
         Image logoImage = new Image("data/resources/images/logo.png", 2);
         Visual menuLogo = new Visual(engine, -1, 75, logoImage);

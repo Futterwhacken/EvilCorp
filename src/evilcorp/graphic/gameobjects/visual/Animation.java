@@ -11,7 +11,6 @@ public class Animation extends GameObject
     private final int posY;
 
     private final Image[] images;
-    private final double duration;
     private final double delay;
 
     private int currentImage;
@@ -27,9 +26,8 @@ public class Animation extends GameObject
         this.posY = posY;
 
         this.images = images;
-        this.duration = duration;
 
-        delay =  duration / images.length;
+        this.delay =  duration / images.length;
 
         currentImage = 0;
     }
@@ -58,5 +56,10 @@ public class Animation extends GameObject
     public void launch() {
         active = true;
         clock = Engine.getTime();
+        currentImage = 0;
+    }
+
+    public boolean isFinished() {
+        return currentImage >= images.length;
     }
 }
