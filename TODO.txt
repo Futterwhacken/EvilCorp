@@ -3,12 +3,13 @@
 TODO:
     * add Frame and LabeledFrame classes ??
     * button feedback
-    * réduire nb de lignes notif
-    * cleanup constructors (gros bordel)
     * next turn button
+    * text area text offset
+    * réduire nb de lignes notif
 
 
 DONE:
+    * [DONE] cleanup constructors (gros bordel)
     * [DONE] add possibility to choose font for Text, Button labels, etc
     * [DONE] add win/lose trigger
     * [DONE] add Scene class (splash screen, menu, game, credits)
