@@ -29,8 +29,6 @@ public class Engine implements Runnable
     private final Renderer renderer;
     private final Input input;
 
-    public final ArrayList<Scene> scenes; // debug
-
     private final String title;
     private final int width;
     private final int height;
@@ -40,8 +38,10 @@ public class Engine implements Runnable
     private final boolean debug;
 
     private Font standardFont;
+    private Font standardFontBig;
 
-    public Scene currentScene; // debug
+    private final ArrayList<Scene> scenes;
+    private Scene currentScene;
 
     private Engine(String title, int width, int height, double scale, double updateCap, boolean debug) {
         this.scenes = new ArrayList<>();
@@ -149,6 +149,9 @@ public class Engine implements Runnable
 
     public Font getStandardFont() { return standardFont; }
     public void setStandardFont(Font font) { standardFont = font; }
+
+    public Font getStandardFontBig() { return standardFontBig; }
+    public void setStandardFontBig(Font font) { standardFontBig = font; }
 
     public Scene getCurrentScene() { return currentScene; }
     public void setCurrentScene(Scene scene) {

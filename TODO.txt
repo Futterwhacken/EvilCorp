@@ -1,11 +1,16 @@
 
 
 TODO:
-    * add win/lose trigger
     * add Frame and LabeledFrame classes ??
     * button feedback
     * réduire nb de lignes notif
-    *
+    * cleanup constructors (gros bordel)
+    * next turn button
+
+
+DONE:
+    * [DONE] add possibility to choose font for Text, Button labels, etc
+    * [DONE] add win/lose trigger
     * [DONE] add Scene class (splash screen, menu, game, credits)
     * [DONE] embed paths in config reader
     * [DONE] handle button text margin

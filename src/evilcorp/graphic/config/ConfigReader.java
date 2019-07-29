@@ -575,14 +575,23 @@ public class ConfigReader
             line = pass(reader);
             buffer = line.split(" ");
 
-
-            Button nextTurnButton = new Button(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]),
+            // debug
+            /*Button nextTurnButton = new Button(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]),
                     () -> {
                         NotificationBus.clearWaitingList();
                         NotificationBus.clearImmediateList();
                         gm.nextTurn();
                     },
                     new Image(imagesPath+buffer[2])
+            );*/
+
+            Button nextTurnButton = new Button(engine, Integer.valueOf(buffer[0])+13, Integer.valueOf(buffer[1]),
+                    () -> {
+                        NotificationBus.clearWaitingList();
+                        NotificationBus.clearImmediateList();
+                        gm.nextTurn();
+                    },
+                    "NEXT TURN", 0xff00ffff, engine.getStandardFontBig()
             );
 
             reader.close();

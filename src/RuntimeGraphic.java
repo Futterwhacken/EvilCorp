@@ -3,6 +3,7 @@ import evilcorp.graphic.Engine;
 import evilcorp.graphic.config.ConfigReader;
 import evilcorp.graphic.gameobjects.Scene;
 import evilcorp.graphic.gameobjects.interactive.Button;
+import evilcorp.graphic.gameobjects.text.Text;
 import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Font;
 
@@ -20,43 +21,57 @@ public class RuntimeGraphic {
 
         /* LOADING CONFIG */
 
-        GameMaster.initGameMaster("data/config/logic/"); // ceci peu arriver quand on load la GameScene
+        GameMaster gm = GameMaster.initGameMaster("data/config/logic/"); // ceci peu arriver quand on load la GameScene
         Engine engine = Engine.initEngine("data/config/graphic/");
 
         Font[] fonts = ConfigReader.readFonts("data/config/graphic/fonts.cfg");
         engine.setStandardFont(fonts[0]);
+        engine.setStandardFontBig(fonts[1]);
 
-        /* LOADING MENU SCENE */
+        /* SCENES */
 
         Scene menuScene = new Scene(engine);
+        Scene gameScene = new Scene(engine);
+        Scene creditsScene = new Scene(engine);
+
+        Scene lostScene = new Scene(engine); // ?
+        Scene wonScene = new Scene(engine); // ?
+
+        /* LOADING MENU SCENE */
 
         Image logoImage = new Image("data/resources/images/logo.png", 2);
         Visual menuLogo = new Visual(engine, (int)(0.5*(engine.getWidth() - logoImage.getWidth())), 75, logoImage);
 
-        Image startImage = new Image("data/resources/images/start_game.png");
+        String startLabel = "START GAME";
         Button startGame = new Button(engine,
-                (int)(0.5*(engine.getWidth() - startImage.getWidth())),
+                (int)(0.5*(engine.getWidth() - (startLabel.length() * engine.getStandardFontBig().getTextUnitWidth()))),
                 350,
-                engine::nextScene,
-                startImage);
+                () -> engine.setCurrentScene(gameScene),
+                startLabel, 0xffffffff, engine.getStandardFontBig());
 
-        Image quitImage = new Image("data/resources/images/quit_game.png");
-        Button quitGame = new Button(engine,
-                (int)(0.5*(engine.getWidth() - quitImage.getWidth())),
+        String creditsLabel = "CREDITS";
+        Button creditsButton = new Button(engine,
+                (int)(0.5*(engine.getWidth() - (creditsLabel.length() * engine.getStandardFontBig().getTextUnitWidth()))),
                 390,
-                engine::stop,
-                quitImage);
+                () -> engine.setCurrentScene(creditsScene),
+                creditsLabel, 0xffffffff, engine.getStandardFontBig());
+
+        String quitLabel = "QUIT GAME";
+        Button quitGame = new Button(engine,
+                (int)(0.5*(engine.getWidth() - (quitLabel.length() * engine.getStandardFontBig().getTextUnitWidth()))),
+                430,
+                () -> engine.stop(),
+                quitLabel, 0xffffffff, engine.getStandardFontBig());
 
         menuScene.addGameObject(menuLogo);
         menuScene.addGameObject(startGame);
+        menuScene.addGameObject(creditsButton);
         menuScene.addGameObject(quitGame);
 
         engine.addScene(menuScene);
 
 
         /* LOADING GAME SCENE */
-
-        Scene gameScene = new Scene(engine);
 
         Map map = ConfigReader.readMap("data/config/graphic/map.cfg");
 
@@ -92,7 +107,52 @@ public class RuntimeGraphic {
             gameScene.addGameObject(o);
         }
 
+        gameScene.addAction(() -> {
+            switch (gm.checkGameStatus()) {
+                case 0:
+                    System.out.println("YOU LOST"); // debug, waiting for fonts
+                    engine.setCurrentScene(creditsScene);
+
+
+                case 2:
+                    System.out.println("YOU WON"); // debug, waiting for fonts
+                    engine.setCurrentScene(creditsScene);
+
+                default: break;
+            }
+        });
+
         engine.addScene(gameScene);
+
+        /* LOADING CREDITS SCENE */
+
+        // take logoImage
+        Visual creditsLogo = new Visual(engine, (int)(0.5*(engine.getWidth() - logoImage.getWidth())), 75, logoImage);
+
+        String credits = "CREATED BY HARMED-CHRONOGRAM & SPIEGELEISEN";
+        Text creditsText = new Text(engine,
+                (int)(0.5*(engine.getWidth() - (credits.length() * engine.getStandardFontBig().getTextUnitWidth()))),
+                340,
+                credits,
+                0xffffffff,
+                engine.getStandardFontBig()
+        );
+
+
+        String returnLabel = "RETURN TO MAIN MENU";
+        Button returnMainMenu = new Button(engine,
+                (int)(0.5*(engine.getWidth() - (returnLabel.length() * engine.getStandardFontBig().getTextUnitWidth()))),
+                420,
+                () -> engine.setCurrentScene(menuScene),
+                returnLabel, 0xffffffff, engine.getStandardFontBig());
+
+        creditsScene.addGameObject(creditsLogo);
+        creditsScene.addGameObject(creditsText);
+        creditsScene.addGameObject(returnMainMenu);
+
+        engine.addScene(creditsScene);
+
+
 
 
 

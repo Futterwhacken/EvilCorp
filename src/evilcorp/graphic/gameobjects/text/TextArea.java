@@ -2,12 +2,14 @@ package evilcorp.graphic.gameobjects.text;
 
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.GameObject;
+import evilcorp.graphic.gfx.Font;
 
 import java.util.ArrayList;
 
 public class TextArea extends GameObject
 {
     private final Text[] texts;
+    private final Font font;
 
     protected final int posX;
     protected final int posY;
@@ -18,7 +20,7 @@ public class TextArea extends GameObject
 
     // allow inArea Offset
 
-    public TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts) {
+    public TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts, Font font) {
         super(engine);
 
         this.posX = posX;
@@ -26,9 +28,14 @@ public class TextArea extends GameObject
         this.lineHeight = lineHeight;
 
         this.maxLines = maxLines;
-        this.maxChars = width / engine.getStandardFont().getTextUnitWidth();
+        this.maxChars = width / font.getTextUnitWidth();
 
         this.texts = texts;
+        this.font = font;
+    }
+
+    public TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts) {
+        this(engine, posX, posY, width, lineHeight, maxLines, texts, engine.getStandardFont());
     }
 
     protected TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines) {
@@ -56,7 +63,7 @@ public class TextArea extends GameObject
             }
 
             for (int j = 0; j < strings.size() && usedLines < maxLines; j++) {
-                engine.getRenderer().drawText(engine.getStandardFont(), strings.get(j), posX, posY + (lineHeight * usedLines), texts[i].getColor());
+                engine.getRenderer().drawText(font, strings.get(j), posX, posY + (lineHeight * usedLines), texts[i].getColor());
                 usedLines++;
             }
         }

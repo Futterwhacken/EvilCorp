@@ -13,12 +13,15 @@ public class Scene extends GameObject
     private Menu currentMenu;
     private Region selectedRegion;
 
-    public ArrayList<GameObject> gameObjects; // debug
+    private ArrayList<GameObject> gameObjects;
+
+    private ArrayList<Action> sceneActions;
 
     public Scene(Engine engine) {
         super(engine);
 
         this.gameObjects = new ArrayList<>();
+        this.sceneActions = new ArrayList<>();
     }
 
     @Override
@@ -26,6 +29,10 @@ public class Scene extends GameObject
 
         if (currentMenu != null && selectedRegion != null) {
             currentMenu.update();
+        }
+
+        for (Action a : sceneActions) {
+            a.exec();
         }
 
         for (GameObject o : gameObjects) {
@@ -45,9 +52,9 @@ public class Scene extends GameObject
         }
     }
 
-    public void addGameObject(GameObject o) {
-        gameObjects.add(o);
-    }
+    public void addGameObject(GameObject object) { gameObjects.add(object); }
+
+    public void addAction(Action action) { sceneActions.add(action); }
 
     public Region getSelectedRegion() { return selectedRegion; }
     public void setSelectedRegion(Region region) {
