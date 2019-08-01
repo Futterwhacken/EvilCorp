@@ -56,7 +56,7 @@ public class Engine implements Runnable
         this.scale = scale;
         this.updateRate = 1.0/updateCap;
 
-        this.debug = debug;
+        this.debug = false;
 
         this.window = new Window(this);
         this.renderer = new Renderer(this);
@@ -69,7 +69,7 @@ public class Engine implements Runnable
         if (currentScene == null) {
             currentScene = scenes.get(0);
         }
-        thread.run();
+        thread.start();
     }
 
     public void stop() {

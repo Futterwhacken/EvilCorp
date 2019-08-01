@@ -24,7 +24,12 @@ public class Visual extends GameObject
             this.posX = posX;
         }
 
-        this.posY = posY;
+        if (posY == -1) {
+            this.posY = (int)(0.5*(engine.getHeight() - image.getHeight()));
+        }
+        else {
+            this.posY = posY;
+        }
     }
 
     @Override

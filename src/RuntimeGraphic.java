@@ -31,6 +31,8 @@ public class RuntimeGraphic {
 
         /* SCENES */
 
+        Scene loadingScene = new Scene(engine);
+
         Scene splashScene = new Scene(engine);
         Scene menuScene = new Scene(engine);
         Scene gameScene = new Scene(engine);
@@ -38,6 +40,30 @@ public class RuntimeGraphic {
 
         Scene lostScene = new Scene(engine); // ?
         Scene wonScene = new Scene(engine); // ?
+
+        /* LOADING LOADING SCENE */
+
+        Image futterLogoImage = new Image("data/resources/images/futterwhacken-logo.png", 0.5);
+        Visual futterLogo = new Visual(engine, -1, -1, futterLogoImage);
+        Text futterText = new Text(engine, -1, (engine.getHeight()/2)+(futterLogoImage.getHeight()/2)+20, "FUTTERWHACKEN", 0xffffffff, engine.getStandardFontBig());
+
+
+        loadingScene.addGameObject(futterLogo);
+        loadingScene.addGameObject(futterText);
+
+        double start = engine.getTime();
+        loadingScene.addAction(() -> {
+            if (engine.getTime() - start >= 3) {
+                engine.setCurrentScene(splashScene);
+            }
+        });
+
+
+        engine.addScene(loadingScene);
+        engine.start();
+
+        // start engine here, to mask loading of other resources
+
 
         /* LOADING SPLASH SCENE */
 
@@ -182,7 +208,7 @@ public class RuntimeGraphic {
 
 
 
-        engine.start();
+        //engine.start();
     }
 }
 
