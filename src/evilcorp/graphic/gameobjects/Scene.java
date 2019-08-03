@@ -1,6 +1,5 @@
 package evilcorp.graphic.gameobjects;
 
-import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.interactive.Button;
 import evilcorp.graphic.gameobjects.interactive.Menu;
 import evilcorp.logic.area.region.Region;
@@ -17,8 +16,8 @@ public class Scene extends GameObject
 
     private ArrayList<Action> sceneActions;
 
-    public Scene(Engine engine) {
-        super(engine);
+    public Scene() {
+        super();
 
         this.gameObjects = new ArrayList<>();
         this.sceneActions = new ArrayList<>();

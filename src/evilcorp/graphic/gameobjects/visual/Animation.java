@@ -19,8 +19,8 @@ public class Animation extends GameObject
 
     private boolean active = false;
 
-    public Animation(Engine engine, int posX, int posY, Image[] images, double duration) {
-        super(engine);
+    public Animation(int posX, int posY, Image[] images, double duration) {
+        super();
 
         this.posX = posX;
         this.posY = posY;

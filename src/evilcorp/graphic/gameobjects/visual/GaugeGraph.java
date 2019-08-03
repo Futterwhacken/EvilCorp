@@ -25,8 +25,8 @@ public class GaugeGraph extends GameObject
 
     private Action action;
 
-    public GaugeGraph(Engine engine, int posX, int posY, int width, int height, boolean horizontal, double level, double max, int borderSize, int color, int borderColor) {
-        super(engine);
+    public GaugeGraph(int posX, int posY, int width, int height, boolean horizontal, double level, double max, int borderSize, int color, int borderColor) {
+        super();
 
         this.posX = posX;
         this.posY = posY;

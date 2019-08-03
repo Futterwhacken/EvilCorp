@@ -10,8 +10,8 @@ public class NotificationWaitingArea extends TextArea
     private final int color;
 
     // réduire le nb de lignes
-    public NotificationWaitingArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, int color) {
-        super(engine, posX, posY, width, lineHeight, maxLines);
+    public NotificationWaitingArea(int posX, int posY, int width, int lineHeight, int maxLines, int color) {
+        super(posX, posY, width, lineHeight, maxLines);
         this.color = color;
     }
 

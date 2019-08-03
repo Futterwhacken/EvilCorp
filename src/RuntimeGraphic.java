@@ -31,33 +31,29 @@ public class RuntimeGraphic {
 
         /* SCENES */
 
-        Scene loadingScene = new Scene(engine);
+        Scene loadingScene = new Scene();
 
-        Scene splashScene = new Scene(engine);
-        Scene menuScene = new Scene(engine);
-        Scene gameScene = new Scene(engine);
-        Scene creditsScene = new Scene(engine);
+        Scene splashScene = new Scene();
+        /*Scene menuScene = new Scene();
+        Scene gameScene = new Scene();
+        Scene creditsScene = new Scene();
 
-        Scene lostScene = new Scene(engine); // ?
-        Scene wonScene = new Scene(engine); // ?
+        Scene lostScene = new Scene(); // ?
+        Scene wonScene = new Scene(); // ?*/
 
         /* LOADING LOADING SCENE */
 
-        Image futterLogoImage = new Image("data/resources/images/futterwhacken-logo.png", 0.5);
-        Visual futterLogo = new Visual(engine, -1, -1, futterLogoImage);
-        Text futterText = new Text(engine, -1, (engine.getHeight()/2)+(futterLogoImage.getHeight()/2)+20, "FUTTERWHACKEN", 0xffffffff, engine.getStandardFontBig());
+        GameObject[] loadingSceneObjects = ConfigReader.readScene("data/config/graphic/loading_scene.cfg");
+        for (GameObject o : loadingSceneObjects) {
+            loadingScene.addGameObject(o);
+        }
 
-
-        loadingScene.addGameObject(futterLogo);
-        loadingScene.addGameObject(futterText);
-
-        double start = engine.getTime();
+        double start = Engine.getTime();
         loadingScene.addAction(() -> {
-            if (engine.getTime() - start >= 3) {
+            if (Engine.getTime() - start >= 3) {
                 engine.setCurrentScene(splashScene);
             }
         });
-
 
         engine.addScene(loadingScene);
         engine.start();
@@ -67,7 +63,7 @@ public class RuntimeGraphic {
 
         /* LOADING SPLASH SCENE */
 
-        String logoPath = "data/resources/images/logo.png";
+        /*String logoPath = "data/resources/images/logo.png";
 
         int n = 20;
         Image[] images = new Image[n];
@@ -76,7 +72,7 @@ public class RuntimeGraphic {
             images[i] = new Image(logoPath, scale);
         }
 
-        Animation splash = new Animation(engine, engine.getWidth()/2, 75 + (new Image("data/resources/images/logo.png", 2)).getHeight()/2, images, 0.5);
+        Animation splash = new Animation(engine.getWidth()/2, 75 + (new Image("data/resources/images/logo.png", 2)).getHeight()/2, images, 0.5);
 
         splashScene.addGameObject(splash);
         splashScene.addAction(() -> {
@@ -86,30 +82,30 @@ public class RuntimeGraphic {
         });
 
         engine.addScene(splashScene);
-        splash.launch();
+        splash.launch();*/
 
 
         /* LOADING MENU SCENE */
 
-        Image logoImage = new Image("data/resources/images/logo.png", 2);
-        Visual menuLogo = new Visual(engine, -1, 75, logoImage);
+        /*Image logoImage = new Image("data/resources/images/logo.png", 2);
+        Visual menuLogo = new Visual(-1, 75, logoImage);
 
         String startLabel = "START GAME";
-        Button startGame = new Button(engine,
+        Button startGame = new Button(
                 -1,
                 350,
                 () -> engine.setCurrentScene(gameScene),
                 startLabel, 0xffffffff, engine.getStandardFontBig());
 
         String creditsLabel = "CREDITS";
-        Button creditsButton = new Button(engine,
+        Button creditsButton = new Button(
                 -1,
                 390,
                 () -> engine.setCurrentScene(creditsScene),
                 creditsLabel, 0xffffffff, engine.getStandardFontBig());
 
         String quitLabel = "QUIT GAME";
-        Button quitGame = new Button(engine,
+        Button quitGame = new Button(
                 -1,
                 430,
                 () -> engine.stop(),
@@ -120,12 +116,12 @@ public class RuntimeGraphic {
         menuScene.addGameObject(creditsButton);
         menuScene.addGameObject(quitGame);
 
-        engine.addScene(menuScene);
+        engine.addScene(menuScene);*/
 
 
         /* LOADING GAME SCENE */
 
-        Map map = ConfigReader.readMap("data/config/graphic/map.cfg");
+        /*Map map = ConfigReader.readMap("data/config/graphic/map.cfg");
 
         GameObject[] menuObjects = ConfigReader.readMenu("data/config/graphic/menu.cfg");
         Menu mainMenu = (Menu)menuObjects[0];
@@ -174,15 +170,15 @@ public class RuntimeGraphic {
             }
         });
 
-        engine.addScene(gameScene);
+        engine.addScene(gameScene);*/
 
         /* LOADING CREDITS SCENE */
 
         // take logoImage
-        Visual creditsLogo = new Visual(engine, -1, 75, logoImage);
+        /*Visual creditsLogo = new Visual( -1, 75, logoImage);
 
         String credits = "CREATED BY HARMED-CHRONOGRAM & SPIEGELEISEN";
-        Text creditsText = new Text(engine,
+        Text creditsText = new Text(
                 -1,
                 340,
                 credits,
@@ -192,7 +188,7 @@ public class RuntimeGraphic {
 
 
         String returnLabel = "RETURN TO MAIN MENU";
-        Button returnMainMenu = new Button(engine,
+        Button returnMainMenu = new Button(
                 -1,
                 420,
                 () -> engine.setCurrentScene(menuScene),
@@ -202,13 +198,7 @@ public class RuntimeGraphic {
         creditsScene.addGameObject(creditsText);
         creditsScene.addGameObject(returnMainMenu);
 
-        engine.addScene(creditsScene);
-
-
-
-
-
-        //engine.start();
+        engine.addScene(creditsScene);*/
     }
 }
 

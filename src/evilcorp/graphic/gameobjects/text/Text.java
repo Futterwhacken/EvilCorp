@@ -16,8 +16,8 @@ public class Text extends GameObject
     private final int posY;
     private final int color;
 
-    public Text(Engine engine, int posX, int posY, String text, int color, Font font) {
-        super(engine);
+    public Text(int posX, int posY, String text, int color, Font font) {
+        super();
 
         this.text = text;
         this.defaultText = text;
@@ -35,24 +35,24 @@ public class Text extends GameObject
         this.color = color;
     }
 
-    public Text(Engine engine) {
-        this(engine, 0, 0, "", 0xffffffff);
+    public Text() {
+        this(0, 0, "", 0xffffffff);
     }
 
-    public Text(Engine engine, int color) {
-        this(engine, 0, 0, "", color);
+    public Text(int color) {
+        this(0, 0, "", color);
     }
 
-    public Text(Engine engine, String text, int color) {
-        this(engine, 0, 0, text, color);
+    public Text(String text, int color) {
+        this(0, 0, text, color);
     }
 
-    public Text(Engine engine, int posX, int posY, int color) {
-        this(engine, posX, posY, "", color);
+    public Text(int posX, int posY, int color) {
+        this(posX, posY, "", color);
     }
 
-    public Text(Engine engine, int posX, int posY, String text, int color) {
-        this(engine, posX, posY, text, color, engine.getStandardFont());
+    public Text(int posX, int posY, String text, int color) {
+        this(posX, posY, text, color, Engine.getEngine().getStandardFont());
     }
 
 

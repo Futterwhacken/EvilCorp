@@ -20,8 +20,8 @@ public class TextArea extends GameObject
 
     // allow inArea Offset
 
-    public TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts, Font font) {
-        super(engine);
+    public TextArea(int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts, Font font) {
+        super();
 
         if (posX == -1) {
             this.posX = (int)(0.5*(engine.getWidth() - width));
@@ -40,12 +40,12 @@ public class TextArea extends GameObject
         this.font = font;
     }
 
-    public TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts) {
-        this(engine, posX, posY, width, lineHeight, maxLines, texts, engine.getStandardFont());
+    public TextArea(int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts) {
+        this(posX, posY, width, lineHeight, maxLines, texts, Engine.getEngine().getStandardFont());
     }
 
-    protected TextArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines) {
-        this(engine, posX, posY, width, lineHeight, maxLines, null);
+    protected TextArea(int posX, int posY, int width, int lineHeight, int maxLines) {
+        this(posX, posY, width, lineHeight, maxLines, null);
     }
 
     @Override

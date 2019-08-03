@@ -157,6 +157,11 @@ public class Engine implements Runnable
     public Font getStandardFontBig() { return standardFontBig; }
     public void setStandardFontBig(Font font) { standardFontBig = font; }
 
+    public Font getFont(int i) { // fix this !
+        if (i == 0) return standardFont;
+        return standardFontBig;
+    }
+
     public Scene getCurrentScene() { return currentScene; }
     public void setCurrentScene(Scene scene) {
         currentScene = scene;

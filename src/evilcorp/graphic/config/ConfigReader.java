@@ -3,6 +3,7 @@ package evilcorp.graphic.config;
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.Action;
 import evilcorp.graphic.gameobjects.GameObject;
+import evilcorp.graphic.gameobjects.Scene;
 import evilcorp.graphic.gameobjects.interactive.Button;
 import evilcorp.graphic.gameobjects.interactive.Map;
 import evilcorp.graphic.gameobjects.interactive.Menu;
@@ -23,6 +24,8 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 @SuppressWarnings("Duplicates")
 public class ConfigReader
@@ -32,12 +35,87 @@ public class ConfigReader
     private static final String mapsPath = "data/resources/maps/";
     private static final String imagesPath = "data/resources/images/";
 
+    private static HashMap<String, Object> createdObjects = new HashMap<>();
+
+
+    public static Object createObject(String config) {
+        String[] tmp = config.split(" ");
+
+        String type = tmp[0];
+        String id = tmp[1];
+        String[] params = new String[tmp.length - 2];
+
+        Object object = null;
+
+        System.arraycopy(tmp, 2, params, 0, tmp.length - 2);
+
+
+        if (type.equals("IMAGE")) {
+            object = new Image(params[0], Double.valueOf(params[1]));
+        }
+
+        else if (type.equals("VISUAL")) {
+            object = new Visual(
+                    Integer.valueOf(params[0]),
+                    Integer.valueOf(params[1]),
+                    (Image)createdObjects.get(params[2]));
+        }
+
+        else if (type.equals("TEXT")) {
+            if (params.length == 5) {
+                object = new Text(
+                        Integer.valueOf(params[0]),
+                        Integer.valueOf(params[1]),
+                        params[2],
+                        (int)Long.parseLong(params[3], 16),
+                        Engine.getEngine().getFont(Integer.valueOf(params[4])));
+            }
+        }
+
+        createdObjects.put(id, object);
+
+        return object;
+    }
+
+    public static GameObject[] readScene(String configPath) {
+        String line;
+
+        ArrayList<GameObject> objects = new ArrayList<>();
+
+        try {
+            FileReader fileReader = new FileReader(configPath);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            while ((line = pass(reader)) != null) {
+
+                Object current = createObject(line);
+                if (current instanceof GameObject) {
+                    objects.add((GameObject)current);
+                }
+
+            }
+
+            reader.close();
+
+            return objects.toArray(new GameObject[]{});
+
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file \"" + configPath + "\"");
+        }
+        catch (IOException ex) {
+            System.out.println("Error reading file \""+ configPath + "\"");
+        }
+
+        return null;
+    }
+
 
     private static String pass(BufferedReader br) throws IOException {
         String line;
         do {
-                line = br.readLine();
-        } while (line.length() == 0 || line.charAt(0) == '#');
+            line = br.readLine();
+        } while (line != null && (line.length() == 0 || line.charAt(0) == '#'));
         return line;
     }
 
@@ -222,7 +300,7 @@ public class ConfigReader
 
             reader.close();
 
-            return new Map(engine, posX, posY, width, height, scale, regionNames, imagesPaths, parameters);
+            return new Map(posX, posY, width, height, scale, regionNames, imagesPaths, parameters);
         }
         catch (FileNotFoundException ex) {
             System.out.println("Unable to open file \"" + configPath + "\"");
@@ -282,9 +360,9 @@ public class ConfigReader
 
             // building objects
 
-            TextArea hoverTextArea = new TextArea(engine, hoverPosX, hoverPosY, hoverWidth, hoverLineHeight, hoverMaxLines, new Text[]{new Text(engine, hoverColor)});
-            Menu tmp = new Menu(engine, menuPosX, menuPosY, menuFieldHeight, menuColor);
-            Menu mainMenu = new Menu(engine, menuPosX, menuPosY, menuFieldHeight, labels[0],
+            TextArea hoverTextArea = new TextArea(hoverPosX, hoverPosY, hoverWidth, hoverLineHeight, hoverMaxLines, new Text[]{new Text(hoverColor)});
+            Menu tmp = new Menu(menuPosX, menuPosY, menuFieldHeight, menuColor);
+            Menu mainMenu = new Menu(menuPosX, menuPosY, menuFieldHeight, labels[0],
                     new String[]{
                             labels[1],
                             labels[2],
@@ -356,7 +434,7 @@ public class ConfigReader
             // building text area
 
             // modulariser tout ça ?
-            Text selectedRegionText = new Text(engine, "SELECT A REGION", color);
+            Text selectedRegionText = new Text("SELECT A REGION", color);
             selectedRegionText.setAction(() -> {
                 if (engine.getCurrentScene().getSelectedRegion() != null)
                     selectedRegionText.setText(engine.getCurrentScene().getSelectedRegion().getName());
@@ -364,60 +442,60 @@ public class ConfigReader
                     selectedRegionText.setText(selectedRegionText.getDefaultText());
             });
 
-            Text selectedRegionActivityText = new Text(engine, color);
+            Text selectedRegionActivityText = new Text(color);
             selectedRegionActivityText.setAction(() -> {
                 if (engine.getCurrentScene().getSelectedRegion() != null)
                     selectedRegionActivityText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getActivityToleranceString());
             });
 
-            Text selectedRegionEnvironmentText = new Text(engine, color);
+            Text selectedRegionEnvironmentText = new Text(color);
             selectedRegionEnvironmentText.setAction(() -> {
                 if (engine.getCurrentScene().getSelectedRegion() != null)
                     selectedRegionEnvironmentText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getEnvironmentToleranceString());
             });
 
-            Text selectedRegionOppositionText = new Text(engine, color);
+            Text selectedRegionOppositionText = new Text(color);
             selectedRegionOppositionText.setAction(() -> {
                 if (engine.getCurrentScene().getSelectedRegion() != null)
                     selectedRegionOppositionText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getOppositionToleranceString());
             });
 
-            Text selectedRegionProductionText = new Text(engine, color);
+            Text selectedRegionProductionText = new Text(color);
             selectedRegionProductionText.setAction(() -> {
                 if (engine.getCurrentScene().getSelectedRegion() != null)
                     selectedRegionProductionText.setText("PRODUCTION: " + engine.getCurrentScene().getSelectedRegion().getProductivity());
             });
 
-            Text selectedRegionPollutionText = new Text(engine, color);
+            Text selectedRegionPollutionText = new Text(color);
             selectedRegionPollutionText.setAction(() -> {
                 if (engine.getCurrentScene().getSelectedRegion() != null)
                     selectedRegionPollutionText.setText("POLLUTION: " + engine.getCurrentScene().getSelectedRegion().getVisibility());
             });
 
-            Text selectedRegionSocialText = new Text(engine, color);
+            Text selectedRegionSocialText = new Text(color);
             selectedRegionSocialText.setAction(() -> {
                 if (engine.getCurrentScene().getSelectedRegion() != null)
                     selectedRegionSocialText.setText("SOCIAL: " + engine.getCurrentScene().getSelectedRegion().getSocial());
             });
 
-            Text selectedRegionExploitationText = new Text(engine, color);
+            Text selectedRegionExploitationText = new Text(color);
             selectedRegionExploitationText.setAction(() -> {
                 if (engine.getCurrentScene().getSelectedRegion() != null)
                     selectedRegionExploitationText.setText(""+engine.getCurrentScene().getSelectedRegion().getExploitations().size() + "/" + engine.getCurrentScene().getSelectedRegion().getMaxExpl() + " EXPLOITATIONS");
             });
 
-            TextArea regionInfo = new TextArea(engine, posX, posY, width, lineHeight, maxLines,
+            TextArea regionInfo = new TextArea(posX, posY, width, lineHeight, maxLines,
                     new Text[]{
                             selectedRegionText,
-                            new Text(engine),
+                            new Text(),
                             selectedRegionActivityText,
                             selectedRegionEnvironmentText,
                             selectedRegionOppositionText,
-                            new Text(engine),
+                            new Text(),
                             selectedRegionProductionText,
                             selectedRegionPollutionText,
                             selectedRegionSocialText,
-                            new Text(engine),
+                            new Text(),
                             selectedRegionExploitationText,
                     });
 
@@ -497,27 +575,27 @@ public class ConfigReader
             int offset = (height-engine.getStandardFont().getCharHeight())/2;
             int field = borderSize;
 
-            Text productionGaugeText = new Text(engine,posX - ((prod.length()+1) * charWidth) - borderSize, posY, prod, textColor);
-            Text visibilityGaugeText = new Text(engine,posX - ((poll.length()+1) * charWidth) - borderSize, posY + height*2, poll, textColor);
-            Text socialGaugeText = new Text(engine,posX - ((social.length()+1) * charWidth) - borderSize, posY + height*4, social, textColor);
+            Text productionGaugeText = new Text(posX - ((prod.length()+1) * charWidth) - borderSize, posY, prod, textColor);
+            Text visibilityGaugeText = new Text(posX - ((poll.length()+1) * charWidth) - borderSize, posY + height*2, poll, textColor);
+            Text socialGaugeText = new Text(posX - ((social.length()+1) * charWidth) - borderSize, posY + height*4, social, textColor);
 
-            Text productionLevelText = new Text(engine,posX + width + charWidth + borderSize, posY, textColor);
+            Text productionLevelText = new Text(posX + width + charWidth + borderSize, posY, textColor);
             productionLevelText.setAction(() -> productionLevelText.setText(""+gm.getWorld().getProductivity()));
 
-            Text visibilityLevelText = new Text(engine,posX + width + charWidth + borderSize, posY + height*2, textColor);
+            Text visibilityLevelText = new Text(posX + width + charWidth + borderSize, posY + height*2, textColor);
             visibilityLevelText.setAction(() -> visibilityLevelText.setText(""+gm.getWorld().getVisibility()));
 
-            Text socialLevelText = new Text(engine,posX + width + charWidth + borderSize, posY + height*4, textColor);
+            Text socialLevelText = new Text(posX + width + charWidth + borderSize, posY + height*4, textColor);
             socialLevelText.setAction(() -> socialLevelText.setText(""+gm.getWorld().getSocial()));
 
 
-            GaugeGraph productionGauge = new GaugeGraph(engine, posX, posY + height*field*0 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, prodColor, textColor);
+            GaugeGraph productionGauge = new GaugeGraph(posX, posY + height*field*0 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, prodColor, textColor);
             productionGauge.setAction(() -> productionGauge.setLevel(gm.getWorld().getProductivity()));
 
-            GaugeGraph visibilityGauge = new GaugeGraph(engine, posX, posY + height*field*1 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, pollColor, textColor);
+            GaugeGraph visibilityGauge = new GaugeGraph(posX, posY + height*field*1 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, pollColor, textColor);
             visibilityGauge.setAction(() -> visibilityGauge.setLevel(gm.getWorld().getVisibility()));
 
-            GaugeGraph socialGauge = new GaugeGraph(engine, posX, posY + height*field*2 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, socialColor, textColor);
+            GaugeGraph socialGauge = new GaugeGraph(posX, posY + height*field*2 - offset, width, height, horizontal, Config.minGauge, Config.maxGauge, borderSize, socialColor, textColor);
             socialGauge.setAction(() -> socialGauge.setLevel(gm.getWorld().getSocial()));
 
             reader.close();
@@ -555,14 +633,14 @@ public class ConfigReader
             line = pass(reader);
             buffer = line.split(" ");
 
-            Text turnsText = new Text(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), (int)Long.parseLong(buffer[2], 16));
+            Text turnsText = new Text(Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), (int)Long.parseLong(buffer[2], 16));
             turnsText.setAction(() -> turnsText.setText("TURN: " + gm.getTurn()));
 
             // funds text
             line = pass(reader);
             buffer = line.split(" ");
 
-            Text fundsText = new Text(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), (int)Long.parseLong(buffer[2], 16));
+            Text fundsText = new Text(Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), (int)Long.parseLong(buffer[2], 16));
             fundsText.setAction(() -> fundsText.setText("FUNDS: " + gm.getPoints() + " $"));
 
             // next button
@@ -579,7 +657,7 @@ public class ConfigReader
                     new Image(imagesPath+buffer[2])
             );*/
 
-            Button nextTurnButton = new Button(engine, Integer.valueOf(buffer[0])+13, Integer.valueOf(buffer[1]),
+            Button nextTurnButton = new Button(Integer.valueOf(buffer[0])+13, Integer.valueOf(buffer[1]),
                     () -> {
                         NotificationBus.clearWaitingList();
                         NotificationBus.clearImmediateList();
@@ -619,7 +697,6 @@ public class ConfigReader
             buffer = line.split(" ");
 
             NotificationWaitingArea notificationWaitingArea = new NotificationWaitingArea(
-                    engine,
                     Integer.valueOf(buffer[0]),
                     Integer.valueOf(buffer[1]),
                     Integer.valueOf(buffer[2]),
@@ -633,7 +710,6 @@ public class ConfigReader
             buffer = line.split(" ");
 
             NotificationImmediateArea notificationImmediateArea = new NotificationImmediateArea(
-                    engine,
                     Integer.valueOf(buffer[0]),
                     Integer.valueOf(buffer[1]),
                     Integer.valueOf(buffer[2]),
@@ -648,7 +724,7 @@ public class ConfigReader
             buffer = line.split(" ");
 
             Image image = new Image(imagesPath+buffer[2]);
-            Visual logo = new Visual(engine, Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), image);
+            Visual logo = new Visual(Integer.valueOf(buffer[0]), Integer.valueOf(buffer[1]), image);
 
             reader.close();
 

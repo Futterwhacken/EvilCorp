@@ -15,17 +15,17 @@ public class Menu extends GameObject
     private final Button[] buttons;
 
     // to create template menu
-    public Menu(Engine engine, int posX, int posY, int fieldHeight, int color) {
-        this(engine, posX, posY, fieldHeight, null, null, null, color);
+    public Menu(int posX, int posY, int fieldHeight, int color) {
+        this(posX, posY, fieldHeight, null, null, null, color);
     }
 
     // to create menu from template
-    public Menu(Engine engine, Menu template, String label, String[] options, Action[] actions) {
-        this(engine, template.posX, template.posY, template.fieldHeight, label, options, actions, template.color);
+    public Menu(Menu template, String label, String[] options, Action[] actions) {
+        this(template.posX, template.posY, template.fieldHeight, label, options, actions, template.color);
     }
 
-    public Menu(Engine engine, int posX, int posY, int fieldHeight, String label, String[] options, Action[] actions, int color) {
-        super(engine);
+    public Menu(int posX, int posY, int fieldHeight, String label, String[] options, Action[] actions, int color) {
+        super();
 
         this.posX = posX;
         this.posY = posY;
@@ -37,7 +37,7 @@ public class Menu extends GameObject
             this.buttons = new Button[actions.length];
 
             for (int i = 0; i < actions.length; i++) {
-                buttons[i] = new Button(engine, posX, posY + i * fieldHeight, actions[i], options[i], color);
+                buttons[i] = new Button(posX, posY + i * fieldHeight, actions[i], options[i], color);
             }
         }
         else {
@@ -138,6 +138,6 @@ public class Menu extends GameObject
         finalOptions[finalOptions.length - 1] = "RETURN";
         finalActions[finalActions.length - 1] = () -> engine.getCurrentScene().setCurrentMenu(engine.getCurrentScene().getMainMenu());
 
-        return new Menu(engine, template, label, finalOptions, finalActions);
+        return new Menu(template, label, finalOptions, finalActions);
     }
 }

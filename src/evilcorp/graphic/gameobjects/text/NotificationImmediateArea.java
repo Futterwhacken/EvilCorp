@@ -11,8 +11,8 @@ public class NotificationImmediateArea extends TextArea
     private final int delay;
     private final int[] counters;
 
-    public NotificationImmediateArea(Engine engine, int posX, int posY, int width, int lineHeight, int maxLines, int color, int delay) {
-        super(engine, posX, posY, width, lineHeight, maxLines);
+    public NotificationImmediateArea(int posX, int posY, int width, int lineHeight, int maxLines, int color, int delay) {
+        super(posX, posY, width, lineHeight, maxLines);
 
         this.color = color;
         this.delay = delay;

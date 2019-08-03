@@ -25,8 +25,7 @@ public class Button extends GameObject
     private boolean hovered = false;
     private boolean clicked = false;
 
-    private Button(Engine engine, int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor, Font font) {
-        super(engine);
+    private Button(int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor, Font font) {
 
         if (image != null && posX == -1) {
             this.posX = (int)(0.5*(engine.getWidth() - image.getWidth()));
@@ -53,22 +52,22 @@ public class Button extends GameObject
 
 
     // image
-    public Button(Engine engine, int posX, int posY, Action action, Image image) {
-        this(engine, posX, posY, image.getWidth(), image.getHeight(), action, image, null, 0, null);
+    public Button(int posX, int posY, Action action, Image image) {
+        this(posX, posY, image.getWidth(), image.getHeight(), action, image, null, 0, null);
     }
 
     // string label
-    public Button(Engine engine, int posX, int posY, Action action, String label, int labelColor, Font font) {
-        this(engine, posX, posY, font.textLength(label), font.getCharHeight(), action, null, label, labelColor, font);
+    public Button(int posX, int posY, Action action, String label, int labelColor, Font font) {
+        this(posX, posY, font.textLength(label), font.getCharHeight(), action, null, label, labelColor, font);
     }
 
-    public Button(Engine engine, int posX, int posY, Action action, String label, int labelColor) {
-        this(engine, posX, posY, action, label, labelColor, engine.getStandardFont());
+    public Button(int posX, int posY, Action action, String label, int labelColor) {
+        this(posX, posY, action, label, labelColor, Engine.getEngine().getStandardFont());
     }
 
     // invisible
-    public Button(Engine engine, int posX, int posY, int width, int height, Action action) {
-        this(engine, posX, posY, width, height, action, null, null, 0, null);
+    public Button(int posX, int posY, int width, int height, Action action) {
+        this(posX, posY, width, height, action, null, null, 0, null);
     }
 
 

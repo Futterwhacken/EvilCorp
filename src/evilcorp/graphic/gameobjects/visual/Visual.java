@@ -12,8 +12,8 @@ public class Visual extends GameObject
     private final int posX;
     private final int posY;
 
-    public Visual(Engine engine, int posX, int posY, Image image) {
-        super(engine);
+    public Visual(int posX, int posY, Image image) {
+        super();
 
         this.image = image;
 

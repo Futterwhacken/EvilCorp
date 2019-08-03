@@ -14,8 +14,8 @@ public abstract class GameObject
     protected final int id;
     protected final Engine engine;
 
-    public GameObject(Engine engine) {
-        this.engine = engine;
+    public GameObject() {
+        this.engine = Engine.getEngine();
         this.id = instanceCount++;
         instances.add(this);
     }
