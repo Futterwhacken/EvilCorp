@@ -30,8 +30,6 @@ import java.util.HashMap;
 @SuppressWarnings("Duplicates")
 public class ConfigReader
 {
-
-    private static final String fontsPath = "data/resources/fonts/";
     private static final String mapsPath = "data/resources/maps/";
     private static final String imagesPath = "data/resources/images/";
 
@@ -40,7 +38,16 @@ public class ConfigReader
     public static Object getObject(String id) { return createdObjects.get(id); }
 
 
-    public static Object createObject(String config) {
+    private static String pass(BufferedReader br) throws IOException {
+        String line;
+        do {
+            line = br.readLine();
+        } while (line != null && (line.length() == 0 || line.charAt(0) == '#'));
+        return line;
+    }
+
+
+    private static Object createObject(String config) {
         String[] tmp = config.split(" ");
 
         String type = tmp[0];
@@ -52,64 +59,138 @@ public class ConfigReader
         System.arraycopy(tmp, 2, params, 0, tmp.length - 2);
 
 
-        if (type.equals("IMAGE")) {
-            object = new Image(params[0], Double.valueOf(params[1]));
-        }
+        switch (type) {
 
-        else if (type.equals("VISUAL")) {
-            object = new Visual(
-                    Integer.valueOf(params[0]),
-                    Integer.valueOf(params[1]),
-                    (Image)getObject(params[2])
-            );
-        }
+            case "IMAGE":
+                object = new Image(params[0], Double.valueOf(params[1]));
+                break;
 
-        else if (type.equals("TEXT")) {
-            if (params.length == 5) {
-                object = new Text(
+            case "FONT":
+                object = new Font(
+                        params[0],
+                        Integer.valueOf(params[1]),
+                        Integer.valueOf(params[2]),
+                        Integer.valueOf(params[3])
+                );
+                break;
+
+            case "VISUAL":
+                object = new Visual(
                         Integer.valueOf(params[0]),
                         Integer.valueOf(params[1]),
-                        params[2].replace("_", " "),
-                        (int)Long.parseLong(params[3], 16),
-                        Engine.getEngine().getFont(Integer.valueOf(params[4]))
+                        (Image) getObject(params[2])
                 );
-            }
-        }
+                break;
 
-        else if (type.equals("ANIMATION")) {
-            String path = params[2];
-            int nbImages = Integer.valueOf(params[3]);
+            case "TEXT":
+                if (params.length == 5) {
+                    object = new Text(
+                            Integer.valueOf(params[0]),
+                            Integer.valueOf(params[1]),
+                            params[2].replace("_", " "),
+                            (int) Long.parseLong(params[3], 16),
+                            Engine.getEngine().getFont(Integer.valueOf(params[4]))
+                    );
+                }
+                break;
 
-            // modulariser pour avoir différentes mouvements d'animation
-            Image[] images = new Image[nbImages];
-            for (int i = 0; i < nbImages; i++) {
-                double scale = ((nbImages/10.0)*2)/((i+1) * 0.1);
-                images[i] = new Image(path, scale);
-            }
+            case "ANIMATION":
+                String path = params[2];
+                int nbImages = Integer.valueOf(params[3]);
 
-            object = new Animation(
-                    Integer.valueOf(params[0]),
-                    Integer.valueOf(params[1]),
-                    images,
-                    Double.valueOf(params[4])
-            );
-        }
+                // modulariser pour avoir différentes mouvements d'animation
+                Image[] images = new Image[nbImages];
+                for (int i = 0; i < nbImages; i++) {
+                    double scale = ((nbImages / 10.0) * 2) / ((i + 1) * 0.1);
+                    images[i] = new Image(path, scale);
+                }
 
-        else if (type.equals("BUTTON")) {
-            if (params.length == 5) { // handle different kinds of buttons
-                object = new Button(
+                object = new Animation(
                         Integer.valueOf(params[0]),
                         Integer.valueOf(params[1]),
-                        params[2].replace("_", " "),
-                        (int) Long.parseLong(params[3], 16),
-                        Engine.getEngine().getFont(Integer.valueOf(params[4]))
+                        images,
+                        Double.valueOf(params[4])
                 );
-            }
+                break;
+
+            case "BUTTON":
+                if (params.length == 5) { // handle different kinds of buttons
+                    object = new Button(
+                            Integer.valueOf(params[0]),
+                            Integer.valueOf(params[1]),
+                            params[2].replace("_", " "),
+                            (int) Long.parseLong(params[3], 16),
+                            Engine.getEngine().getFont(Integer.valueOf(params[4]))
+                    );
+                }
+                break;
+
+
         }
 
         createdObjects.put(id, object);
 
         return object;
+    }
+
+
+
+    public static Object[] readEngine(String configPath) {
+        String[] buffer;
+
+        try {
+            FileReader fileReader = new FileReader(configPath);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            buffer = pass(reader).split(" ");
+            reader.close();
+
+            return new Object[]{
+                    buffer[0],
+                    Integer.valueOf(buffer[1]),
+                    Integer.valueOf(buffer[2]),
+                    Double.valueOf(buffer[3]),
+                    Double.valueOf(buffer[4]),
+                    Boolean.valueOf(buffer[5])
+            };
+
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file \"" + configPath + "\"");
+        }
+        catch (IOException ex) {
+            System.out.println("Error reading file \""+ configPath + "\"");
+        }
+
+        return null;
+    }
+
+    public static Font[] readFonts(String configPath) {
+        String line;
+
+        ArrayList<Font> fonts = new ArrayList<>();
+
+        try {
+            FileReader fileReader = new FileReader(configPath);
+            BufferedReader reader = new BufferedReader(fileReader);
+
+            while ((line = pass(reader)) != null) {
+                fonts.add((Font)createObject(line));
+            }
+
+            reader.close();
+
+            return fonts.toArray(new Font[]{});
+
+        }
+        catch (FileNotFoundException ex) {
+            System.out.println("Unable to open file \"" + configPath + "\"");
+        }
+        catch (IOException ex) {
+            System.out.println("Error reading file \""+ configPath + "\"");
+        }
+
+        return null;
     }
 
     public static GameObject[] readScene(String configPath) {
@@ -146,119 +227,6 @@ public class ConfigReader
     }
 
 
-    private static String pass(BufferedReader br) throws IOException {
-        String line;
-        do {
-            line = br.readLine();
-        } while (line != null && (line.length() == 0 || line.charAt(0) == '#'));
-        return line;
-    }
-
-    public static Object[] readEngine(String configPath) {
-        String line;
-        String[] buffer;
-
-        String title;
-        int width, height;
-        double scale, updateCap;
-        boolean debug;
-
-        try {
-            FileReader fileReader = new FileReader(configPath);
-            BufferedReader reader = new BufferedReader(fileReader);
-
-            line = pass(reader);
-
-            // debug
-            debug = Boolean.valueOf(line);
-
-            // dimensions
-            line = pass(reader);
-            buffer = line.split(" ");
-
-            width = Integer.valueOf(buffer[0]);
-            height = Integer.valueOf(buffer[1]);
-            scale = Double.valueOf(buffer[2]);
-
-            // update cap
-            line = pass(reader);
-
-            updateCap = Double.valueOf(line);
-
-            // title
-            line = pass(reader);
-
-            title = line;
-
-            reader.close();
-
-            return new Object[]{title, width, height, scale, updateCap, debug};
-
-        }
-        catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file \"" + configPath + "\"");
-        }
-        catch (IOException ex) {
-            System.out.println("Error reading file \""+ configPath + "\"");
-        }
-
-        return null;
-    }
-
-    public static Font[] readFonts(String configPath) {
-        String line;
-        String[] buffer;
-
-        Font[] fonts;
-
-        String path;
-        int width, height, interspace;
-
-        int fontCount;
-
-        try {
-            FileReader fileReader = new FileReader(configPath);
-            BufferedReader reader = new BufferedReader(fileReader);
-
-            // nb fonts
-            line = pass(reader);
-
-            fontCount = Integer.valueOf(line);
-
-            fonts = new Font[fontCount];
-
-            // fonts
-            for (int i = 0; i < fontCount; i++) {
-                // path
-                line = pass(reader);
-
-                path = fontsPath+line;
-
-                // params
-                line = reader.readLine();
-                buffer = line.split(" ");
-
-                width = Integer.valueOf(buffer[0]);
-                height = Integer.valueOf(buffer[1]);
-                interspace = Integer.valueOf(buffer[2]);
-
-                fonts[i] = new Font(path, width, height, interspace);
-            }
-
-            reader.close();
-
-            return fonts;
-
-        }
-        catch (FileNotFoundException ex) {
-            System.out.println("Unable to open file \"" + configPath + "\"");
-        }
-        catch (IOException ex) {
-            System.out.println("Error reading file \""+ configPath + "\"");
-        }
-
-        return null;
-    }
 
     public static Map readMap(String configPath) {
 
@@ -698,7 +666,7 @@ public class ConfigReader
                         NotificationBus.clearImmediateList();
                         gm.nextTurn();
                     },
-                    "NEXT TURN", 0xff00ffff, engine.getStandardFontBig()
+                    "NEXT TURN", 0xff00ffff, engine.getFont(1)
             );
 
             reader.close();

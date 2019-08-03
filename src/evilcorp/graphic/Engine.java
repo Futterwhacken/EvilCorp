@@ -15,7 +15,8 @@ public class Engine implements Runnable
     public static Engine initEngine(String configPath) {
         if (instance == null) {
             Object[] config = ConfigReader.readEngine(configPath+"engine.cfg");
-            instance = new Engine(config[0].toString(), (int)config[1], (int)config[2], (double)config[3], (double)config[4], (boolean)config[5]);
+            Font[] fonts = ConfigReader.readFonts(configPath+"fonts.cfg");
+            instance = new Engine(config[0].toString(), (int)config[1], (int)config[2], (double)config[3], (double)config[4], (boolean)config[5], fonts);
         }
         return instance;
     }
@@ -41,13 +42,12 @@ public class Engine implements Runnable
 
     private final boolean debug;
 
-    private Font standardFont;
-    private Font standardFontBig;
+    private final Font[] fonts;
 
     private final ArrayList<Scene> scenes;
     private Scene currentScene;
 
-    private Engine(String title, int width, int height, double scale, double updateCap, boolean debug) {
+    private Engine(String title, int width, int height, double scale, double updateCap, boolean debug, Font[] fonts) {
         this.scenes = new ArrayList<>();
 
         this.title = title;
@@ -56,7 +56,9 @@ public class Engine implements Runnable
         this.scale = scale;
         this.updateRate = 1.0/updateCap;
 
-        this.debug = false;
+        this.debug = debug;
+
+        this.fonts = fonts;
 
         this.window = new Window(this);
         this.renderer = new Renderer(this);
@@ -122,8 +124,8 @@ public class Engine implements Runnable
                 renderer.clear();
 
                 if (debug) {
-                    renderer.drawText(standardFont, "FPS:" + fps, 0, 2, 0xff00ff00);
-                    renderer.drawText(standardFont, "X: " + input.getMouseX() + ", Y: " + input.getMouseY(), 70, 2, 0xff00ff00);
+                    renderer.drawText(getStandardFont(), "FPS:" + fps, 0, 2, 0xff00ff00);
+                    renderer.drawText(getStandardFont(), "X: " + input.getMouseX() + ", Y: " + input.getMouseY(), 70, 2, 0xff00ff00);
                 }
 
                 currentScene.render();
@@ -151,15 +153,10 @@ public class Engine implements Runnable
     public Renderer getRenderer() { return renderer; }
     public Input getInput() { return input; }
 
-    public Font getStandardFont() { return standardFont; }
-    public void setStandardFont(Font font) { standardFont = font; }
-
-    public Font getStandardFontBig() { return standardFontBig; }
-    public void setStandardFontBig(Font font) { standardFontBig = font; }
-
-    public Font getFont(int i) { // fix this !
-        if (i == 0) return standardFont;
-        return standardFontBig;
+    public Font getStandardFont() { return fonts[0]; }
+    public Font getFont(int i) {
+        if (i > 0 && i < fonts.length) return fonts[i];
+        return fonts[0];
     }
 
     public Scene getCurrentScene() { return currentScene; }

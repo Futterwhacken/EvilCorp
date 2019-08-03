@@ -20,14 +20,14 @@ import evilcorp.logic.GameMaster;
 public class RuntimeGraphic {
     public static void main(String[] args) {
 
+        // !!! HANDLE EXCEPTIONS !!!
+
         /* LOADING CONFIG */
 
-        GameMaster gm = GameMaster.initGameMaster("data/config/logic/"); // ceci peu arriver quand on load la GameScene
+        // reworkd engine and gm init
+        GameMaster gm = GameMaster.initGameMaster("data/config/logic/"); // could be called when loading GameScene
         Engine engine = Engine.initEngine("data/config/graphic/");
 
-        Font[] fonts = ConfigReader.readFonts("data/config/graphic/fonts.cfg");
-        engine.setStandardFont(fonts[0]);
-        engine.setStandardFontBig(fonts[1]);
 
         /* SCENES */
 
@@ -55,8 +55,9 @@ public class RuntimeGraphic {
         engine.addScene(loadingScene);
 
 
-        // start engine here, to mask loading of other resources
-        engine.start();
+        /* START ENGINE */
+
+        engine.start(); // start engine here, to mask loading of other resources
 
 
         /* LOADING SPLASH SCENE */
