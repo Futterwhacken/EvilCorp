@@ -22,7 +22,13 @@ public class Animation extends GameObject
     public Animation(int posX, int posY, Image[] images, double duration) {
         super();
 
-        this.posX = posX;
+        if (posX == -1) {
+            this.posX = engine.getWidth()/2;
+        }
+        else {
+            this.posX = posX;
+        }
+
         this.posY = posY;
 
         this.images = images;
@@ -48,8 +54,9 @@ public class Animation extends GameObject
     @Override
     public void render() {
         if (active) {
-            if (currentImage < images.length) // fix this in update
-                engine.getRenderer().drawImage(images[currentImage], posX-(images[currentImage].getWidth() / 2), posY-(images[currentImage].getHeight() / 2));
+            if (currentImage < images.length) { // fix this in update
+                engine.getRenderer().drawImage(images[currentImage], posX - (images[currentImage].getWidth() / 2), posY - (images[currentImage].getHeight() / 2));
+            }
         }
     }
 
@@ -61,5 +68,9 @@ public class Animation extends GameObject
 
     public boolean isFinished() {
         return currentImage >= images.length;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 }

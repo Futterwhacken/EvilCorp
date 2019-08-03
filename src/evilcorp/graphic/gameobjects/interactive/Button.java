@@ -55,11 +55,19 @@ public class Button extends GameObject
     public Button(int posX, int posY, Action action, Image image) {
         this(posX, posY, image.getWidth(), image.getHeight(), action, image, null, 0, null);
     }
+    public Button(int posX, int posY, Image image) {
+        this(posX, posY, image.getWidth(), image.getHeight(), null, image, null, 0, null);
+    }
+
 
     // string label
     public Button(int posX, int posY, Action action, String label, int labelColor, Font font) {
         this(posX, posY, font.textLength(label), font.getCharHeight(), action, null, label, labelColor, font);
     }
+    public Button(int posX, int posY, String label, int labelColor, Font font) {
+        this(posX, posY, font.textLength(label), font.getCharHeight(), null, null, label, labelColor, font);
+    }
+
 
     public Button(int posX, int posY, Action action, String label, int labelColor) {
         this(posX, posY, action, label, labelColor, Engine.getEngine().getStandardFont());
@@ -68,6 +76,9 @@ public class Button extends GameObject
     // invisible
     public Button(int posX, int posY, int width, int height, Action action) {
         this(posX, posY, width, height, action, null, null, 0, null);
+    }
+    public Button(int posX, int posY, int width, int height) {
+        this(posX, posY, width, height, null, null, null, 0, null);
     }
 
 
@@ -96,7 +107,9 @@ public class Button extends GameObject
             if (!clicked) {
                 clicked = true;
                 engine.getInput().setHasClicked(true);
-                action.exec();
+
+                if (action != null)
+                    action.exec();
             }
         }
         else {

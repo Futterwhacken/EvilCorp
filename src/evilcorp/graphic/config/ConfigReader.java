@@ -11,6 +11,7 @@ import evilcorp.graphic.gameobjects.text.NotificationImmediateArea;
 import evilcorp.graphic.gameobjects.text.NotificationWaitingArea;
 import evilcorp.graphic.gameobjects.text.Text;
 import evilcorp.graphic.gameobjects.text.TextArea;
+import evilcorp.graphic.gameobjects.visual.Animation;
 import evilcorp.graphic.gameobjects.visual.GaugeGraph;
 import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Font;
@@ -37,6 +38,8 @@ public class ConfigReader
 
     private static HashMap<String, Object> createdObjects = new HashMap<>();
 
+    public static Object getObject(String id) { return createdObjects.get(id); }
+
 
     public static Object createObject(String config) {
         String[] tmp = config.split(" ");
@@ -58,7 +61,8 @@ public class ConfigReader
             object = new Visual(
                     Integer.valueOf(params[0]),
                     Integer.valueOf(params[1]),
-                    (Image)createdObjects.get(params[2]));
+                    (Image)getObject(params[2])
+            );
         }
 
         else if (type.equals("TEXT")) {
@@ -66,9 +70,41 @@ public class ConfigReader
                 object = new Text(
                         Integer.valueOf(params[0]),
                         Integer.valueOf(params[1]),
-                        params[2],
+                        params[2].replace("_", " "),
                         (int)Long.parseLong(params[3], 16),
-                        Engine.getEngine().getFont(Integer.valueOf(params[4])));
+                        Engine.getEngine().getFont(Integer.valueOf(params[4]))
+                );
+            }
+        }
+
+        else if (type.equals("ANIMATION")) {
+            String path = params[2];
+            int nbImages = Integer.valueOf(params[3]);
+
+            // modulariser pour avoir différentes mouvements d'animation
+            Image[] images = new Image[nbImages];
+            for (int i = 0; i < nbImages; i++) {
+                double scale = ((nbImages/10.0)*2)/((i+1) * 0.1);
+                images[i] = new Image(path, scale);
+            }
+
+            object = new Animation(
+                    Integer.valueOf(params[0]),
+                    Integer.valueOf(params[1]),
+                    images,
+                    Double.valueOf(params[4])
+            );
+        }
+
+        else if (type.equals("BUTTON")) {
+            if (params.length == 5) { // handle different kinds of buttons
+                object = new Button(
+                        Integer.valueOf(params[0]),
+                        Integer.valueOf(params[1]),
+                        params[2].replace("_", " "),
+                        (int) Long.parseLong(params[3], 16),
+                        Engine.getEngine().getFont(Integer.valueOf(params[4]))
+                );
             }
         }
 
