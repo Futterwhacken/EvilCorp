@@ -15,7 +15,6 @@ import evilcorp.graphic.gameobjects.interactive.Menu;
 import evilcorp.graphic.gameobjects.text.TextArea;
 
 import evilcorp.logic.GameMaster;
-import evilcorp.logic.config.Config;
 
 
 public class RuntimeGraphic {
@@ -37,7 +36,7 @@ public class RuntimeGraphic {
         Scene menuScene = new Scene();
         Scene creditsScene = new Scene();
         Scene gameScene = new Scene();
-        
+
 
         /* LOADING LOADING SCENE */
 
@@ -122,19 +121,19 @@ public class RuntimeGraphic {
 
         /* LOADING GAME SCENE */
 
-        /*Map map = ConfigReader.readMap("data/config/graphic/map.cfg");
+        Map map = ConfigReader.readMap("data/config/graphic/toProcess/map.cfg");
 
-        GameObject[] menuObjects = ConfigReader.readMenu("data/config/graphic/menu.cfg");
+        GameObject[] menuObjects = ConfigReader.readMenu("data/config/graphic/toProcess/menu.cfg");
         Menu mainMenu = (Menu)menuObjects[0];
         TextArea hoverTextArea = (TextArea)menuObjects[1];
 
-        TextArea regionInfo = ConfigReader.readInfoArea("data/config/graphic/info_area.cfg");
+        TextArea regionInfo = ConfigReader.readInfoArea("data/config/graphic/toProcess/info_area.cfg");
 
-        GameObject[] gaugeObjects = ConfigReader.readGauges("data/config/graphic/gauges.cfg");
+        GameObject[] gaugeObjects = ConfigReader.readGauges("data/config/graphic/toProcess/gauges.cfg");
 
-        GameObject[] nextObjects = ConfigReader.readNextArea("data/config/graphic/next_area.cfg");
+        GameObject[] nextObjects = ConfigReader.readNextArea("data/config/graphic/toProcess/next_area.cfg");
 
-        GameObject[] notifObjects = ConfigReader.readNotifArea("data/config/graphic/notif_area.cfg");
+        GameObject[] notifObjects = ConfigReader.readNotifArea("data/config/graphic/toProcess/notif_area.cfg");
 
 
         gameScene.addGameObject(map);
@@ -171,7 +170,7 @@ public class RuntimeGraphic {
             }
         });
 
-        engine.addScene(gameScene);*/
+        engine.addScene(gameScene);
 
 
     }

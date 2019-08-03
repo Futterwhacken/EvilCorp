@@ -3,7 +3,6 @@ package evilcorp.graphic.config;
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.Action;
 import evilcorp.graphic.gameobjects.GameObject;
-import evilcorp.graphic.gameobjects.Scene;
 import evilcorp.graphic.gameobjects.interactive.Button;
 import evilcorp.graphic.gameobjects.interactive.Map;
 import evilcorp.graphic.gameobjects.interactive.Menu;
@@ -15,8 +14,8 @@ import evilcorp.graphic.gameobjects.visual.Animation;
 import evilcorp.graphic.gameobjects.visual.GaugeGraph;
 import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Font;
-
 import evilcorp.graphic.gfx.Image;
+
 import evilcorp.logic.GameMaster;
 import evilcorp.logic.NotificationBus;
 import evilcorp.logic.config.Config;
