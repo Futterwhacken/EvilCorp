@@ -3,51 +3,60 @@ package evilcorp.graphic.gameobjects.visual;
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.Action;
 import evilcorp.graphic.gameobjects.GameObject;
+import evilcorp.graphic.gameobjects.text.Text;
+import evilcorp.graphic.gfx.Font;
 
 public class GaugeGraph extends GameObject
 {
-    private final boolean horizontal;
-
     private final int posX;
     private final int posY;
-    private final int color;
+    private final int gaugeColor;
 
-    private final int dimensionStatic;
-    private final int dimensionDynamicMax;
+    private final int height;
+    private final int width;
 
     private final double max;
 
     private final int borderSize;
-    private final int borderColor;
+    private final Text label;
+    private final Text counter;
+    private final int textColor;
 
     private double level;
-    private int dimensionDynamic;
+    private int currentWidth;
 
     private Action action;
 
-    public GaugeGraph(int posX, int posY, int width, int height, boolean horizontal, double level, double max, int borderSize, int color, int borderColor) {
+    public GaugeGraph(int posX, int posY, int width, int height, double level, double max, int gaugeColor, int borderSize, String label, int textColor, Font font) {
         super();
 
-        this.posX = posX;
-        this.posY = posY;
-
-        this.horizontal = horizontal;
-        this.level = level;
-        this.max = max;
-        this.color = color;
-
-        this.borderSize = borderSize;
-        this.borderColor = borderColor;
-
-        if (horizontal) {
-            this.dimensionStatic = height;
-            this.dimensionDynamicMax = width;
+        if (posX == -1) {
+            this.posX = (Engine.getEngine().getWidth() - width)/2;
         }
         else {
-            this.dimensionStatic = width;
-            this.dimensionDynamicMax = height;
+            this.posX = posX;
         }
-        this.dimensionDynamic = (int)(dimensionDynamicMax * level/max);
+
+        this.posY = posY;
+
+        this.level = level;
+        this.max = max;
+        this.gaugeColor = gaugeColor;
+
+        this.borderSize = borderSize;
+        this.textColor = textColor;
+
+        this.height = height;
+        this.width = width;
+
+        this.currentWidth = (int)(width * level/max);
+
+        int offsetY = (height-font.getCharHeight())/2;
+
+        this.label = new Text(this.posX - (font.textLength(label) + font.getCharWidth()) - borderSize, posY + offsetY, label, textColor, font);
+        this.counter = new Text(this.posX + width + font.getCharWidth() + borderSize, posY + offsetY, textColor);
+
+        counter.setAction(() -> counter.setText(""+this.level));
     }
 
     @Override
@@ -55,22 +64,20 @@ public class GaugeGraph extends GameObject
         if (action != null) {
             action.exec();
         }
-        dimensionDynamic = (int)(dimensionDynamicMax * level/max);
+        currentWidth = (int)(width * level/max);
+
+        label.update();
+        counter.update();
     }
 
     @Override
     public void render() {
-        if (horizontal) {
-            engine.getRenderer().drawRectangle(posX, posY, dimensionDynamic, dimensionStatic, color);
-            engine.getRenderer().drawRectangle(posX - borderSize, posY, borderSize, dimensionStatic, borderColor);
-            engine.getRenderer().drawRectangle(posX + dimensionDynamicMax + borderSize, posY, borderSize, dimensionStatic, borderColor);
-        }
-        else {
-            engine.getRenderer().drawRectangle(posX, posY, dimensionStatic, dimensionDynamic, color);
-            engine.getRenderer().drawRectangle(posX, posY - borderSize, dimensionStatic, borderSize, borderColor);
-            engine.getRenderer().drawRectangle(posX, posY + dimensionDynamicMax + borderSize, dimensionStatic, borderSize, borderColor);
-        }
+        engine.getRenderer().drawRectangle(posX, posY, currentWidth, height, gaugeColor);
+        engine.getRenderer().drawRectangle(posX - borderSize, posY, borderSize, height, textColor);
+        engine.getRenderer().drawRectangle(posX + width + borderSize, posY, borderSize, height, textColor);
 
+        label.render();
+        counter.render();
 
     }
 

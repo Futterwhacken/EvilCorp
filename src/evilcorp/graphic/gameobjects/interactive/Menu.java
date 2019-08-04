@@ -12,7 +12,11 @@ public class Menu extends GameObject
     private final int fieldHeight;
     private final int color;
     private final String label;
-    private final Button[] buttons;
+
+    private Button[] buttons;
+
+    private String[] options;
+
 
     // to create template menu
     public Menu(int posX, int posY, int fieldHeight, int color) {
@@ -33,16 +37,9 @@ public class Menu extends GameObject
         this.color = color;
         this.label = label;
 
-        if (actions != null) {
-            this.buttons = new Button[actions.length];
+        this.options = options;
 
-            for (int i = 0; i < actions.length; i++) {
-                buttons[i] = new Button(posX, posY + i * fieldHeight, actions[i], options[i], color);
-            }
-        }
-        else {
-            buttons = new Button[0];
-        }
+        setButtons(actions);
     }
 
     @Override
@@ -62,8 +59,6 @@ public class Menu extends GameObject
         }
     }
 
-    public Button[] getButtons() { return buttons; }
-
     public boolean noneHovered() {
         for (Button b : buttons) {
             if (b.isHovered()) {
@@ -73,6 +68,26 @@ public class Menu extends GameObject
 
         return true;
     }
+
+    public Button[] getButtons() { return buttons; }
+    public void setButtons(Action[] actions) {
+        if (actions != null) {
+            this.buttons = new Button[actions.length];
+
+            for (int i = 0; i < actions.length; i++) {
+                buttons[i] = new Button(posX, posY + i * fieldHeight, actions[i], options[i], color);
+            }
+        }
+        else {
+            this.buttons = new Button[0];
+        }
+    }
+
+    public String getOption(int i) {
+        if (i >= 0 && i < options.length) return options[i];
+        return options[0];
+    }
+
 
     public static Menu buildAddExploitationMenu(String label, Menu template) {
         Engine engine = Engine.getEngine();

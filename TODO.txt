@@ -1,15 +1,18 @@
 
 
 TODO:
+    * polish constructors & configreader
+    * rework immediate notif delay (with proper timer)
+
+FRONT:
     * add Frame and LabeledFrame classes ??
     * button feedback
     * next turn button
-    * text area text offset
+    * text area offset
     * réduire nb de lignes notif
-    * rework configreader and configuration paradigm
-
 
 DONE:
+    * [DONE] rework configreader and configuration paradigm
     * [DONE] cleanup constructors (gros bordel)
     * [DONE] add possibility to choose font for Text, Button labels, etc
     * [DONE] add win/lose trigger
@@ -24,14 +27,3 @@ DONE:
     * [DONE] show buy and rmv cost
     * [DONE] HOVER NOTIFICATION & MENU show event status, descr and cost
     * [DONE] immediate and waiting notifications
-
-
-OK CONSTRUCTORS:
-    - Button
-    - Map
-    - Menu
-    - Text : ok-ish
-    - TextArea
-    - Notif*Area
-    - Visual
-    - GaugeGraph

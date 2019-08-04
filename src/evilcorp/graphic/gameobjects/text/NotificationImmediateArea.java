@@ -8,10 +8,10 @@ import java.util.ArrayList;
 public class NotificationImmediateArea extends TextArea
 {
     private final int color;
-    private final int delay;
+    private final double delay;
     private final int[] counters;
 
-    public NotificationImmediateArea(int posX, int posY, int width, int lineHeight, int maxLines, int color, int delay) {
+    public NotificationImmediateArea(int posX, int posY, int width, int lineHeight, int maxLines, int color, double delay) {
         super(posX, posY, width, lineHeight, maxLines);
 
         this.color = color;

@@ -51,7 +51,14 @@ public class Scene extends GameObject
         }
     }
 
-    public void addGameObject(GameObject object) { gameObjects.add(object); }
+    public void addGameObject(GameObject object) {
+        if (object instanceof Menu) {
+            setMainMenu((Menu)object);
+            return;
+        }
+
+        gameObjects.add(object);
+    }
 
     public void addAction(Action action) { sceneActions.add(action); }
 
