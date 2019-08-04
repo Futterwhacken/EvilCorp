@@ -1,6 +1,6 @@
 package evilcorp.graphic.gameobjects.text;
 
-import evilcorp.graphic.Engine;
+import evilcorp.graphic.gfx.Font;
 import evilcorp.logic.NotificationBus;
 
 import java.util.ArrayList;
@@ -9,9 +9,8 @@ public class NotificationWaitingArea extends TextArea
 {
     private final int color;
 
-    // réduire le nb de lignes
-    public NotificationWaitingArea(int posX, int posY, int width, int lineHeight, int maxLines, int color) {
-        super(posX, posY, width, lineHeight, maxLines);
+    public NotificationWaitingArea(int posX, int posY, int width, int lineHeight, int maxLines, int color, Font font) {
+        super(posX, posY, width, lineHeight, maxLines, font);
         this.color = color;
     }
 

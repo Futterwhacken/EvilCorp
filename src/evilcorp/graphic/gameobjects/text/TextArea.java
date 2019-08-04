@@ -1,6 +1,5 @@
 package evilcorp.graphic.gameobjects.text;
 
-import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gfx.Font;
 
@@ -40,12 +39,8 @@ public class TextArea extends GameObject
         this.font = font;
     }
 
-    public TextArea(int posX, int posY, int width, int lineHeight, int maxLines, Text[] texts) {
-        this(posX, posY, width, lineHeight, maxLines, texts, Engine.getEngine().getStandardFont());
-    }
-
-    protected TextArea(int posX, int posY, int width, int lineHeight, int maxLines) {
-        this(posX, posY, width, lineHeight, maxLines, null);
+    protected TextArea(int posX, int posY, int width, int lineHeight, int maxLines, Font font) {
+        this(posX, posY, width, lineHeight, maxLines, null, font);
     }
 
     @Override

@@ -12,9 +12,9 @@ public class Scene extends GameObject
     private Menu currentMenu;
     private Region selectedRegion;
 
-    private ArrayList<GameObject> gameObjects;
+    private final ArrayList<GameObject> gameObjects;
 
-    private ArrayList<Action> sceneActions;
+    private final ArrayList<Action> sceneActions;
 
     public Scene() {
         super();

@@ -3,6 +3,7 @@ package evilcorp.graphic.gameobjects.interactive;
 import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.Action;
 import evilcorp.graphic.gameobjects.GameObject;
+import evilcorp.graphic.gfx.Font;
 
 public class Menu extends GameObject
 {
@@ -11,24 +12,19 @@ public class Menu extends GameObject
     private final int posY;
     private final int fieldHeight;
     private final int color;
+    private final Font font;
     private final String label;
+    private final String[] options;
 
     private Button[] buttons;
 
-    private String[] options;
 
 
-    // to create template menu
-    public Menu(int posX, int posY, int fieldHeight, int color) {
-        this(posX, posY, fieldHeight, null, null, null, color);
-    }
-
-    // to create menu from template
     public Menu(Menu template, String label, String[] options, Action[] actions) {
-        this(template.posX, template.posY, template.fieldHeight, label, options, actions, template.color);
+        this(template.posX, template.posY, template.fieldHeight, label, options, actions, template.color, template.font);
     }
 
-    public Menu(int posX, int posY, int fieldHeight, String label, String[] options, Action[] actions, int color) {
+    public Menu(int posX, int posY, int fieldHeight, String label, String[] options, Action[] actions, int color, Font font) {
         super();
 
         this.posX = posX;
@@ -36,7 +32,7 @@ public class Menu extends GameObject
         this.fieldHeight = fieldHeight;
         this.color = color;
         this.label = label;
-
+        this.font = font;
         this.options = options;
 
         setButtons(actions);
@@ -75,7 +71,7 @@ public class Menu extends GameObject
             this.buttons = new Button[actions.length];
 
             for (int i = 0; i < actions.length; i++) {
-                buttons[i] = new Button(posX, posY + i * fieldHeight, actions[i], options[i], color);
+                buttons[i] = new Button(posX, posY + i * fieldHeight, actions[i], options[i], color, font);
             }
         }
         else {

@@ -1,6 +1,5 @@
 package evilcorp.graphic.gameobjects.visual;
 
-import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.Action;
 import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gfx.Image;

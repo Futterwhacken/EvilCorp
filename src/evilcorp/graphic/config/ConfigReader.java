@@ -17,11 +17,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-@SuppressWarnings("Duplicates")
 public class ConfigReader
 {
 
-    private static HashMap<String, Object> createdObjects = new HashMap<>();
+    private static final HashMap<String, Object> createdObjects = new HashMap<>();
 
     public static Object getObject(String id) { return createdObjects.get(id); }
 
@@ -149,7 +148,8 @@ public class ConfigReader
                         Integer.valueOf(params[2]),
                         Integer.valueOf(params[3]),
                         Integer.valueOf(params[4]),
-                        (int)Long.parseLong(params[5], 16)
+                        (int)Long.parseLong(params[5], 16),
+                        Engine.getEngine().getFont(Integer.valueOf(params[6]))
                 );
 
                 break;
@@ -162,21 +162,22 @@ public class ConfigReader
                         Integer.valueOf(params[3]),
                         Integer.valueOf(params[4]),
                         (int)Long.parseLong(params[5], 16),
-                        Double.valueOf(params[6])
+                        Engine.getEngine().getFont(Integer.valueOf(params[6])),
+                        Double.valueOf(params[7])
                 );
 
                 break;
 
             case "MAP":
-                int nbRegions = Integer.valueOf(params[5]);
+                int nbRegions = Integer.valueOf(params[3]);
 
                 String[] names = new String[nbRegions];
                 String[] paths = new String[nbRegions+1];
                 int[][] config = new int[nbRegions][];
 
-                paths[0] = params[6];
+                paths[0] = params[4];
 
-                cur = 7;
+                cur = 5;
                 for (int i = 0; i < nbRegions; i++) {
                     names[i] = params[cur++].replace("_", " ");
                     paths[i+1] = params[cur++];
@@ -193,9 +194,7 @@ public class ConfigReader
                 object = new Map(
                         Integer.valueOf(params[0]),
                         Integer.valueOf(params[1]),
-                        Integer.valueOf(params[2]),
-                        Integer.valueOf(params[3]),
-                        Double.valueOf(params[4]),
+                        Double.valueOf(params[2]),
                         names,
                         paths,
                         config
@@ -205,9 +204,9 @@ public class ConfigReader
 
             case "MENU":
 
-                String[] options = new String[Integer.valueOf(params[5])];
+                String[] options = new String[Integer.valueOf(params[6])];
 
-                cur = 6;
+                cur = 7;
                 for (int i = 0; i < options.length; i++) {
                     options[i] = params[cur++].replace("_", " ");
                 }
@@ -219,7 +218,8 @@ public class ConfigReader
                         params[3].replace("_", " "),
                         options,
                         null,
-                        (int)Long.parseLong(params[4], 16)
+                        (int)Long.parseLong(params[4], 16),
+                        Engine.getEngine().getFont(Integer.valueOf(params[5]))
                 );
 
                 break;

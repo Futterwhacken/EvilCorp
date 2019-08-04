@@ -1,14 +1,10 @@
 package evilcorp.graphic.gfx;
 
-import evilcorp.graphic.Input;
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 public class Image
 {

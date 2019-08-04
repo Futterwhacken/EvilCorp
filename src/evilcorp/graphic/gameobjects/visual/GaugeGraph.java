@@ -54,7 +54,7 @@ public class GaugeGraph extends GameObject
         int offsetY = (height-font.getCharHeight())/2;
 
         this.label = new Text(this.posX - (font.textLength(label) + font.getCharWidth()) - borderSize, posY + offsetY, label, textColor, font);
-        this.counter = new Text(this.posX + width + font.getCharWidth() + borderSize, posY + offsetY, textColor);
+        this.counter = new Text(this.posX + width + font.getCharWidth() + borderSize, posY + offsetY, "", textColor, font);
 
         counter.setAction(() -> counter.setText(""+this.level));
     }

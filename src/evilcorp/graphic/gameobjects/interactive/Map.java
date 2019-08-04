@@ -1,6 +1,5 @@
 package evilcorp.graphic.gameobjects.interactive;
 
-import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Image;
@@ -13,11 +12,11 @@ public class Map extends GameObject
     private final Visual map;
     private final Button[] buttons;
 
-    public Map(int posX, int posY, int width, int height, double scale, String[] names, String[] imagesPath, int[][] params) {
+    public Map(int posX, int posY, double scale, String[] names, String[] imagesPath, int[][] params) {
         super();
 
         if (posX == -1) {
-            posX = (int)(0.5*(engine.getWidth() - (width * scale)));
+            posX = (int)(0.5*(engine.getWidth() - ((new Image(imagesPath[0])).getWidth() * scale)));
         }
 
         this.map = new Visual(posX, posY, new Image(imagesPath[0], scale));

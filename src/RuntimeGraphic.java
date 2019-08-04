@@ -97,7 +97,7 @@ public class RuntimeGraphic {
         );
 
         ((Button)ConfigReader.getObject("quitGame")).setAction(
-                () -> engine.stop()
+                engine::stop
         );
 
         engine.addScene(menuScene);

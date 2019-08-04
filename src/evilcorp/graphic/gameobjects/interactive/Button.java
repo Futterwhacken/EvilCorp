@@ -1,10 +1,8 @@
 package evilcorp.graphic.gameobjects.interactive;
 
-import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.Action;
 import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gfx.Font;
-import evilcorp.graphic.gfx.Image;
 
 public class Button extends GameObject
 {
@@ -17,7 +15,6 @@ public class Button extends GameObject
     private Action hoverAction;
     private Action unHoverAction;
 
-    private final Image image;
     private final String label;
     private final int labelColor;
     private final Font font;
@@ -25,12 +22,10 @@ public class Button extends GameObject
     private boolean hovered = false;
     private boolean clicked = false;
 
-    private Button(int posX, int posY, int width, int height, Action action, Image image, String label, int labelColor, Font font) {
+    private Button(int posX, int posY, int width, int height, Action action, String label, int labelColor, Font font) {
 
-        if (image != null && posX == -1) {
-            this.posX = (int)(0.5*(engine.getWidth() - image.getWidth()));
-        }
-        else if (label != null && posX == -1) {
+
+        if (label != null && posX == -1) {
             this.posX = (int)(0.5*(engine.getWidth() - font.textLength(label)));
         }
         else {
@@ -43,42 +38,22 @@ public class Button extends GameObject
 
         this.action = action;
 
-        this.image = image;
-
         this.label = label;
         this.labelColor = labelColor;
         this.font = font;
     }
 
-
-    // image
-    public Button(int posX, int posY, Action action, Image image) {
-        this(posX, posY, image.getWidth(), image.getHeight(), action, image, null, 0, null);
-    }
-    public Button(int posX, int posY, Image image) {
-        this(posX, posY, image.getWidth(), image.getHeight(), null, image, null, 0, null);
-    }
-
-
     // string label
     public Button(int posX, int posY, Action action, String label, int labelColor, Font font) {
-        this(posX, posY, font.textLength(label), font.getCharHeight(), action, null, label, labelColor, font);
+        this(posX, posY, font.textLength(label), font.getCharHeight(), action, label, labelColor, font);
     }
     public Button(int posX, int posY, String label, int labelColor, Font font) {
-        this(posX, posY, font.textLength(label), font.getCharHeight(), null, null, label, labelColor, font);
-    }
-
-
-    public Button(int posX, int posY, Action action, String label, int labelColor) {
-        this(posX, posY, action, label, labelColor, Engine.getEngine().getStandardFont());
+        this(posX, posY, font.textLength(label), font.getCharHeight(), null, label, labelColor, font);
     }
 
     // invisible
     public Button(int posX, int posY, int width, int height, Action action) {
-        this(posX, posY, width, height, action, null, null, 0, null);
-    }
-    public Button(int posX, int posY, int width, int height) {
-        this(posX, posY, width, height, null, null, null, 0, null);
+        this(posX, posY, width, height, action, null, 0, null);
     }
 
 
@@ -122,10 +97,7 @@ public class Button extends GameObject
 
     @Override
     public void render() {
-        if (image != null) {
-            engine.getRenderer().drawImage(image, posX, posY);
-        }
-        else if (label != null) {
+        if (label != null) {
             //engine.getRenderer().drawRectangle(posX, posY, width, height, 0xFFFF0000); // debug
             engine.getRenderer().drawText(font, label, posX, posY, labelColor);
         }

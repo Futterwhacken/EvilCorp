@@ -1,6 +1,6 @@
 package evilcorp.graphic.gameobjects.text;
 
-import evilcorp.graphic.Engine;
+import evilcorp.graphic.gfx.Font;
 import evilcorp.logic.NotificationBus;
 
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ public class NotificationImmediateArea extends TextArea
     private final double delay;
     private final int[] counters;
 
-    public NotificationImmediateArea(int posX, int posY, int width, int lineHeight, int maxLines, int color, double delay) {
-        super(posX, posY, width, lineHeight, maxLines);
+    public NotificationImmediateArea(int posX, int posY, int width, int lineHeight, int maxLines, int color, Font font, double delay) {
+        super(posX, posY, width, lineHeight, maxLines, font);
 
         this.color = color;
         this.delay = delay;

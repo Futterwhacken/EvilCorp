@@ -9,7 +9,7 @@ public class Text extends GameObject
 {
     private String text;
     private Action action;
-    private final String defaultText;
+
     private final Font font;
 
     private final int posX;
@@ -20,8 +20,6 @@ public class Text extends GameObject
         super();
 
         this.text = text;
-        this.defaultText = text;
-        //this.action = action;
         this.font = font;
 
         if (posX == -1) {
@@ -36,24 +34,13 @@ public class Text extends GameObject
     }
 
     public Text() {
-        this(0, 0, "", 0xffffffff);
+        this(0, 0, "", 0, Engine.getEngine().getStandardFont());
     }
 
     public Text(int color) {
-        this(0, 0, "", color);
+        this(0, 0, "", color, Engine.getEngine().getStandardFont());
     }
 
-    public Text(String text, int color) {
-        this(0, 0, text, color);
-    }
-
-    public Text(int posX, int posY, int color) {
-        this(posX, posY, "", color);
-    }
-
-    public Text(int posX, int posY, String text, int color) {
-        this(posX, posY, text, color, Engine.getEngine().getStandardFont());
-    }
 
 
     @Override
@@ -71,7 +58,6 @@ public class Text extends GameObject
     public void setAction(Action action) { this.action = action; }
 
     public String getText() { return text; }
-    public String getDefaultText() { return defaultText; }
 
     public int getColor() { return color; }
 }

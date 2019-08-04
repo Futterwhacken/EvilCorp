@@ -1,7 +1,7 @@
 
 
 TODO:
-    * polish constructors & configreader
+    * polish configreader
     * rework immediate notif delay (with proper timer)
 
 FRONT:
