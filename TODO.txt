@@ -2,16 +2,15 @@
 
 TODO:
     * polish configreader
-    * rework immediate notif delay (with proper timer)
 
 FRONT:
-    * add Frame and LabeledFrame classes ??
-    * button feedback
-    * next turn button
-    * text area offset
-    * réduire nb de lignes notif
+    * fucking button margins
+    * fucking front-end, make it pretty !!!!!!!!!!!!!!!!!!!!!!!!!!
+    * fucking missing informations
 
 DONE:
+    * [DONE] rework immediate notif delay (with proper timer)
+    * [DONE] resolution setting
     * [DONE] rework configreader and configuration paradigm
     * [DONE] cleanup constructors (gros bordel)
     * [DONE] add possibility to choose font for Text, Button labels, etc
