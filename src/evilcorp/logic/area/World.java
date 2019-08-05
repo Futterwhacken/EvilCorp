@@ -12,10 +12,7 @@ public final class World extends Area
     private static World instance = null;
 
     public static World initWorld(Region[] regions) {
-        if (instance == null) {
-            instance = new World(regions);
-        }
-        return instance;
+        return new World(regions);
     }
 
     public static World getWorld() {

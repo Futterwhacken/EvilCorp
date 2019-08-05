@@ -11,12 +11,18 @@ public final class GameMaster extends GameLogic
     /* On en a fait un Singleton */
 
     private static GameMaster instance = null;
+    private static String configPath;
 
     public static GameMaster initGameMaster(String configPath) {
         if (instance == null) {
             instance = new GameMaster(configPath);
+            GameMaster.configPath = configPath;
         }
         return instance;
+    }
+
+    public static void resetGameMaster() {
+        instance = new GameMaster(configPath);
     }
 
     public static GameMaster getGameMaster() {

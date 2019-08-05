@@ -15,8 +15,8 @@ public class Engine implements Runnable
     public static Engine initEngine(String configPath) {
         if (instance == null) {
             Object[] config = ConfigReader.readEngine(configPath+"engine.cfg");
-            Font[] fonts = ConfigReader.readFonts(configPath+"fonts.cfg");
-            instance = new Engine(config[0].toString(), (int)config[1], (int)config[2], (double)config[3], (double)config[4], (boolean)config[5], fonts);
+            Font[] fonts = ConfigReader.readFonts(configPath+"fonts.cfg"); // make fonts scalable
+            instance = new Engine(config[0].toString(), (int)config[1], (int)config[2], (double)config[3], (boolean)config[4], (double)config[5], (boolean)config[6], fonts);
         }
         return instance;
     }
@@ -37,7 +37,8 @@ public class Engine implements Runnable
     private final String title;
     private final int width;
     private final int height;
-    private final double scale;
+    private double scale;
+    private boolean fullscreen;
     private final double updateRate;
 
     private final boolean debug;
@@ -47,13 +48,14 @@ public class Engine implements Runnable
     private final ArrayList<Scene> scenes;
     private Scene currentScene;
 
-    private Engine(String title, int width, int height, double scale, double updateCap, boolean debug, Font[] fonts) {
+    private Engine(String title, int width, int height, double scale, boolean fullscreen, double updateCap, boolean debug, Font[] fonts) {
         this.scenes = new ArrayList<>();
 
         this.title = title;
         this.width = width;
         this.height = height;
         this.scale = scale;
+        this.fullscreen = fullscreen;
         this.updateRate = 1.0/updateCap;
 
         this.debug = debug;
@@ -148,6 +150,7 @@ public class Engine implements Runnable
     public int getHeight() { return height; }
     public double getScale() { return scale; }
     public double getUpdateRate() { return updateRate; }
+    public boolean isFullscreen() { return fullscreen; }
 
     public Window getWindow() { return window; }
     public Renderer getRenderer() { return renderer; }
@@ -163,15 +166,16 @@ public class Engine implements Runnable
     public void setCurrentScene(Scene scene) {
         currentScene = scene;
     }
-    public void nextScene() {
-        for (int i = 0; i < scenes.size(); i++) {
-            if (scenes.get(i) == currentScene && i+1 < scenes.size()) {
-                setCurrentScene(scenes.get(i+1));
-            }
-        }
-    }
     public void addScene(Scene scene) {
         scenes.add(scene);
+    }
+
+    public void setResolution(double scale, boolean fullscreen) {
+        this.scale = scale;
+        this.fullscreen = fullscreen;
+
+        window.setup();
+        input.setup();
     }
 
 }

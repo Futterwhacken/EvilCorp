@@ -268,8 +268,9 @@ public class ConfigReader
                     Integer.valueOf(buffer[1]),
                     Integer.valueOf(buffer[2]),
                     Double.valueOf(buffer[3]),
-                    Double.valueOf(buffer[4]),
-                    Boolean.valueOf(buffer[5])
+                    Boolean.valueOf(buffer[4]),
+                    Double.valueOf(buffer[5]),
+                    Boolean.valueOf(buffer[6])
             };
 
         }

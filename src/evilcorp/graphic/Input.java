@@ -27,10 +27,20 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener
         mouseX = 0;
         mouseY = 0;
 
+        setup();
+    }
+
+    public void setup() {
+        mouseX = 0;
+        mouseY = 0;
         engine.getWindow().getCanvas().addKeyListener(this);
         engine.getWindow().getCanvas().addMouseListener(this);
         engine.getWindow().getCanvas().addMouseMotionListener(this);
 
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = false;
+        }
+        setHasClicked(false);
     }
 
     public void update() {

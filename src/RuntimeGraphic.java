@@ -23,8 +23,9 @@ public class RuntimeGraphic {
         /* LOADING CONFIG */
 
         // reworkd engine and gm init
-        GameMaster gm = GameMaster.initGameMaster("data/config/logic/"); // could be called when loading GameScene
+        GameMaster gm = GameMaster.initGameMaster("data/config/logic/");
         Engine engine = Engine.initEngine("data/config/graphic/");
+
 
 
         /* SCENES */
@@ -32,6 +33,7 @@ public class RuntimeGraphic {
         Scene loadingScene = new Scene();
         Scene splashScene = new Scene();
         Scene menuScene = new Scene();
+        Scene settingsScene = new Scene();
         Scene creditsScene = new Scene();
         Scene gameScene = new Scene();
 
@@ -89,7 +91,14 @@ public class RuntimeGraphic {
         }
 
         ((Button)ConfigReader.getObject("startGame")).setAction(
-                () -> engine.setCurrentScene(gameScene)
+                () -> {
+                    GameMaster.initGameMaster("data/config/logic/");
+                    engine.setCurrentScene(gameScene);
+                }
+        );
+
+        ((Button)ConfigReader.getObject("showSettings")).setAction(
+                () -> engine.setCurrentScene(settingsScene)
         );
 
         ((Button)ConfigReader.getObject("showCredits")).setAction(
@@ -118,7 +127,41 @@ public class RuntimeGraphic {
         engine.addScene(creditsScene);
 
 
+        /* LOADING OPTIONS SCENE */
+
+
+        GameObject[] settingsSceneObjects = ConfigReader.readScene("data/config/graphic/scenes/settings_scene.cfg");
+
+        for (GameObject o : settingsSceneObjects) {
+            settingsScene.addGameObject(o);
+        }
+
+        ((Button)ConfigReader.getObject("res1")).setAction(
+                () -> engine.setResolution(1.5, engine.isFullscreen())
+        );
+
+        ((Button)ConfigReader.getObject("res2")).setAction(
+                () -> engine.setResolution(1, engine.isFullscreen())
+        );
+
+        ((Button)ConfigReader.getObject("res3")).setAction(
+                () -> engine.setResolution(0.75, engine.isFullscreen())
+        );
+
+        ((Button)ConfigReader.getObject("full")).setAction(
+                () -> engine.setResolution(engine.getScale(), !engine.isFullscreen())
+        );
+
+        ((Button)ConfigReader.getObject("exitSettings")).setAction(
+                () -> engine.setCurrentScene(menuScene)
+        );
+
+
+        engine.addScene(settingsScene);
+
         /* LOADING GAME SCENE */
+
+        /* put in function and make startgame call it -> reloading game */
 
         GameObject[] gameSceneObjects = ConfigReader.readScene("data/config/graphic/scenes/game_scene.cfg");
 
@@ -127,19 +170,20 @@ public class RuntimeGraphic {
         }
 
 
+
         ((Button)ConfigReader.getObject("nextTurn")).setAction(
                 () -> {
                     NotificationBus.clearWaitingList();
                     NotificationBus.clearImmediateList();
-                    gm.nextTurn();
+                    GameMaster.getGameMaster().nextTurn();
                 }
         );
 
         Text turns = ((Text)ConfigReader.getObject("turns"));
-        turns.setAction(() -> turns.setText("TURN: " + gm.getTurn()));
+        turns.setAction(() -> turns.setText("TURN: " + GameMaster.getGameMaster().getTurn()));
 
         Text funds = ((Text)ConfigReader.getObject("funds"));
-        funds.setAction(() -> funds.setText("FUNDS: " + gm.getPoints() + " $"));
+        funds.setAction(() -> funds.setText("FUNDS: " + GameMaster.getGameMaster().getPoints() + " $"));
 
 
         TextArea hoverTextArea = (TextArea)ConfigReader.getObject("hoverTextArea");
@@ -170,13 +214,13 @@ public class RuntimeGraphic {
 
 
         GaugeGraph production = (GaugeGraph)ConfigReader.getObject("production");
-        production.setAction(() -> production.setLevel(gm.getWorld().getProductivity()));
+        production.setAction(() -> production.setLevel(GameMaster.getGameMaster().getWorld().getProductivity()));
 
         GaugeGraph visibility = (GaugeGraph)ConfigReader.getObject("pollution");
-        visibility.setAction(() -> visibility.setLevel(gm.getWorld().getVisibility()));
+        visibility.setAction(() -> visibility.setLevel(GameMaster.getGameMaster().getWorld().getVisibility()));
 
         GaugeGraph social = (GaugeGraph)ConfigReader.getObject("social");
-        social.setAction(() -> social.setLevel(gm.getWorld().getSocial()));
+        social.setAction(() -> social.setLevel(GameMaster.getGameMaster().getWorld().getSocial()));
 
 
 
@@ -230,15 +274,18 @@ public class RuntimeGraphic {
 
 
         gameScene.addAction(() -> {
-            switch (gm.checkGameStatus()) {
+            switch (GameMaster.getGameMaster().checkGameStatus()) {
                 case 0:
                     System.out.println("YOU LOST"); // debug, waiting for fonts
                     engine.setCurrentScene(creditsScene);
-
+                    GameMaster.resetGameMaster();
+                    break;
 
                 case 2:
                     System.out.println("YOU WON"); // debug, waiting for fonts
                     engine.setCurrentScene(creditsScene);
+                    GameMaster.resetGameMaster();
+                    break;
             }
         });
 
