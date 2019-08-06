@@ -8,7 +8,7 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 import java.util.ArrayList;
 
-public class RuntimeConsole {
+public class MainConsole {
     private static final Scanner scan = new Scanner(System.in);
     private static GameMaster gm = null;
 
@@ -243,7 +243,7 @@ public class RuntimeConsole {
 
     public static void main(String[] args) {
         try {
-            RuntimeConsole.gm = GameMaster.initGameMaster("data/config/logic/");
+            MainConsole.gm = GameMaster.initGameMaster("data/config/logic/");
         }
         catch (NullPointerException e) {
             display("Could not load GameMaster, exiting");

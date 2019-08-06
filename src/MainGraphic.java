@@ -15,7 +15,7 @@ import evilcorp.logic.GameMaster;
 import evilcorp.logic.NotificationBus;
 
 
-public class RuntimeGraphic {
+public class MainGraphic {
     public static void main(String[] args) {
 
         // !!! HANDLE EXCEPTIONS !!!
