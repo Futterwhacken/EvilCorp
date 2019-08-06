@@ -22,12 +22,7 @@ public class Text extends GameObject
         this.text = text;
         this.font = font;
 
-        if (posX == -1) {
-            this.posX = (int)(0.5*(engine.getWidth() - font.textLength(text)));
-        }
-        else {
-            this.posX = posX;
-        }
+        this.posX = posX;
 
         this.posY = posY;
         this.color = color;
@@ -51,7 +46,12 @@ public class Text extends GameObject
 
     @Override
     public void render() {
-        engine.getRenderer().drawText(font, text, posX, posY, color);
+        if (posX == -1) {
+            engine.getRenderer().drawText(font, text, (int)(0.5*(engine.getWidth() - font.textLength(text))), posY, color);
+        }
+        else {
+            engine.getRenderer().drawText(font, text, posX, posY, color);
+        }
     }
 
     public void setText(String text) { this.text = text; }

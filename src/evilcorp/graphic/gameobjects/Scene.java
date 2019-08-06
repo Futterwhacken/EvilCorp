@@ -23,6 +23,12 @@ public class Scene extends GameObject
         this.sceneActions = new ArrayList<>();
     }
 
+    public void reset() {
+        selectedRegion = null;
+        setMainMenu(mainMenu);
+        update();
+    }
+
     @Override
     public void update() {
 

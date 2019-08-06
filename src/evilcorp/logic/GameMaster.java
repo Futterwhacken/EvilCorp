@@ -23,6 +23,8 @@ public final class GameMaster extends GameLogic
 
     public static void resetGameMaster() {
         instance = new GameMaster(configPath);
+        NotificationBus.clearImmediateList();
+        NotificationBus.clearWaitingList();
     }
 
     public static GameMaster getGameMaster() {

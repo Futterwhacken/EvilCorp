@@ -2,6 +2,7 @@
 
 TODO:
     * polish configreader
+    * rework notifications (pseudo-duplicates & missing/unformated information)
 
 FRONT:
     * fucking button margins
@@ -9,6 +10,7 @@ FRONT:
     * fucking missing informations
 
 DONE:
+    * [DONE] make game reloadable (gamemaster and gamescene)
     * [DONE] rework immediate notif delay (with proper timer)
     * [DONE] resolution setting
     * [DONE] rework configreader and configuration paradigm

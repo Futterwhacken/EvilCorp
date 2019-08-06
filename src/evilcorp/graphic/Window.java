@@ -20,18 +20,13 @@ public class Window
         this.engine = engine;
 
         setup();
-
-        /* MAKE FRAME MODIFIABLE VIA AN OPTION SCENE -> scaling resolution*/
     }
 
     public void update()
     {
-        /* scale up BufferedImage ? */
-
         //graphics.drawImage(image, 0, 0, null);
         graphics.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
-        //canvas.paint(graphics);
-        //buffer.show();
+        buffer.show();
     }
 
     public BufferedImage getImage() { return image; }
@@ -49,20 +44,19 @@ public class Window
         frame.setLayout(new BorderLayout());
         frame.add(canvas);
 
-        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
 
         if (engine.isFullscreen()) {
-            frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
             frame.setUndecorated(true);
         }
         else {
-            frame.setLocation(0,0);
             frame.setUndecorated(false);
         }
 
         frame.setVisible(true);
         frame.pack();
+
+        frame.setLocationRelativeTo(null);
 
         canvas.createBufferStrategy(1);
         buffer = canvas.getBufferStrategy();

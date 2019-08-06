@@ -1,5 +1,6 @@
 package evilcorp.graphic.gameobjects.interactive;
 
+import evilcorp.graphic.Engine;
 import evilcorp.graphic.gameobjects.GameObject;
 import evilcorp.graphic.gameobjects.visual.Visual;
 import evilcorp.graphic.gfx.Image;
@@ -11,6 +12,7 @@ public class Map extends GameObject
 {
     private final Visual map;
     private final Button[] buttons;
+    private final Image def;
 
     public Map(int posX, int posY, double scale, String[] names, String[] imagesPath, int[][] params) {
         super();
@@ -19,7 +21,8 @@ public class Map extends GameObject
             posX = (int)(0.5*(engine.getWidth() - ((new Image(imagesPath[0])).getWidth() * scale)));
         }
 
-        this.map = new Visual(posX, posY, new Image(imagesPath[0], scale));
+        this.def = new Image(imagesPath[0], scale);
+        this.map = new Visual(posX, posY, def);
         this.buttons = new Button[names.length];
 
         for (int i = 0; i < names.length; i++) {
@@ -36,6 +39,10 @@ public class Map extends GameObject
 
     @Override
     public void update() {
+        if (Engine.getEngine().getCurrentScene().getSelectedRegion() == null) {
+            map.setImage(def);
+        }
+
         map.update();
         for (Button b : buttons) {
             b.update();

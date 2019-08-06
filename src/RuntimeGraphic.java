@@ -27,7 +27,6 @@ public class RuntimeGraphic {
         Engine engine = Engine.initEngine("data/config/graphic/");
 
 
-
         /* SCENES */
 
         Scene loadingScene = new Scene();
@@ -35,6 +34,7 @@ public class RuntimeGraphic {
         Scene menuScene = new Scene();
         Scene settingsScene = new Scene();
         Scene creditsScene = new Scene();
+        Scene endScene = new Scene();
         Scene gameScene = new Scene();
 
 
@@ -92,7 +92,8 @@ public class RuntimeGraphic {
 
         ((Button)ConfigReader.getObject("startGame")).setAction(
                 () -> {
-                    GameMaster.initGameMaster("data/config/logic/");
+                    GameMaster.resetGameMaster();
+                    gameScene.reset();
                     engine.setCurrentScene(gameScene);
                 }
         );
@@ -159,9 +160,38 @@ public class RuntimeGraphic {
 
         engine.addScene(settingsScene);
 
-        /* LOADING GAME SCENE */
+        /* LOADING END SCENE */
 
-        /* put in function and make startgame call it -> reloading game */
+        GameObject[] endSceneObjects = ConfigReader.readScene("data/config/graphic/scenes/end_scene.cfg");
+
+        for (GameObject o : endSceneObjects) {
+            endScene.addGameObject(o);
+        }
+
+        Text gameStatus = ((Text)ConfigReader.getObject("gameStatus"));
+        gameStatus.setAction(
+                () -> {
+                    switch (GameMaster.getGameMaster().checkGameStatus()) {
+                        case 0:
+                            gameStatus.setText("YOU LOST, THE REVOLUTION HAS PREVAILED");
+                            break;
+
+                        case 2:
+                            gameStatus.setText("YOU WON, YOUR HEGEMONY IS COMPLETE");
+                            break;
+                    }
+                }
+        );
+
+
+        ((Button)ConfigReader.getObject("exitEnd")).setAction(
+                () -> engine.setCurrentScene(creditsScene)
+        );
+
+        engine.addScene(endScene);
+
+
+        /* LOADING GAME SCENE */
 
         GameObject[] gameSceneObjects = ConfigReader.readScene("data/config/graphic/scenes/game_scene.cfg");
 
@@ -176,6 +206,7 @@ public class RuntimeGraphic {
                     NotificationBus.clearWaitingList();
                     NotificationBus.clearImmediateList();
                     GameMaster.getGameMaster().nextTurn();
+                    engine.getCurrentScene().setSelectedRegion(null);
                 }
         );
 
@@ -228,64 +259,70 @@ public class RuntimeGraphic {
         selectedRegion.setAction(() -> {
             if (engine.getCurrentScene().getSelectedRegion() != null)
                 selectedRegion.setText(engine.getCurrentScene().getSelectedRegion().getName());
+            else
+                selectedRegion.setText("SELECT A REGION");
         });
 
         Text activityText = (Text)ConfigReader.getObject("!activityText");
         activityText.setAction(() -> {
             if (engine.getCurrentScene().getSelectedRegion() != null)
                 activityText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getActivityToleranceString());
+            else
+                activityText.setText("");
         });
 
         Text environmentText = (Text)ConfigReader.getObject("!environmentText");
         environmentText.setAction(() -> {
             if (engine.getCurrentScene().getSelectedRegion() != null)
                 environmentText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getEnvironmentToleranceString());
+            else
+                environmentText.setText("");
         });
 
         Text oppositionText = (Text)ConfigReader.getObject("!oppositionText");
         oppositionText.setAction(() -> {
             if (engine.getCurrentScene().getSelectedRegion() != null)
                 oppositionText.setText(engine.getCurrentScene().getSelectedRegion().getParams().getOppositionToleranceString());
+            else
+                oppositionText.setText("");
         });
 
         Text productionText = (Text)ConfigReader.getObject("!productionText");
         productionText.setAction(() -> {
             if (engine.getCurrentScene().getSelectedRegion() != null)
                 productionText.setText("PRODUCTION: " + engine.getCurrentScene().getSelectedRegion().getProductivity());
+            else
+                productionText.setText("");
         });
 
         Text pollutionText = (Text)ConfigReader.getObject("!pollutionText");
         pollutionText.setAction(() -> {
             if (engine.getCurrentScene().getSelectedRegion() != null)
                 pollutionText.setText("POLLUTION: " + engine.getCurrentScene().getSelectedRegion().getVisibility());
+            else
+                pollutionText.setText("");
         });
 
         Text socialText = (Text)ConfigReader.getObject("!socialText");
         socialText.setAction(() -> {
             if (engine.getCurrentScene().getSelectedRegion() != null)
                 socialText.setText("SOCIAL: " + engine.getCurrentScene().getSelectedRegion().getSocial());
+            else
+                socialText.setText("");
         });
 
         Text exploitationText = (Text)ConfigReader.getObject("!exploitationText");
         exploitationText.setAction(() -> {
             if (engine.getCurrentScene().getSelectedRegion() != null)
                 exploitationText.setText(""+engine.getCurrentScene().getSelectedRegion().getExploitations().size() + "/" + engine.getCurrentScene().getSelectedRegion().getMaxExpl() + " EXPLOITATIONS");
+            else
+                exploitationText.setText("");
         });
 
 
         gameScene.addAction(() -> {
-            switch (GameMaster.getGameMaster().checkGameStatus()) {
-                case 0:
-                    System.out.println("YOU LOST"); // debug, waiting for fonts
-                    engine.setCurrentScene(creditsScene);
-                    GameMaster.resetGameMaster();
-                    break;
-
-                case 2:
-                    System.out.println("YOU WON"); // debug, waiting for fonts
-                    engine.setCurrentScene(creditsScene);
-                    GameMaster.resetGameMaster();
-                    break;
+            if (GameMaster.getGameMaster().checkGameStatus() != 1) {
+                    engine.setCurrentScene(endScene);
             }
         });
 
